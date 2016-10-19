@@ -1,4 +1,0 @@
-../../modules/AmcCarrierCore/2.0/xdc/AmcCarrierCore.xdc
-../../modules/AmcCarrierCore/2.0/xdc/AmcGenericAdcDacBay0Pinout.xdc
-../../modules/AmcCarrierCore/2.0/xdc/AmcGenericAdcDacBay1Pinout.xdc
-hdl/AmcCarrierBcm.xdc
