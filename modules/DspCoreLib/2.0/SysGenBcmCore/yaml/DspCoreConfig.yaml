@@ -1,0 +1,118 @@
+##############################################################################
+## This file is part of 'LCLS2 Common Carrier Core'.
+## It is subject to the license terms in the LICENSE.txt file found in the
+## top-level directory of this distribution and at:
+##    https://confluence.slac.stanford.edu/display/ppareg/LICENSE.html.
+## No part of 'LCLS2 Common Carrier Core', including this file,
+## may be copied, modified, propagated, or distributed except according to
+## the terms contained in the LICENSE.txt file.
+##############################################################################
+#schemaversion 3.0.0
+#once
+
+DspCoreConfig: &DspCoreConfig
+  description: "Sysgen configuration and status registers"
+  class: MMIODev
+  configPrio: 1
+  size: 0x010000
+  #########
+  children:
+  #########
+    #########################################################
+    Version:
+      class: IntField
+      at:
+        offset: 0x0000
+      sizeBits: 32
+      mode: RO
+      description: "System generator core version"
+    #########################################################
+    CoefA0:
+      class: IntField
+      at:
+        offset: 0x0004
+      sizeBits: 32
+      mode: RW
+      description: "Floating - Coef A0 of processig equation to properly scale the first averaged group"
+    #########################################################
+    CoefA1:
+      class: IntField
+      at:
+        offset: 0x0008
+      sizeBits: 32
+      mode: RW
+      description: "Floating - Coef A1 of processig equation to properly scale the second averaged group"
+    #########################################################
+    CoefA2:
+      class: IntField
+      at:
+        offset: 0x000C
+      sizeBits: 32
+      mode: RW
+      description: "Floating - Coef A2 of processig equation to properly scale the third averaged group"
+    #########################################################
+    Coef_lnQcal:
+      class: IntField
+      at:
+        offset: 0x0010
+      sizeBits: 32
+      mode: RW
+      description: "Floating - natural logarithm of Qcal value provided by bergoz (or ~ 0xc0981e4f)"
+    #########################################################
+    TempCoef0:
+      class: IntField
+      at:
+        offset: 0x0014
+      sizeBits: 32
+      mode: RW
+      description: "Floating -  temperature coefficient of Toroid, like ~ 0x3dcccccd)"
+    #########################################################
+    TempTor:
+      class: IntField
+      at:
+        offset: 0x0018
+      sizeBits: 32
+      mode: RW
+      description: "Floating - Temperature of Toroid in K, like 27C + 273.15, or like 0x43961333)"
+    #########################################################
+    TempCoef1:
+      class: IntField
+      at:
+        offset: 0x001C
+      sizeBits: 32
+      mode: RW
+      description: "Floating - temperature coefficient of Amp, like ~ 0x3dcccccd)"
+    #########################################################
+    TempAmp:
+      class: IntField
+      at:
+        offset: 0x0020
+      sizeBits: 32
+      mode: RW
+      description: "Floating -  Temperature of Amp in K, like 27C + 273.15, or like 0x43961333)"
+    #########################################################
+    TempCoef2:
+      class: IntField
+      at:
+        offset: 0x0024
+      sizeBits: 32
+      mode: RW
+      description: "Floating - temperature coefficient of Electronics, like ~ 0x3e4ccccd)"
+    #########################################################
+    TempElc:
+      class: IntField
+      at:
+        offset: 0x0028
+      sizeBits: 32
+      mode: RW
+      description: "Floating - Temperature of Electronics in K, like 27C + 273.15, or like 0x43961333)"
+    #########################################################
+    TempCalib:
+      class: IntField
+      at:
+        offset: 0x002c
+      sizeBits: 32
+      mode: RW
+      description: "Floating -  Temperature of Amp in K at calibration, like 23C + 273.15, or like 0x43941333)"
+    #########################################################
+

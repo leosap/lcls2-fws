@@ -1,0 +1,181 @@
+##############################################################################
+## This file is part of 'LCLS2 Common Carrier Core'.
+## It is subject to the license terms in the LICENSE.txt file found in the
+## top-level directory of this distribution and at:
+##    https://confluence.slac.stanford.edu/display/ppareg/LICENSE.html.
+## No part of 'LCLS2 Common Carrier Core', including this file,
+## may be copied, modified, propagated, or distributed except according to
+## the terms contained in the LICENSE.txt file.
+##############################################################################
+#schemaversion 3.0.0
+#once
+
+DspCoreRes: &DspCoreRes
+  description: "Sysgen configuration and status registers"
+  class: MMIODev
+  configPrio: 1
+  size: 0x010000
+  #########
+  children:
+  #########
+    #########################################################
+    MultResultA0:
+      class: IntField
+      at:
+        offset: 0x0100
+      sizeBits: 32
+      mode: RO
+      description: "Floating - Result of multiplication of ADC average 0 and A0 coef, or ~ 0x402aed85- sampl, 0x3e2aed9a-16samp"
+    #########################################################
+    MultResultA1:
+      class: IntField
+      at:
+        offset: 0x0104
+      sizeBits: 32
+      mode: RO
+      description: "Floating - Result of multiplication of ADC average 1 and A1 coef, or ~ 0xc02aed85- sampl, 0xbe2aed9a-16samp"
+    #########################################################
+    MultResultA2:
+      class: IntField
+      at:
+        offset: 0x0108
+      sizeBits: 32
+      mode: RO
+      description: "Floating - Result of multiplication of ADC average 2 and A2 coef, or ~ 0x00000000 normally"
+    #########################################################
+    AddSums0:
+      class: IntField
+      at:
+        offset: 0x010C
+      sizeBits: 32
+      mode: RO
+      description: "Floating - Result of sum MultResultA0 and MultResultA1"
+    #########################################################
+    AddSums1:
+      class: IntField
+      at:
+        offset: 0x0110
+      sizeBits: 32
+      mode: RO
+      description: "Floating - Result of addition of MultResultA0 and Coef_lnQcal"
+    #########################################################
+    AddSums2:
+      class: IntField
+      at:
+        offset: 0x0114
+      sizeBits: 32
+      mode: RO
+      description: "Floating - Result of addition of AddSums0 and AddSums1"
+    #########################################################
+    ExpCalc:
+      class: IntField
+      at:
+        offset: 0x0118
+      sizeBits: 32
+      mode: RO
+      description: "Floating - Result of exp(AddSums2)"
+    #########################################################
+    TempDif0:
+      class: IntField
+      at:
+        offset: 0x011C
+      sizeBits: 32
+      mode: RO
+      description: "Floating - Result of temperature difference of Tor TempTor - TempTor_c"
+    #########################################################
+    TempMult0:
+      class: IntField
+      at:
+        offset: 0x0120
+      sizeBits: 32
+      mode: RO
+      description: "Floating - Result of Multiplication of temperature difference of TempDif0 and CoefTEmp0"
+    #########################################################
+    TempMultP0:
+      class: IntField
+      at:
+        offset: 0x0124
+      sizeBits: 32
+      mode: RO
+      description: "Floating - Result of addition of TempMult0 and 1.0"
+    #########################################################
+    TempDif1:
+      class: IntField
+      at:
+        offset: 0x0128
+      sizeBits: 32
+      mode: RO
+      description: "Floating - RResult of temperature difference of Amp TempAmp - TempAmp_c"
+    #########################################################
+    TempMult1:
+      class: IntField
+      at:
+        offset: 0x012C
+      sizeBits: 32
+      mode: RO
+      description: "Floating - Result of Multiplication of temperature difference of TempDif1 and CoefTEmp1"
+    #########################################################
+    TempMultP1:
+      class: IntField
+      at:
+        offset: 0x0130
+      sizeBits: 32
+      mode: RO
+      description: "Floating - Result of addition of TempMult1 and 1.0"
+    #########################################################
+    TempDif2:
+      class: IntField
+      at:
+        offset: 0x0134
+      sizeBits: 32
+      mode: RO
+      description: "Floating - Result of temperature difference of Elc TempElc - TempElc_c"
+    #########################################################
+    TempMult2:
+      class: IntField
+      at:
+        offset: 0x0138
+      sizeBits: 32
+      mode: RO
+      description: "Floating - Result of Multiplication of temperature difference of TempDif2 and CoefTEmp2"
+    #########################################################
+    TempMultP2:
+      class: IntField
+      at:
+        offset: 0x013C
+      sizeBits: 32
+      mode: RO
+      description: "Floating - Result of addition of TempMult2 and 1.0"
+    #########################################################
+    Mult0:
+      class: IntField
+      at:
+        offset: 0x0140
+      sizeBits: 32
+      mode: RO
+      description: "Floating - Result of multiplication of  ChargaData and TempMultP0"
+    #########################################################
+    Mult1:
+      class: IntField
+      at:
+        offset: 0x0144
+      sizeBits: 32
+      mode: RO
+      description: "Floating - Result of multiplication of  TempMultP1 and TempMultP2"
+    #########################################################
+    Mult2:
+      class: IntField
+      at:
+        offset: 0x0148
+      sizeBits: 32
+      mode: RO
+      description: "Floating - Result of multiplication of  Mult0 and Mult1"
+    #########################################################
+    Scratch:
+      class: IntField
+      at:
+        offset: 0x0FFC
+      sizeBits: 32
+      mode: RW
+      description: "Scratch register"
+    #########################################################

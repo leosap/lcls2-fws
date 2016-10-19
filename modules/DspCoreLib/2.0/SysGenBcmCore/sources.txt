@@ -1,0 +1,11 @@
+vhdl work rtl/AdcIntProcPkg.vhd
+vhdl work rtl/AdcIntSum.vhd
+vhdl work rtl/TrigDelay.vhd
+vhdl work rtl/DataReady.vhd
+vhdl work rtl/AdcIntProc.vhd
+vhdl work rtl/AxiLiteGenRegAdcProc.vhd
+vhdl work rtl/BCMAlignment.vhd
+vhdl work rtl/DspCoreWrapper.vhd
+vhdl work simulink/netlist/dspcore.dcp
+vhdl work rtl/DspCoreMrWrapper.vhd
+vhdl work simulink/netlist/dspcoremr.dcp
