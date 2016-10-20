@@ -18,6 +18,10 @@ export TIMING_TAG  = 2.0
 export ETH_TAG     = 2.0
 export RSSI_TAG    = 2.0
 export JESD_TAG    = 2.0
+export COMMON_TAG  = 2.0
+export DSP_TAG     = 2.0
+
+export PROJECT = AmcCarrierBcm
 
 # Using a non-standard StdLib directory structure, 
 # which requires me to define the VIVADO_BUILD_DIR path
@@ -48,8 +52,8 @@ export MODULE_DIRS = $(PROJ_DIR)/../../modules/AmcCarrierCore/$(AMC_TAG)  \
                      $(PROJ_DIR)/../../modules/EthernetLib/$(ETH_TAG)/EthMacCore \
                      $(PROJ_DIR)/../../modules/RssiCore/$(RSSI_TAG) \
                      $(PROJ_DIR)/../../modules/Jesd204bCore/$(JESD_TAG) \
-                     $(PROJ_DIR)/../../modules/DspCoreLib/SysGenBcmCore \
-                     $(PROJ_DIR)/../../modules/Common \
+                     $(PROJ_DIR)/../../modules/DspCoreLib/$(DSP_TAG)/SysGenBcmCore \
+                     $(PROJ_DIR)/../../modules/Common/$(COMMON_TAG)/ \
                      $(PROJ_DIR)
 
 
