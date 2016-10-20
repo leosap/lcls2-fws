@@ -7,49 +7,55 @@
 ## may be copied, modified, propagated, or distributed except according to
 ## the terms contained in the LICENSE.txt file.
 ##############################################################################
+#schemaversion 3.0.0
+#once
+#include AmcGenericAdcDacCore.yaml
+#include DaqMuxV2.yaml
+#include DacSigGeneration.yaml
+#include SysGen.yaml
+#include TimingProc.yaml
 
-include: AmcGenericAdcDacCore.yaml
-include: DaqMuxV2.yaml
-include: DacSigGeneration.yaml
-include: SysGen.yaml
-include: TimingProc.yaml
-
-Device: &ApplicationCore
+ApplicationCore: &ApplicationCore
   name: ApplicationCore
-  description: Application Core
+  class: MMIODev
+  configPrio: 1
+  description: "Application Core"
   size: 0x80000000
   ########
-  MMIODev:
+  children:
   ########
-    - <<: *AmcGenericAdcDacCore
-      offset: 0x00000000
-      stride: 0x00800000
-      nelms: 2
+    AmcGenericAdcDacCore:
+      <<: *AmcGenericAdcDacCore
+      at:
+        offset: 0x00000000
+        stride: 0x00800000
+        nelms: 2
     ##################################################
-    - <<: *DaqMuxV2
-      offset: 0x01000000
-      nelms: 2
-      stride: 0x01000000
+    DaqMuxV2:
+      <<: *DaqMuxV2
+      at:
+        offset: 0x01000000
+        stride: 0x01000000
+        nelms: 2
     ##################################################
-    - <<: *DacSigGeneration
-      offset: 0x03000000
-      nelms: 2
-      stride: 0x01000000
+    DacSigGeneration:
+      <<: *DacSigGeneration
+      at:
+        offset: 0x03000000
+        stride: 0x01000000
+        nelms: 2
     ##################################################
-    - <<: *SysGen
-      offset: 0x05000000
-      nelms: 2
-      stride: 0x01000000
+    SysGen:
+      <<: *SysGen
+      at:
+        offset: 0x05000000
+        stride: 0x01000000
+        nelms: 2
     ##################################################
-    - <<: *TimingProc
-      offset: 0x07000000
-      nelms: 2
-      stride: 0x01000000
+    TimingProc:
+      <<: *TimingProc
+      at:
+        offset: 0x07000000
+        stride: 0x01000000
+        nelms: 2
     #################################################
-
-  #########
-  Commands:
-  #########
-    ##################################################
-    # Add your top level commands here
-    ##################################################

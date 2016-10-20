@@ -7,27 +7,28 @@
 ## may be copied, modified, propagated, or distributed except according to
 ## the terms contained in the LICENSE.txt file.
 ##############################################################################
+#schemaversion 3.0.0
+#once
+#include AmcCarrierCore.yaml
+#include ApplicationCore.yaml
 
-include: AmcCarrierCore.yaml
-include: ApplicationCore.yaml
-
-Device: &DigFpga
+DigFpga: &DigFpga
   name: DigFpga
-  description: DigFpga
+  class: MMIODev
+  configPrio: 1
+  description: "DigFpga for BCM head"
   size: 0x100000000 # 4GB of address space
   ########
-  MMIODev:
+  children:
   ########
+    AmcCarrierCore:
+      <<: *AmcCarrierCore
+      at:
+        offset: 0x00000000
     ##################################################
-    - <<: *AmcCarrierCore
-      offset: 0x00000000
+    ApplicationCore:
+      <<: *ApplicationCore
+      at:
+        offset: 0x80000000
     ##################################################
-    - <<: *ApplicationCore
-      offset: 0x80000000
-    ##################################################
-  #########
-  Commands:
-  #########
-    ##################################################
-    # Add your top level commands here
-    ##################################################
+
