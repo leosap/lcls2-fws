@@ -1,5 +1,106 @@
 - DigFpga:
     - ApplicationCore:
+        - SysGen:
+            - DspPreprocConfig:
+                - Mode: !<value> 0x1
+                - ADCSimEn: !<value> 0x0
+                - SimAdcSumData2: !<value> 0x00010000
+                - BergozOffsetEn: !<value>
+                    - 0x0
+                    - 0x0
+                    - 0x0
+                    - 0x0
+                    - 0x1
+                    - 0x0
+                    - 0x0
+                    - 0x0
+                - SimAdcSumData1: !<value> 0x00010000
+                - NumberSamples2: !<value>
+                    - 0x00
+                    - 0x08
+                    - 0x08
+                    - 0x08
+                    - 0x08
+                    - 0x08
+                    - 0x08
+                    - 0x08
+                - TrigDelay2: !<value>
+                    - 0x00
+                    - 0x20
+                    - 0x20
+                    - 0x20
+                    - 0x20
+                    - 0x20
+                    - 0x20
+                    - 0x20
+                - SimAdcSumData0: !<value>
+                    - 0x00006ad0
+                    - 0x00010000
+                    - 0x00010000
+                    - 0x00010000
+                    - 0x00006760
+                    - 0x00010000
+                    - 0x00010000
+                    - 0x00010000
+                - NumberSamples1: !<value>
+                    - 0x00
+                    - 0x08
+                    - 0x08
+                    - 0x08
+                    - 0x20
+                    - 0x08
+                    - 0x08
+                    - 0x08
+                - NumberSamples0: !<value>
+                    - 0x20
+                    - 0x0a
+                    - 0x0a
+                    - 0x0a
+                    - 0x08
+                    - 0x0a
+                    - 0x0a
+                    - 0x0a
+                - TrigDelay1: !<value>
+                    - 0x00
+                    - 0x12
+                    - 0x12
+                    - 0x12
+                    - 0x12
+                    - 0x12
+                    - 0x12
+                    - 0x12
+            - DspCoreConfig:
+                - TempAmp: !<value>
+                    - 0x43931333
+                    - 0x43961333
+                - TempCalib: !<value> 0x43941333
+                - TempCoef2: !<value>
+                    - 0x3b03126f
+                    - 0x3e4ccccd
+                - Coef_lnQcal: !<value>
+                    - 0x411a8b44
+                    - 0x3f75e354
+                - TempElc: !<value>
+                    - 0x43931333
+                    - 0x43961333
+                - TempTor: !<value>
+                    - 0x43931333
+                    - 0x43961333
+                - TempCoef1: !<value>
+                    - 0x3a83126f
+                    - 0x3dcccccd
+                - TempCoef0: !<value>
+                    - 0x3a83126f
+                    - 0x3dcccccd
+                - CoefA2: !<value> 0x00000000
+                - CoefA1: !<value>
+                    - 0x00000000
+                    - 0x35800000
+                - CoefA0: !<value>
+                    - 0xb7881255
+                    - 0xb8000000
+            - DspCoreRes:
+                - Scratch: !<value> 0x00000000
         - DacSigGeneration:
             - AxiLiteGenRegItf:
                 - periodSize: !<value> 0x007
@@ -4135,6 +4236,7 @@
         - AmcGenericAdcDacCore:
             - Gthe3Channel:
                 - ES_CONTROL: !<value> 0x00
+                - ES_ERRDET_EN: !<value> 0x0
                 - TX_PROGDIV_CFG: !<value> 0x8000
                 - ES_SDATA_MASK: !<value> 0x0000
                 - RXDFE_HC_CFG0: !<value> 0x0000
@@ -4142,7 +4244,6 @@
                 - FTS_DESKEW_SEQ_ENABLE: !<value> 0xf
                 - FTS_LANE_DESKEW_EN: !<value> 0x0
                 - ES_QUALIFIER: !<value> 0x0000
-                - ES_ERRDET_EN: !<value> 0x0
                 - RXDFE_HC_CFG1: !<value> 0x0000
                 - ES_PMA_CFG: !<value> 0x000
                 - FTS_LANE_DESKEW_CFG: !<value> 0x0
@@ -4175,9 +4276,9 @@
                 - TXDLY_LCFG: !<value> 0x0050
                 - ALIGN_PCOMMA_DET: !<value> 0x1
                 - RXDFE_OS_CFG0: !<value> 0x8000
-                - RXPHDLY_CFG: !<value> 0x2020
                 - RXDFE_OS_CFG1: !<value> 0x0000
                 - RXDLY_CFG: !<value> 0x001f
+                - RXPHDLY_CFG: !<value> 0x2020
                 - RXDLY_LCFG: !<value> 0x0030
                 - RX_BIAS_CFG0: !<value> 0x0ab4
                 - RXDFE_HD_CFG0: !<value> 0x0000
@@ -4188,12 +4289,12 @@
                 - RX_CM_TRIM: !<value> 0xa
                 - RXPH_MONITOR_SEL: !<value> 0x00
                 - RX_SUM_VCMTUNE: !<value> 0x0
+                - RX_CM_SEL: !<value> 0x3
+                - RX_SUM_RES_CTRL: !<value> 0x3
                 - RX_SUM_VREF_TUNE: !<value> 0x0
                 - RX_SUM_VCM_OVWR: !<value> 0x0
                 - RX_SUM_IREF_TUNE: !<value> 0xc
-                - RX_CM_SEL: !<value> 0x3
                 - RX_SUM_DFETAPREP_EN: !<value> 0x0
-                - RX_SUM_RES_CTRL: !<value> 0x3
                 - RXOOB_CFG: !<value> 0x006
                 - CBCC_DATA_SOURCE_SEL: !<value> 0x1
                 - OOB_PWRUP: !<value> 0x0
@@ -4258,8 +4359,8 @@
                 - TXPH_CFG: !<value> 0x0980
                 - RXCDR_LOCK_CFG2: !<value> 0x77c3
                 - RXDFE_HF_CFG1: !<value> 0x0000
-                - TERM_RCAL_OVRD: !<value> 0x0
                 - TXPH_MONITOR_SEL: !<value> 0x00
+                - TERM_RCAL_OVRD: !<value> 0x0
                 - PD_TRANS_TIME_FROM_P2: !<value> 0x03c
                 - TERM_RCAL_CFG: !<value> 0x4210
                 - PD_TRANS_TIME_TO_P2: !<value> 0x64
@@ -4270,9 +4371,9 @@
                 - TX_CLK25_DIV: !<value> 0x07
                 - TX_XCLK_SEL: !<value> 0x1
                 - TX_DATA_WIDTH: !<value> 0x5
+                - TXFIFO_ADDR_CFG: !<value> 0x0
                 - TX_DEEMPH1: !<value> 0x00
                 - TX_RXDETECT_REF: !<value> 0x4
-                - TXFIFO_ADDR_CFG: !<value> 0x0
                 - TX_DEEMPH0: !<value> 0x00
                 - TXBUF_RESET_ON_RATE_CHANGE: !<value> 0x1
                 - TXGEARBOX_EN: !<value> 0x0
@@ -4286,8 +4387,8 @@
                 - TX_CLKMUX_EN: !<value> 0x1
                 - TX_LOOPBACK_DRIVE_HIZ: !<value> 0x0
                 - TX_MARGIN_FULL_1: !<value> 0x4e
-                - TX_MARGIN_FULL_3: !<value> 0x4a
                 - TX_MARGIN_FULL_0: !<value> 0x4f
+                - TX_MARGIN_FULL_3: !<value> 0x4a
                 - TX_MARGIN_LOW_0: !<value> 0x46
                 - TX_MARGIN_FULL_2: !<value> 0x4c
                 - TX_MARGIN_FULL_4: !<value> 0x48
@@ -4391,13 +4492,13 @@
                 - RXDFE_H5_CFG0: !<value> 0x2000
                 - RXDFE_H4_CFG0: !<value> 0x2000
                 - RXDFE_H3_CFG1: !<value> 0x0000
-                - TX_SARC_LPBK_ENB: !<value> 0x0
-                - TEMPERATUR_PAR: !<value> 0x2
                 - TX_MODE_SEL: !<value> 0x0
                 - PROCESS_PAR: !<value> 0x2
+                - TX_SARC_LPBK_ENB: !<value> 0x0
                 - TX_EML_PHI_TUNE: !<value> 0x0
                 - CPLL_CFG3: !<value> 0x00
                 - RXDFE_H5_CFG1: !<value> 0x0003
+                - TEMPERATUR_PAR: !<value> 0x2
                 - TX_DCD_EN: !<value> 0x0
                 - RXDFE_H6_CFG1: !<value> 0x0000
                 - DDI_CTRL: !<value> 0x0
@@ -4418,10 +4519,10 @@
                 - PCIE_BUFG_DIV_CTRL: !<value> 0x1000
                 - RXPHSLIP_CFG: !<value> 0x6622
                 - PCIE_RXPCS_CFG_GEN3: !<value> 0x02a4
-                - RXDFE_H9_CFG0: !<value> 0x2000
-                - RXDFE_HA_CFG0: !<value> 0x2000
                 - RXDFE_H9_CFG1: !<value> 0x0000
                 - RX_PROGDIV_CFG: !<value> 0x8000
+                - RXDFE_H9_CFG0: !<value> 0x2000
+                - RXDFE_HA_CFG0: !<value> 0x2000
                 - CPLL_CFG1: !<value> 0xa4ac
                 - CPLL_CFG0: !<value> 0x21f8
                 - DEC_MCOMMA_DETECT: !<value> 0x1
@@ -4455,10 +4556,10 @@
                 - SATA_CPLL_CFG: !<value> 0x0
                 - A_RXPROGDIVRESET: !<value> 0x0
                 - CPLL_FBDIV: !<value> 0x03
-                - CPLL_LOCK_CFG: !<value> 0x01e8
                 - CPLL_FBDIV_45: !<value> 0x0
-                - TXDRVBIAS_P: !<value> 0xa
+                - CPLL_LOCK_CFG: !<value> 0x01e8
                 - TXDRVBIAS_N: !<value> 0xa
+                - TXDRVBIAS_P: !<value> 0xa
                 - ALIGN_COMMA_WORD: !<value> 0x1
                 - ALIGN_COMMA_DOUBLE: !<value> 0x0
                 - SHOW_REALIGN_COMMA: !<value> 0x0
@@ -4484,8 +4585,8 @@
                 - CHAN_BOND_SEQ_2_ENABLE: !<value> 0xf
                 - CHAN_BOND_SEQ_2_USE: !<value> 0x0
                 - CLK_COR_KEEP_IDLE: !<value> 0x0
-                - CHAN_BOND_SEQ_2_4: !<value> 0x000
                 - CLK_COR_MIN_LAT: !<value> 0x08
+                - CHAN_BOND_SEQ_2_4: !<value> 0x000
                 - CHAN_BOND_SEQ_2_2: !<value> 0x000
                 - CHAN_BOND_SEQ_2_3: !<value> 0x000
                 - CHAN_BOND_SEQ_1_ENABLE: !<value> 0xf
@@ -5009,10 +5110,10 @@
                 - ResetGTs: !<value> 0x0
                 - InvertSync: !<value> Regular
                 - ClearErrors: !<value> 0x0
-                - SysrefDelay: !<value> 0x0b
-                - SubClass: !<value> 0x1
                 - Enable: !<value> 0x0f
                 - ReplaceEnable: !<value> Enabled
+                - SysrefDelay: !<value> 0x0b
+                - SubClass: !<value> 0x1
             - JesdTx:
                 - testOutMux: !<value> SawIncrement
                 - dataOutMux: !<value> UserData
@@ -5028,6 +5129,148 @@
                 - ReplaceEnable: !<value> 0x1
                 - Enable: !<value> 0x3
                 - SubClass: !<value> 0x1
+        - TimingProc:
+            - TriggerLaneReg:
+                - SoftTrig: !<value> 0x0
+                - trigStretch: !<value>
+                    - 0x30
+                    - 0x30
+                    - 0x00
+                    - 0x18
+                    - 0x04
+                    - 0x00
+                    - 0x01
+                    - 0x30
+                    - 0x00
+                    - 0x00
+                    - 0x00
+                    - 0x30
+                    - 0x30
+                    - 0x00
+                    - 0x18
+                    - 0x00
+                    - 0x00
+                    - 0x30
+                    - 0x30
+                    - 0x00
+                    - 0x00
+                    - 0x00
+                - beamRequest: !<value> 0x00000000
+                - outPolarity: !<value>
+                    - 0x1
+                    - 0x0
+                    - 0x0
+                    - 0x1
+                    - 0x0
+                    - 0x1
+                    - 0x0
+                    - 0x0
+                    - 0x0
+                    - 0x0
+                    - 0x0
+                    - 0x0
+                    - 0x0
+                    - 0x0
+                    - 0x1
+                    - 0x1
+                    - 0x0
+                    - 0x0
+                    - 0x0
+                    - 0x0
+                    - 0x0
+                    - 0x0
+                - trigDelay: !<value>
+                    - 0x18
+                    - 0x18
+                    - 0x00
+                    - 0x18
+                    - 0x80
+                    - 0x00
+                    - 0x80
+                    - 0x18
+                    - 0x00
+                    - 0x00
+                    - 0x00
+                    - 0x18
+                    - 0x18
+                    - 0x00
+                    - 0x18
+                    - 0x00
+                    - 0x00
+                    - 0x18
+                    - 0x18
+                    - 0x00
+                    - 0x00
+                    - 0x00
+                - SelectField: !<value>
+                    - 0x1
+                    - 0x0
+                    - 0x0
+                    - 0x1
+                    - 0x0
+                    - 0x0
+                    - 0x0
+                    - 0x0
+                    - 0x0
+                    - 0x0
+                    - 0x0
+                    - 0x0
+                    - 0x0
+                    - 0x0
+                    - 0x1
+                    - 0x0
+                    - 0x0
+                    - 0x0
+                    - 0x0
+                    - 0x0
+                    - 0x0
+                    - 0x0
+                - SelectSource: !<value>
+                    - 0x2
+                    - 0x3
+                    - 0x0
+                    - 0x1
+                    - 0x2
+                    - 0x0
+                    - 0x2
+                    - 0x3
+                    - 0x0
+                    - 0x0
+                    - 0x0
+                    - 0x1
+                    - 0x3
+                    - 0x0
+                    - 0x1
+                    - 0x0
+                    - 0x0
+                    - 0x1
+                    - 0x3
+                    - 0x0
+                    - 0x0
+                    - 0x0
+                - fixedRate: !<value>
+                    - 0x040
+                    - 0x000
+                    - 0x000
+                    - 0x040
+                    - 0x000
+                    - 0x000
+                    - 0x000
+                    - 0x000
+                    - 0x000
+                    - 0x000
+                    - 0x000
+                    - 0x000
+                    - 0x000
+                    - 0x000
+                    - 0x040
+                    - 0x000
+                    - 0x000
+                    - 0x000
+                    - 0x000
+                    - 0x000
+                    - 0x000
+                    - 0x000
     - AmcCarrierCore:
         - AmcCarrierMps:
             - AmcCarrierMpsPhy:
@@ -5040,12 +5283,12 @@
         - RssiServerSw:
             - MaxOutOfSeq: !<value> 0x00
             - MaxNumRetrans: !<value> 0x02
+            - MaxCumAck: !<value> 0x03
             - NullSegTimeout: !<value> 0x00c8
             - CumAckTimeout: !<value> 0x0019
             - RetransTimeout: !<value> 0x0032
             - MaxSegSize: !<value> 0x0400
             - MaxOutsSeg: !<value> 0x08
-            - MaxCumAck: !<value> 0x03
             - Version: !<value> 0x1
             - InitSeqN: !<value> 0x80
             - Mode: !<value> 0x0
@@ -5054,8 +5297,8 @@
             - OpenConn: !<value> 0x0
             - HeaderChksumEn: !<value> 0x1
         - UdpEngineWrapper:
-            - ClientRemotePort: !<value> 0x0000
             - ClientRemoteIp: !<value> 0x00000000
+            - ClientRemotePort: !<value> 0x0000
         - EthMacPhy:
             - HardReset: !<value> 0x0
             - SoftReset: !<value> 0x0
@@ -5069,9 +5312,9 @@
                     - SoftTrigger: !<value> 0x0
                     - Init: !<value> 0x0
                     - Mode: !<value> Wrap
+                    - Enabled: !<value> 0x0
                     - EndAddr: !<value> 0x0000000000000000
                     - StartAddr: !<value> 0x0000000000000000
-                    - Enabled: !<value> 0x0
             - BsaWaveformEngine:
                 - WaveformEngineBuffers:
                     - FramesAfterTrigger: !<value> 0x0000
@@ -5079,6 +5322,7 @@
                     - SoftTrigger: !<value> 0x0
                     - Init: !<value> 0x0
                     - Mode: !<value> DoneWhenFull
+                    - Enabled: !<value> 0x0
                     - EndAddr: !<value>
                         - 0x0000000000004000
                         - 0x0000000020004000
@@ -5097,12 +5341,11 @@
                         - 0x00000000a0000000
                         - 0x00000000c0000000
                         - 0x00000000e0000000
-                    - Enabled: !<value> 0x0
         - AmcCarrierTiming:
             - Gthe3Channel:
                 - ES_ERRDET_EN: !<value> 0x0
-                - ES_CONTROL: !<value> 0x00
                 - TX_PROGDIV_CFG: !<value> 0x0000
+                - ES_CONTROL: !<value> 0x00
                 - RXDFE_HC_CFG0: !<value> 0x0000
                 - ES_QUALIFIER: !<value> 0x0000
                 - ES_QUAL_MASK: !<value> 0x0000
@@ -5113,10 +5356,10 @@
                 - ES_HORZ_OFFSET: !<value> 0x000
                 - RXDFE_HC_CFG1: !<value> 0x0000
                 - ES_PMA_CFG: !<value> 0x000
-                - RX_DFE_AGC_CFG1: !<value> 0x0
-                - RXDFE_CFG: !<value> 0x0000
                 - RX_EN_HI_LR: !<value> 0x0
+                - RX_DFE_AGC_CFG1: !<value> 0x0
                 - RX_DFE_AGC_CFG0: !<value> 0x0
+                - RXDFE_CFG: !<value> 0x0000
                 - ALIGN_MCOMMA_VALUE: !<value> 0x000
                 - LOCAL_MASTER: !<value> 0x0
                 - PCS_PCIE_EN: !<value> 0x0
@@ -5128,8 +5371,8 @@
                 - RXPHDLY_CFG: !<value> 0x0000
                 - RXDFE_OS_CFG1: !<value> 0x0000
                 - RXDLY_CFG: !<value> 0x0000
-                - RXDFE_HF_CFG0: !<value> 0x0000
                 - RXDLY_LCFG: !<value> 0x0000
+                - RXDFE_HF_CFG0: !<value> 0x0000
                 - RXDFE_HD_CFG0: !<value> 0x0000
                 - RX_BIAS_CFG0: !<value> 0x0000
                 - PCS_RSVD0: !<value> 0x0000
@@ -5142,8 +5385,8 @@
                 - RX_SUM_VCMTUNE: !<value> 0x0
                 - RX_SUM_VCM_OVWR: !<value> 0x0
                 - RX_SUM_IREF_TUNE: !<value> 0x0
-                - RX_SUM_DFETAPREP_EN: !<value> 0x0
                 - RX_SUM_VREF_TUNE: !<value> 0x0
+                - RX_SUM_DFETAPREP_EN: !<value> 0x0
                 - OOB_PWRUP: !<value> 0x0
                 - RXOOB_CFG: !<value> 0x000
                 - CBCC_DATA_SOURCE_SEL: !<value> 0x0
@@ -5196,8 +5439,8 @@
                 - RXDFE_HF_CFG1: !<value> 0x0000
                 - PD_TRANS_TIME_FROM_P2: !<value> 0x000
                 - TERM_RCAL_CFG: !<value> 0x0000
-                - PD_TRANS_TIME_TO_P2: !<value> 0x00
                 - PD_TRANS_TIME_NONE_P2: !<value> 0x00
+                - PD_TRANS_TIME_TO_P2: !<value> 0x00
                 - TRANS_TIME_RATE: !<value> 0x00
                 - TST_RSV1: !<value> 0x00
                 - TST_RSV0: !<value> 0x00
@@ -5207,9 +5450,9 @@
                 - TX_DEEMPH1: !<value> 0x00
                 - TX_RXDETECT_REF: !<value> 0x0
                 - TXFIFO_ADDR_CFG: !<value> 0x0
+                - TXBUF_RESET_ON_RATE_CHANGE: !<value> 0x0
                 - TX_DEEMPH0: !<value> 0x00
                 - TXBUF_EN: !<value> 0x0
-                - TXBUF_RESET_ON_RATE_CHANGE: !<value> 0x0
                 - TXGEARBOX_EN: !<value> 0x0
                 - TXOUT_DIV: !<value> 0x0
                 - TX_RXDETECT_CFG: !<value> 0x0000
@@ -5234,10 +5477,10 @@
                 - RXPRBS_LINKACQ_CNT: !<value> 0x00
                 - TX_INT_DATAWIDTH: !<value> 0x0
                 - RXOSCALRESET_TIME: !<value> 0x00
-                - RXSYNC_SKIP_DA: !<value> 0x0
                 - RXOOB_CLK_CFG: !<value> 0x0
-                - A_RXOSCALRESET: !<value> 0x0
                 - TXSYNC_SKIP_DA: !<value> 0x0
+                - RXSYNC_SKIP_DA: !<value> 0x0
+                - A_RXOSCALRESET: !<value> 0x0
                 - TX_IDLE_DATA_ZERO: !<value> 0x0
                 - TXSYNC_OVRD: !<value> 0x0
                 - RX_CTLE3_LPF: !<value> 0x00
@@ -5249,9 +5492,9 @@
                 - RX_TUNE_AFE_OS: !<value> 0x0
                 - RX_DFE_KL_LPM_KL_CFG0: !<value> 0x0
                 - ACJTAG_RESET: !<value> 0x0
-                - RESET_POWERSAVE_DISABLE: !<value> 0x0
                 - ACJTAG_MODE: !<value> 0x0
                 - ACJTAG_DEBUG_MODE: !<value> 0x0
+                - RESET_POWERSAVE_DISABLE: !<value> 0x0
                 - RXDFELPM_KL_CFG2: !<value> 0x0000
                 - RXDFE_VP_CFG0: !<value> 0x0000
                 - RXDFE_VP_CFG1: !<value> 0x0000
@@ -5275,9 +5518,9 @@
                 - TXPI_PPMCLK_SEL: !<value> 0x0
                 - TXPI_INVSTROBE_SEL: !<value> 0x0
                 - TXPI_SYNFREQ_PPM: !<value> 0x0
-                - TXPI_PPM_CFG: !<value> 0x00
                 - RX_DFE_KL_LPM_KH_CFG1: !<value> 0x0
                 - GEARBOX_MODE: !<value> 0x00
+                - TXPI_PPM_CFG: !<value> 0x00
                 - RX_DFELPM_CFG1: !<value> 0x0
                 - RX_DFE_KL_LPM_KH_CFG0: !<value> 0x0
                 - RX_DFELPM_CFG0: !<value> 0x0
@@ -5287,9 +5530,9 @@
                 - TXPI_CFG3: !<value> 0x0
                 - TXPI_CFG2: !<value> 0x0
                 - TXPI_CFG1: !<value> 0x0
+                - RXPI_CFG0: !<value> 0x0
                 - TXPI_CFG0: !<value> 0x0
                 - RXPI_CFG6: !<value> 0x0
-                - RXPI_CFG0: !<value> 0x0
                 - RXPI_CFG5: !<value> 0x0
                 - RXPI_CFG4: !<value> 0x0
                 - RXPI_CFG3: !<value> 0x0
@@ -5327,8 +5570,8 @@
                 - RXDFE_H4_CFG0: !<value> 0x0000
                 - TX_SARC_LPBK_ENB: !<value> 0x0
                 - TX_MODE_SEL: !<value> 0x0
-                - PROCESS_PAR: !<value> 0x0
                 - RXDFE_H5_CFG1: !<value> 0x0000
+                - PROCESS_PAR: !<value> 0x0
                 - TEMPERATUR_PAR: !<value> 0x0
                 - TX_DCD_EN: !<value> 0x0
                 - TX_DCD_CFG: !<value> 0x00
@@ -5353,11 +5596,11 @@
                 - RXDFE_H9_CFG0: !<value> 0x0000
                 - RXDFE_HA_CFG0: !<value> 0x0000
                 - RXDFE_H9_CFG1: !<value> 0x0000
-                - CHAN_BOND_SEQ_1_2: !<value> 0x000
+                - RX_PROGDIV_CFG: !<value> 0x0000
                 - CPLL_CFG1: !<value> 0x0000
                 - CPLL_CFG0: !<value> 0x0000
+                - CHAN_BOND_SEQ_1_2: !<value> 0x000
                 - DEC_MCOMMA_DETECT: !<value> 0x0
-                - RX_PROGDIV_CFG: !<value> 0x0000
                 - RX_DDI_SEL: !<value> 0x00
                 - CPLL_INIT_CFG1: !<value> 0x00
                 - DEC_VALID_COMMA_ONLY: !<value> 0x0
@@ -5365,11 +5608,11 @@
                 - RXDFE_HB_CFG0: !<value> 0x0000
                 - ES_EYE_SCAN_EN: !<value> 0x0
                 - ES_PRESCALE: !<value> 0x00
-                - RXLPM_OS_CFG0: !<value> 0x0000
-                - RXLPM_GC_CFG: !<value> 0x0000
                 - DMONITOR_CFG1: !<value> 0x00
+                - RXLPM_OS_CFG0: !<value> 0x0000
                 - RXLPM_OS_CFG1: !<value> 0x0000
                 - RXDFELPM_KL_CFG1: !<value> 0x0000
+                - RXLPM_GC_CFG: !<value> 0x0000
                 - RXDFELPM_KL_CFG0: !<value> 0x0000
                 - RXLPM_KH_CFG1: !<value> 0x0000
                 - RXLPM_KH_CFG0: !<value> 0x0000
@@ -5424,9 +5667,9 @@
                 - PCI3_RX_ASYNC_EBUF_BYPASS: !<value> 0x0
                 - RX_BUFFER_CFG: !<value> 0x00
                 - CHAN_BOND_SEQ_2_1: !<value> 0x000
-                - CHAN_BOND_SEQ_1_ENABLE: !<value> 0x0
                 - OOBDIVCTL: !<value> 0x0
                 - RX_DEFER_RESET_BUF_EN: !<value> 0x0
+                - CHAN_BOND_SEQ_1_ENABLE: !<value> 0x0
                 - PCI3_PIPE_RX_ELECIDLE: !<value> 0x0
                 - PCI3_RX_ELECIDLE_H2L_COUNT: !<value> 0x00
                 - PCI3_AUTO_REALIGN: !<value> 0x0
@@ -5447,10 +5690,10 @@
                 - RX_PMA_POWER_SAVE: !<value> 0x0
                 - TX_PMA_POWER_SAVE: !<value> 0x0
                 - RXDFE_HB_CFG1: !<value> 0x0000
+                - TXPCSRESET_TIME: !<value> 0x00
                 - RXPMARESET_TIME: !<value> 0x00
                 - PCI3_RX_ELECIDLE_LP4_DISABLE: !<value> 0x0
                 - PCI3_RX_ELECIDLE_EI2_ENABLE: !<value> 0x0
-                - TXPCSRESET_TIME: !<value> 0x00
                 - RXELECIDLE_CFG: !<value> 0x0
                 - RXPCSRESET_TIME: !<value> 0x00
                 - RXCDRPHRESET_TIME: !<value> 0x00
@@ -5491,10 +5734,10 @@
                     - 0x00000000
                     - 0x00000000
                     - 0x00000000
-                - TStampU: !<value> 0x00041eb8
-                - TStampL: !<value> 0x220d036a
+                - TStampU: !<value> 0x000423f7
+                - TStampL: !<value> 0x1d82a4b5
                 - PulseIdU: !<value> 0x00000000
-                - PulseIdL: !<value> 0x4c7a718d
+                - PulseIdL: !<value> 0x675144d6
                 - BaseControl: !<value> 0x00c8
                 - TxInhibit: !<value> 0x0
                 - TxLoopback: !<value> 0x0
