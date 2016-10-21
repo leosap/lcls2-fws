@@ -13,18 +13,18 @@
 
 TimingProc: &TimingProc
   name: TimingProc
-  description: "To process timing and external signal for internal and external triggers generation"
   class: MMIODev
   configPrio: 1
+  description: "To process timing and external signal for internal and external triggers generation"
   size: 0x01000000 #
   #########
   children:
   #########
-  TriggerLaneReg:
-    <<: *TriggerLaneReg
-    at:
-      offset: 0x00010000
-      nelms: 11
-      stride: 0x00010000
+    TriggerLaneReg:
+      <<: *TriggerLaneReg
+      at:
+        offset: 0x00010000
+        stride: 0x00010000
+        nelms: 11
     ##################################################
 

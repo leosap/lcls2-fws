@@ -38,13 +38,6 @@ ApplicationCore: &ApplicationCore
         stride: 0x01000000
         nelms: 2
     ##################################################
-    DacSigGeneration:
-      <<: *DacSigGeneration
-      at:
-        offset: 0x03000000
-        stride: 0x01000000
-        nelms: 2
-    ##################################################
     SysGen:
       <<: *SysGen
       at:
@@ -59,3 +52,10 @@ ApplicationCore: &ApplicationCore
         stride: 0x01000000
         nelms: 2
     #################################################
+    DacSigGeneration:
+      <<: *DacSigGeneration
+      at:
+        offset: 0x03000000
+        stride: 0x01000000
+        nelms: 2
+    ##################################################

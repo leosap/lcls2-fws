@@ -14,7 +14,7 @@
 
 DacSigGeneration: &DacSigGeneration
   name: DacSigGeneration
-  description: "To set dac playout test sequence"
+  description: "To set dac playout test sequences"
   class: MMIODev
   configPrio: 1
   size: 0x01000000 #

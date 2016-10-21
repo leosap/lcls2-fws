@@ -11,7 +11,7 @@
 #once
 
 DspCoreConfig: &DspCoreConfig
-  description: "Sysgen configuration and status registers"
+  description: "Sysgen configuration registers"
   class: MMIODev
   configPrio: 1
   size: 0x010000
