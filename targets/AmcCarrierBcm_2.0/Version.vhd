@@ -13,9 +13,9 @@ USE ieee.std_logic_1164.ALL;
 
 package Version is
 
-constant FPGA_VERSION_C : std_logic_vector(31 downto 0) := x"00000016"; -- MAKE_VERSION
+constant FPGA_VERSION_C : std_logic_vector(31 downto 0) := x"00000017"; -- MAKE_VERSION
 
-constant BUILD_STAMP_C : string := "AmcCarrierBcm: Vivado v2016.2 (x86_64) Built Wed Oct 19 17:18:42 PDT 2016 by leosap";
+constant BUILD_STAMP_C : string := "AmcCarrierBcm: Vivado v2016.2 (x86_64) Built Fri Nov 18 17:57:29 PST 2016 by leosap";
 
 end Version;
 
@@ -40,6 +40,6 @@ end Version;
 -- 08/04/2016 (0x00000014): Switch to tagged version
 -- 08/19/2016 (0x00000015): Switch to head to try new features.
 -- 09/21/2016 (0x00000016): Test one shot for DaqMuxV2 hwtrig interface
-
+-- 11/16/2016 (0x00000017): Update to the latest interfaces
 -------------------------------------------------------------------------------
 

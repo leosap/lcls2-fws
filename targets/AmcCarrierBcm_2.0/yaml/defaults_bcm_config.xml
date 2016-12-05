@@ -1067,7 +1067,7 @@
                      <AdcReg_0x003B>0x0</AdcReg_0x003B>
                      <AdcReg_0x003C>0x0</AdcReg_0x003C>
                      <AdcReg_0x003D>0x0</AdcReg_0x003D>
-                     <AdcReg_0x0047>0x0</AdcReg_0x0047>
+                     <AdcReg_0x0047>0x70</AdcReg_0x0047>
                      <AdcReg_0x0060>0x7D</AdcReg_0x0060>
                      <AdcReg_0x0061>0x0</AdcReg_0x0061>
                      <AdcReg_0x0062>0x1</AdcReg_0x0062>

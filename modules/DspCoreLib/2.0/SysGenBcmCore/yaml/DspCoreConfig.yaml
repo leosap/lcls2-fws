@@ -31,6 +31,7 @@ DspCoreConfig: &DspCoreConfig
       class: IntField
       at:
         offset: 0x0004
+      #encoding: IEEE_754
       sizeBits: 32
       mode: RW
       description: "Floating - Coef A0 of processig equation to properly scale the first averaged group"

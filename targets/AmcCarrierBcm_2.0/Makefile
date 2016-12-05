@@ -6,18 +6,18 @@ target: prom
 export PRJ_PART = XCKU040-FFVA1156-2-E
 
 # Define the tags
-export STDLIB_TAG  = 2.0
-export AMC_TAG     = 2.0
-export MGT_TAG     = 2.0
+export STDLIB_TAG  = 2.2.1
+export AMC_TAG     = 2.2.1
+export MGT_TAG     = 2.1
 export PGP_TAG     = 2.0
 export SALT_TAG    = 2.0
-export N25Q_TAG    = 2.0
-export SY56040_TAG = 2.0
-export BSA_TAG     = 2.0
-export TIMING_TAG  = 2.0
-export ETH_TAG     = 2.0
-export RSSI_TAG    = 2.0
-export JESD_TAG    = 2.0
+export N25Q_TAG    = 2.1
+export SY56040_TAG = 2.1
+export BSA_TAG     = 2.1
+export TIMING_TAG  = 2.2
+export ETH_TAG     = 2.1
+export RSSI_TAG    = 2.1
+export JESD_TAG    = 2.1
 export COMMON_TAG  = 2.0
 export DSP_TAG     = 2.0
 

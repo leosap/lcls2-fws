@@ -5058,7 +5058,7 @@
                 - AdcReg_0x0061: !<value> 0x00
                 - AdcReg_0x0060: !<value> 0x7d
                 - AdcReg_0x0062: !<value> 0x01
-                - AdcReg_0x0047: !<value> 0x00
+                - AdcReg_0x0047: !<value> 0x70
                 - AdcReg_0x003D: !<value> 0x00
                 - AdcReg_0x003C: !<value> 0x00
                 - AdcReg_0x003B: !<value> 0x00
