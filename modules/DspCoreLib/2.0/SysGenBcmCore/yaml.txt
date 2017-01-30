@@ -1,6 +1,10 @@
 manual yaml/SysGen.yaml
+manual yaml/SysGenMr.yaml
 manual yaml/DspCoreConfig.yaml
+manual yaml/DspCoreConfigMr.yaml
 manual yaml/DspCoreRes.yaml
+manual yaml/DspCoreResMr.yaml
 manual yaml/DspPreprocConfig.yaml
+manual yaml/DspPreprocConfigMr.yaml
 
 

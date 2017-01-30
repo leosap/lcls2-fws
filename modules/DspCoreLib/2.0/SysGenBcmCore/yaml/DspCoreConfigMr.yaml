@@ -10,8 +10,8 @@
 #schemaversion 3.0.0
 #once
 
-DspCoreRes: &DspCoreRes
-  description: "Sysgen configuration and status registers"
+DspCoreConfigMr: &DspCoreConfigMr
+  description: "Sysgen configuration registers"
   class: MMIODev
   configPrio: 1
   size: 0x010000
@@ -19,182 +19,166 @@ DspCoreRes: &DspCoreRes
   children:
   #########
     #########################################################
-    MultResultA0:
+    Version:
       class: IntField
       at:
-        offset: 0x0100
-      encoding: IEEE_754
+        offset: 0x0000
       sizeBits: 32
       mode: RO
-      description: "Floating - Result of multiplication of ADC average 0 and A0 coef, or ~ 0x402aed85- sampl, 0x3e2aed9a-16samp"
+      description: "System generator core version"
     #########################################################
-    MultResultA1:
+    Inp0CoefA0:
       class: IntField
       at:
-        offset: 0x0104
+        offset: 0x0004
       encoding: IEEE_754
-      sizeBits: 32
-      mode: RO
-      description: "Floating - Result of multiplication of ADC average 1 and A1 coef, or ~ 0xc02aed85- sampl, 0xbe2aed9a-16samp"
-    #########################################################
-    MultResultA2:
-      class: IntField
-      at:
-        offset: 0x0108
-      encoding: IEEE_754
-      sizeBits: 32
-      mode: RO
-      description: "Floating - Result of multiplication of ADC average 2 and A2 coef, or ~ 0x00000000 normally"
-    #########################################################
-    AddSums0:
-      class: IntField
-      at:
-        offset: 0x010C
-      encoding: IEEE_754
-      sizeBits: 32
-      mode: RO
-      description: "Floating - Result of sum MultResultA0 and MultResultA1"
-    #########################################################
-    AddSums1:
-      class: IntField
-      at:
-        offset: 0x0110
-      encoding: IEEE_754
-      sizeBits: 32
-      mode: RO
-      description: "Floating - Result of addition of MultResultA0 and Coef_lnQcal"
-    #########################################################
-    AddSums2:
-      class: IntField
-      at:
-        offset: 0x0114
-      encoding: IEEE_754
-      sizeBits: 32
-      mode: RO
-      description: "Floating - Result of addition of AddSums0 and AddSums1"
-    #########################################################
-    ExpCalc:
-      class: IntField
-      at:
-        offset: 0x0118
-      encoding: IEEE_754
-      sizeBits: 32
-      mode: RO
-      description: "Floating - Result of exp(AddSums2)"
-    #########################################################
-    TempDif0:
-      class: IntField
-      at:
-        offset: 0x011C
-      encoding: IEEE_754
-      sizeBits: 32
-      mode: RO
-      description: "Floating - Result of temperature difference of Tor TempTor - TempTor_c"
-    #########################################################
-    TempMult0:
-      class: IntField
-      at:
-        offset: 0x0120
-      encoding: IEEE_754
-      sizeBits: 32
-      mode: RO
-      description: "Floating - Result of Multiplication of temperature difference of TempDif0 and CoefTEmp0"
-    #########################################################
-    TempMultP0:
-      class: IntField
-      at:
-        offset: 0x0124
-      encoding: IEEE_754
-      sizeBits: 32
-      mode: RO
-      description: "Floating - Result of addition of TempMult0 and 1.0"
-    #########################################################
-    TempDif1:
-      class: IntField
-      at:
-        offset: 0x0128
-      encoding: IEEE_754
-      sizeBits: 32
-      mode: RO
-      description: "Floating - RResult of temperature difference of Amp TempAmp - TempAmp_c"
-    #########################################################
-    TempMult1:
-      class: IntField
-      at:
-        offset: 0x012C
-      encoding: IEEE_754
-      sizeBits: 32
-      mode: RO
-      description: "Floating - Result of Multiplication of temperature difference of TempDif1 and CoefTEmp1"
-    #########################################################
-    TempMultP1:
-      class: IntField
-      at:
-        offset: 0x0130
-      encoding: IEEE_754
-      sizeBits: 32
-      mode: RO
-      description: "Floating - Result of addition of TempMult1 and 1.0"
-    #########################################################
-    TempDif2:
-      class: IntField
-      at:
-        offset: 0x0134
-      encoding: IEEE_754
-      sizeBits: 32
-      mode: RO
-      description: "Floating - Result of temperature difference of Elc TempElc - TempElc_c"
-    #########################################################
-    TempMult2:
-      class: IntField
-      at:
-        offset: 0x0138
-      encoding: IEEE_754
-      sizeBits: 32
-      mode: RO
-      description: "Floating - Result of Multiplication of temperature difference of TempDif2 and CoefTEmp2"
-    #########################################################
-    TempMultP2:
-      class: IntField
-      at:
-        offset: 0x013C
-      encoding: IEEE_754
-      sizeBits: 32
-      mode: RO
-      description: "Floating - Result of addition of TempMult2 and 1.0"
-    #########################################################
-    Mult0:
-      class: IntField
-      at:
-        offset: 0x0140
-      encoding: IEEE_754
-      sizeBits: 32
-      mode: RO
-      description: "Floating - Result of multiplication of  ChargaData and TempMultP0"
-    #########################################################
-    Mult1:
-      class: IntField
-      at:
-        offset: 0x0144
-      encoding: IEEE_754
-      sizeBits: 32
-      mode: RO
-      description: "Floating - Result of multiplication of  TempMultP1 and TempMultP2"
-    #########################################################
-    Mult2:
-      class: IntField
-      at:
-        offset: 0x0148
-      encoding: IEEE_754
-      sizeBits: 32
-      mode: RO
-      description: "Floating - Result of multiplication of  Mult0 and Mult1"
-    #########################################################
-    Scratch:
-      class: IntField
-      at:
-        offset: 0x0FFC
       sizeBits: 32
       mode: RW
-      description: "Scratch register"
+      description: "Floating - Input 0 Coef A0 of processig equation to properly scale the first averaged group"
     #########################################################
+    Inp0CoefA1:
+      class: IntField
+      at:
+        offset: 0x0008
+      encoding: IEEE_754
+      sizeBits: 32
+      mode: RW
+      description: "Floating - Input 0 Coef A1 of processig equation to properly scale the second averaged group"
+    #########################################################
+    Inp0CoefA2:
+      class: IntField
+      at:
+        offset: 0x000C
+      encoding: IEEE_754
+      sizeBits: 32
+      mode: RW
+      description: "Floating - Input 0 Coef A2 of processig equation to properly scale the third averaged group"
+    #########################################################
+    Inp0Coef_offset:
+      class: IntField
+      at:
+        offset: 0x0010
+      encoding: IEEE_754
+      sizeBits: 32
+      mode: RW
+      description: "Floating - Input 0 offset value if needed"
+    #########################################################
+    Inp1CoefA0:
+      class: IntField
+      at:
+        offset: 0x0014
+      encoding: IEEE_754
+      sizeBits: 32
+      mode: RW
+      description: "Floating - Input 1 Coef A0 of processig equation to properly scale the first averaged group"
+    #########################################################
+    Inp1CoefA1:
+      class: IntField
+      at:
+        offset: 0x0018
+      encoding: IEEE_754
+      sizeBits: 32
+      mode: RW
+      description: "Floating - Input 1 Coef A1 of processig equation to properly scale the second averaged group"
+    #########################################################
+    Inp1CoefA2:
+      class: IntField
+      at:
+        offset: 0x001C
+      encoding: IEEE_754
+      sizeBits: 32
+      mode: RW
+      description: "Floating - Input 1 Coef A2 of processig equation to properly scale the third averaged group"
+    #########################################################
+    Inp1Coef_offset:
+      class: IntField
+      at:
+        offset: 0x0020
+      encoding: IEEE_754
+      sizeBits: 32
+      mode: RW
+      description: "Floating - Input 2 offset value if needed"
+    #########################################################
+    Inp2CoefA0:
+      class: IntField
+      at:
+        offset: 0x0024
+      encoding: IEEE_754
+      sizeBits: 32
+      mode: RW
+      description: "Floating - Input 2 Coef A0 of processig equation to properly scale the first averaged group"
+    #########################################################
+    Inp2CoefA1:
+      class: IntField
+      at:
+        offset: 0x0028
+      encoding: IEEE_754
+      sizeBits: 32
+      mode: RW
+      description: "Floating - Input 2 Coef A1 of processig equation to properly scale the second averaged group"
+    #########################################################
+    Inp2CoefA2:
+      class: IntField
+      at:
+        offset: 0x002C
+      encoding: IEEE_754
+      sizeBits: 32
+      mode: RW
+      description: "Floating - Input 2 Coef A2 of processig equation to properly scale the third averaged group"
+    #########################################################
+    Inp2Coef_offset:
+      class: IntField
+      at:
+        offset: 0x0030
+      encoding: IEEE_754
+      sizeBits: 32
+      mode: RW
+      description: "Floating - Input 2 offset value if needed"
+    #########################################################
+    Inp01Thresh:
+      class: IntField
+      at:
+        offset: 0x0034
+      encoding: IEEE_754
+      sizeBits: 32
+      mode: RW
+      description: "Floating -  threshold for input 0 and 1 charge"
+    #########################################################
+    Inp01DiffThresh:
+      class: IntField
+      at:
+        offset: 0x0038
+      encoding: IEEE_754
+      sizeBits: 32
+      mode: RW
+      description: "Floating -  threshold for difference between input 0 and 1 charge"
+    #########################################################
+    Inp10DiffThresh:
+      class: IntField
+      at:
+        offset: 0x003C
+      encoding: IEEE_754
+      sizeBits: 32
+      mode: RW
+      description: "Floating -  threshold for difference between input 1 and 0 charge"
+    #########################################################
+    Inp02DiffThresh:
+      class: IntField
+      at:
+        offset: 0x0040
+      encoding: IEEE_754
+      sizeBits: 32
+      mode: RW
+      description: "Floating -  threshold for difference between input 0 and 2 charge"
+    #########################################################
+    Inp20DiffThresh:
+      class: IntField
+      at:
+        offset: 0x0044
+      encoding: IEEE_754
+      sizeBits: 32
+      mode: RW
+      description: "Floating -  threshold for difference between input 2 and 0 charge"
+    #########################################################
+
+

@@ -9,29 +9,39 @@
 ##############################################################################
 #schemaversion 3.0.0
 #once
-#include AxiLiteGenRegItf.yaml
-#include SigGenLane.yaml
+#include AxiEmpty.yaml
+#include DspCoreConfigMr.yaml
+#include DspCoreResMr.yaml
+#include DspPreprocConfigMr.yaml
 
-DacSigGeneration: &DacSigGeneration
-  name: DacSigGeneration
-  description: "To set dac playout test sequences"
+
+SysGenMr: &SysGenMr
+  name: SysGenMr
+  description: "To process ADC values using system generator with preprocessing to simplify drawing"
   class: MMIODev
   configPrio: 1
   size: 0x01000000 #
   #########
   children:
   #########
-    AxiLiteGenRegItf:
-      <<: *AxiLiteGenRegItf
+    DspCoreConfigMr:
+      <<: *DspCoreConfigMr
       at:
         offset: 0x00000000
-    ##################################################
-    SigGenLane:
-      <<: *SigGenLane
-      at:
-        offset: 0x00010000
-        nelms: 2
+        nelms: 1
         stride: 0x00010000
     ##################################################
-
-
+    DspCoreResMr:
+      <<: *DspCoreResMr
+      at:
+        offset: 0x00010000
+        nelms: 1
+        stride: 0x00010000
+    ##################################################
+    DspPreprocConfigMr:
+      <<: *DspPreprocConfigMr
+      at:
+        offset: 0x00040000
+        nelms:  4
+        stride: 0x00010000
+   ##################################################

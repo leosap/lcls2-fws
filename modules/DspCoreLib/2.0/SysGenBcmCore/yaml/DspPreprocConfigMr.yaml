@@ -10,7 +10,7 @@
 #schemaversion 3.0.0
 #once
 
-DspPreprocConfig: &DspPreprocConfig
+DspPreprocConfigMr: &DspPreprocConfigMr
   description: "Sysgen preprocessing configuration and status registers"
   class: MMIODev
   configPrio: 1
@@ -118,4 +118,5 @@ DspPreprocConfig: &DspPreprocConfig
       mode: RO
       description: "Trigger rate over 1 second interval"
     #########################################################
+
 

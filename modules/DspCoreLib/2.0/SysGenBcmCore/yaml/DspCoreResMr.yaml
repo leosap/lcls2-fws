@@ -10,7 +10,7 @@
 #schemaversion 3.0.0
 #once
 
-DspCoreRes: &DspCoreRes
+DspCoreResMr: &DspCoreResMr
   description: "Sysgen configuration and status registers"
   class: MMIODev
   configPrio: 1
@@ -19,176 +19,194 @@ DspCoreRes: &DspCoreRes
   children:
   #########
     #########################################################
-    MultResultA0:
+    Inp0MultResultA0:
       class: IntField
       at:
         offset: 0x0100
       encoding: IEEE_754
       sizeBits: 32
       mode: RO
-      description: "Floating - Result of multiplication of ADC average 0 and A0 coef, or ~ 0x402aed85- sampl, 0x3e2aed9a-16samp"
+      description: "Floating - Input0 Result of multiplication of ADC average 0 and A0 coef, or ~ 0x402aed85- sampl, 0x3e2aed9a-16samp"
     #########################################################
-    MultResultA1:
+    Inp0MultResultA1:
       class: IntField
       at:
         offset: 0x0104
       encoding: IEEE_754
       sizeBits: 32
       mode: RO
-      description: "Floating - Result of multiplication of ADC average 1 and A1 coef, or ~ 0xc02aed85- sampl, 0xbe2aed9a-16samp"
+      description: "Floating - Input0 Result of multiplication of ADC average 1 and A1 coef, or ~ 0xc02aed85- sampl, 0xbe2aed9a-16samp"
     #########################################################
-    MultResultA2:
+    Inp0MultResultA2:
       class: IntField
       at:
         offset: 0x0108
       encoding: IEEE_754
       sizeBits: 32
       mode: RO
-      description: "Floating - Result of multiplication of ADC average 2 and A2 coef, or ~ 0x00000000 normally"
+      description: "Floating - Input0 Result of multiplication of ADC average 2 and A2 coef, or ~ 0x00000000 normally"
     #########################################################
-    AddSums0:
+    Inp0AddSums0:
       class: IntField
       at:
         offset: 0x010C
       encoding: IEEE_754
       sizeBits: 32
       mode: RO
-      description: "Floating - Result of sum MultResultA0 and MultResultA1"
+      description: "Floating - Input0 Result of sum MultResultA0 and MultResultA1"
     #########################################################
-    AddSums1:
+    Inp0AddSums1:
       class: IntField
       at:
         offset: 0x0110
       encoding: IEEE_754
       sizeBits: 32
       mode: RO
-      description: "Floating - Result of addition of MultResultA0 and Coef_lnQcal"
+      description: "Floating - Input0 Result of addition of MultResultA0 and Coef_lnQcal"
     #########################################################
-    AddSums2:
+    Inp0AddSums2:
       class: IntField
       at:
         offset: 0x0114
       encoding: IEEE_754
       sizeBits: 32
       mode: RO
-      description: "Floating - Result of addition of AddSums0 and AddSums1"
+      description: "Floating - Input0 Result of addition of AddSums0 and AddSums1"
     #########################################################
-    ExpCalc:
+    Inp1MultResultA0:
       class: IntField
       at:
         offset: 0x0118
       encoding: IEEE_754
       sizeBits: 32
       mode: RO
-      description: "Floating - Result of exp(AddSums2)"
+      description: "Floating - Input1 Result of multiplication of ADC average 0 and A0 coef, or ~ 0x402aed85- sampl, 0x3e2aed9a-16samp"
     #########################################################
-    TempDif0:
+    Inp1MultResultA1:
       class: IntField
       at:
         offset: 0x011C
       encoding: IEEE_754
       sizeBits: 32
       mode: RO
-      description: "Floating - Result of temperature difference of Tor TempTor - TempTor_c"
+      description: "Floating - Input1 Result of multiplication of ADC average 1 and A1 coef, or ~ 0xc02aed85- sampl, 0xbe2aed9a-16samp"
     #########################################################
-    TempMult0:
+    Inp1MultResultA2:
       class: IntField
       at:
         offset: 0x0120
       encoding: IEEE_754
       sizeBits: 32
       mode: RO
-      description: "Floating - Result of Multiplication of temperature difference of TempDif0 and CoefTEmp0"
+      description: "Floating - Input1 Result of multiplication of ADC average 2 and A2 coef, or ~ 0x00000000 normally"
     #########################################################
-    TempMultP0:
+    Inp1AddSums0:
       class: IntField
       at:
         offset: 0x0124
       encoding: IEEE_754
       sizeBits: 32
       mode: RO
-      description: "Floating - Result of addition of TempMult0 and 1.0"
+      description: "Floating - Input1 Result of sum MultResultA0 and MultResultA1"
     #########################################################
-    TempDif1:
+    Inp1AddSums1:
       class: IntField
       at:
         offset: 0x0128
       encoding: IEEE_754
       sizeBits: 32
       mode: RO
-      description: "Floating - RResult of temperature difference of Amp TempAmp - TempAmp_c"
+      description: "Floating - Input1 Result of addition of MultResultA0 and Coef_lnQcal"
     #########################################################
-    TempMult1:
+    Inp1AddSums2:
       class: IntField
       at:
         offset: 0x012C
       encoding: IEEE_754
       sizeBits: 32
       mode: RO
-      description: "Floating - Result of Multiplication of temperature difference of TempDif1 and CoefTEmp1"
+      description: "Floating - Input1 Result of addition of AddSums0 and AddSums1"
     #########################################################
-    TempMultP1:
+    Inp2MultResultA0:
       class: IntField
       at:
         offset: 0x0130
       encoding: IEEE_754
       sizeBits: 32
       mode: RO
-      description: "Floating - Result of addition of TempMult1 and 1.0"
+      description: "Floating - Input2 Result of multiplication of ADC average 0 and A0 coef, or ~ 0x402aed85- sampl, 0x3e2aed9a-16samp"
     #########################################################
-    TempDif2:
+    Inp2MultResultA1:
       class: IntField
       at:
         offset: 0x0134
       encoding: IEEE_754
       sizeBits: 32
       mode: RO
-      description: "Floating - Result of temperature difference of Elc TempElc - TempElc_c"
+      description: "Floating - Input2 Result of multiplication of ADC average 1 and A1 coef, or ~ 0xc02aed85- sampl, 0xbe2aed9a-16samp"
     #########################################################
-    TempMult2:
+    Inp2MultResultA2:
       class: IntField
       at:
         offset: 0x0138
       encoding: IEEE_754
       sizeBits: 32
       mode: RO
-      description: "Floating - Result of Multiplication of temperature difference of TempDif2 and CoefTEmp2"
+      description: "Floating - Input2 Result of multiplication of ADC average 2 and A2 coef, or ~ 0x00000000 normally"
     #########################################################
-    TempMultP2:
+    Inp2AddSums0:
       class: IntField
       at:
         offset: 0x013C
       encoding: IEEE_754
       sizeBits: 32
       mode: RO
-      description: "Floating - Result of addition of TempMult2 and 1.0"
+      description: "Floating - Input2 Result of sum MultResultA0 and MultResultA1"
     #########################################################
-    Mult0:
+    Inp2AddSums1:
       class: IntField
       at:
         offset: 0x0140
       encoding: IEEE_754
       sizeBits: 32
       mode: RO
-      description: "Floating - Result of multiplication of  ChargaData and TempMultP0"
+      description: "Floating - Input2 Result of addition of MultResultA0 and Coef_lnQcal"
     #########################################################
-    Mult1:
+    Inp2AddSums2:
       class: IntField
       at:
         offset: 0x0144
       encoding: IEEE_754
       sizeBits: 32
       mode: RO
-      description: "Floating - Result of multiplication of  TempMultP1 and TempMultP2"
+      description: "Floating - Input2 Result of addition of AddSums0 and AddSums1"
     #########################################################
-    Mult2:
+    ChargeDiff0:
       class: IntField
       at:
         offset: 0x0148
       encoding: IEEE_754
       sizeBits: 32
       mode: RO
-      description: "Floating - Result of multiplication of  Mult0 and Mult1"
+      description: "Floating - Result difference beetween charge inp0 and inp1"
+    #########################################################
+    ChargeDiff1:
+      class: IntField
+      at:
+        offset: 0x014C
+      encoding: IEEE_754
+      sizeBits: 32
+      mode: RO
+      description: "Floating - Result difference beetween charge inp0 and inp2"
+    #########################################################
+    Adc2SumInput:
+      class: IntField
+      at:
+        offset: 0x0150
+      encoding: IEEE_754
+      sizeBits: 32
+      mode: RO
+      description: "Floating - ADC2 sum 0 for debug"
     #########################################################
     Scratch:
       class: IntField

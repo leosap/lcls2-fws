@@ -33,6 +33,7 @@ package AdcIntProcPkg is
 
 
   type sampleDataArray3Array is array (natural range <>) of sampleDataArray(2 downto 0);
+  type sampleDataArray5Array is array (natural range <>) of sampleDataArray(5 downto 0);
 
 
   type ConfigSpaceLclType is record
@@ -58,12 +59,17 @@ package AdcIntProcPkg is
 
  type ConfigSpaceArrayType is array (natural range <>) of ConfigSpaceType;
 
-    type Bcm2DspRcrdType is record
+  type Bcm2DspRcrdType is record
       AdcValid       : sl;
       AdcSumDataOut   : Slv32Array(2 downto 0);
       TimingMessageOut : TimingMessageType;
    end record;
 
+  type Bcm2DspRcrdMRType is record
+      AdcValid       : sl;
+      AdcSumDataOut   : Slv32Array(2 downto 0);
+      TimingStreamOut : TimingStreamType;
+   end record;
 
 
      constant BCM_2_DSP_RCRD_INIT_C : Bcm2DspRcrdType := (
@@ -71,9 +77,13 @@ package AdcIntProcPkg is
       AdcSumDataOut   => (others => (others => '1')),
       TimingMessageOut         => TIMING_MESSAGE_INIT_C );
 
-
+     constant BCM_2_DSP_RCRD_INIT_MR_C : Bcm2DspRcrdMRType := (
+      AdcValid       => '0',
+      AdcSumDataOut   => (others => (others => '1')),
+      TimingStreamOut         => TIMING_STREAM_INIT_C );
 
   type Bcm2DspRcrdArrType is array (natural range<>) of Bcm2DspRcrdType;
+  type Bcm2DspRcrdMRArrType is array (natural range<>) of Bcm2DspRcrdMRType;
 
    constant NUM_BCM_APP_C : natural := 2;
    constant DIAGNOSTIC_OUTPUTS_G  : integer := 14;

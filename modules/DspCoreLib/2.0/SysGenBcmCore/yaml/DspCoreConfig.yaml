@@ -31,7 +31,7 @@ DspCoreConfig: &DspCoreConfig
       class: IntField
       at:
         offset: 0x0004
-      #encoding: IEEE_754
+      encoding: IEEE_754
       sizeBits: 32
       mode: RW
       description: "Floating - Coef A0 of processig equation to properly scale the first averaged group"
@@ -40,6 +40,7 @@ DspCoreConfig: &DspCoreConfig
       class: IntField
       at:
         offset: 0x0008
+      encoding: IEEE_754
       sizeBits: 32
       mode: RW
       description: "Floating - Coef A1 of processig equation to properly scale the second averaged group"
@@ -48,6 +49,7 @@ DspCoreConfig: &DspCoreConfig
       class: IntField
       at:
         offset: 0x000C
+      encoding: IEEE_754
       sizeBits: 32
       mode: RW
       description: "Floating - Coef A2 of processig equation to properly scale the third averaged group"
@@ -56,6 +58,7 @@ DspCoreConfig: &DspCoreConfig
       class: IntField
       at:
         offset: 0x0010
+      encoding: IEEE_754
       sizeBits: 32
       mode: RW
       description: "Floating - natural logarithm of Qcal value provided by bergoz (or ~ 0xc0981e4f)"
@@ -64,6 +67,7 @@ DspCoreConfig: &DspCoreConfig
       class: IntField
       at:
         offset: 0x0014
+      encoding: IEEE_754
       sizeBits: 32
       mode: RW
       description: "Floating -  temperature coefficient of Toroid, like ~ 0x3dcccccd)"
@@ -72,6 +76,7 @@ DspCoreConfig: &DspCoreConfig
       class: IntField
       at:
         offset: 0x0018
+      encoding: IEEE_754
       sizeBits: 32
       mode: RW
       description: "Floating - Temperature of Toroid in K, like 27C + 273.15, or like 0x43961333)"
@@ -80,6 +85,7 @@ DspCoreConfig: &DspCoreConfig
       class: IntField
       at:
         offset: 0x001C
+      encoding: IEEE_754
       sizeBits: 32
       mode: RW
       description: "Floating - temperature coefficient of Amp, like ~ 0x3dcccccd)"
@@ -88,6 +94,7 @@ DspCoreConfig: &DspCoreConfig
       class: IntField
       at:
         offset: 0x0020
+      encoding: IEEE_754
       sizeBits: 32
       mode: RW
       description: "Floating -  Temperature of Amp in K, like 27C + 273.15, or like 0x43961333)"
@@ -96,6 +103,7 @@ DspCoreConfig: &DspCoreConfig
       class: IntField
       at:
         offset: 0x0024
+      encoding: IEEE_754
       sizeBits: 32
       mode: RW
       description: "Floating - temperature coefficient of Electronics, like ~ 0x3e4ccccd)"
@@ -104,6 +112,7 @@ DspCoreConfig: &DspCoreConfig
       class: IntField
       at:
         offset: 0x0028
+      encoding: IEEE_754
       sizeBits: 32
       mode: RW
       description: "Floating - Temperature of Electronics in K, like 27C + 273.15, or like 0x43961333)"
@@ -112,6 +121,7 @@ DspCoreConfig: &DspCoreConfig
       class: IntField
       at:
         offset: 0x002c
+      encoding: IEEE_754
       sizeBits: 32
       mode: RW
       description: "Floating -  Temperature of Amp in K at calibration, like 23C + 273.15, or like 0x43941333)"

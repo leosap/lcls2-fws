@@ -47,15 +47,18 @@ entity DspCoreMrWrapper is
       adcValues      : in  sampleDataArray(3 downto 0);
       dacValues      : out sampleDataArray(1 downto 0);
       intTrig        : in  slv(3 downto 0);
-      mpsOut         : out  sl;
       -- Timing Interface (Timing domain)
       timingClk      : in   sl;  --
       timingRst      : in   sl;  --
       timingBus      : in    TimingBusType;
-    -- Diagnostic Interface (diagnosticClk domain)
+     -- Diagnostic Interface (diagnosticClk domain)
       diagnosticClk        : out  sl;
       diagnosticRst        : out  sl;
       diagnosticBus        : out   DiagnosticBusType := DIAGNOSTIC_BUS_INIT_C;
+      -- MPS stuff
+      rtmMpsDout          : out   slv(7 downto 0);
+      AMCconfigured       : out   sl;
+      timingStream        : out TimingStreamType;
       -- AXI-Lite Port
       axiClk         : in  sl;
       axiRst         : in  sl;
@@ -138,7 +141,7 @@ architecture mapping of DspCoreMrWrapper is
    signal ConfigSpace         : ConfigSpaceArrayType(3 downto 0);
    signal adcValidOut         : Slv(3 downto 0);
 
-  signal resultValuesOut        : sampleDataArray3Array(3 downto 0);
+  signal resultValuesOut        : sampleDataArray5Array(3 downto 0);
 
   signal resultValidOut         : slv(3 downto 0);
   signal mpserr                 : slv(3 downto 0);
@@ -146,10 +149,12 @@ architecture mapping of DspCoreMrWrapper is
 
    signal lclDataBus             : Slv32Array(DIAGNOSTIC_OUTPUTS_G-1 downto 0);
 
-   signal Bcm2DspRcrdArr : Bcm2DspRcrdArrType(3 downto 0);
+   signal Bcm2DspRcrdArr : Bcm2DspRcrdMRArrType(3 downto 0);
    signal ADCenabled      : slv(3 downto 0);
    signal axiRstVect      : slv(1 downto 0);
    signal adcvalidvect    : slv(3 downto 0);
+   signal rtmMpsDoutV     : Slv5Array(3 downto 0);
+   signal AqEnabled       : slv(2 downto 0);
 
 begin
 
@@ -201,7 +206,7 @@ begin
             adcValuesIn     => adcValues(I),
             adcValuesOut    => adcValuesOut(I),
             adcValidOut     => adcValidOut(I),
-            timingMessage   => Bcm2DspRcrdArr(I).TimingMessageOut,
+            timingMessage   => TIMING_MESSAGE_INIT_C, -- unused
             resultValidOut  => resultValidOut(I),
             axilReadMaster  => locAxilReadMasters(REG_SPACE0_INDEX_C+I),
             axilReadSlave   => locAxilReadSlaves(REG_SPACE0_INDEX_C+I),
@@ -211,9 +216,9 @@ begin
    end generate genAdcLanes;
    -----------------------------------------------------
 
- genDataAlign : for I in 1 downto 0 generate
+ genDataAlign : for I in 2 downto 0 generate
 
-   U_BCMAlignment : entity work.BCMAlignment
+   U_BCMAlignment : entity work.BCMAlignmentMR
       port map (
          axiClk          => axiClk,
          axiRst          => axiRst,
@@ -245,30 +250,40 @@ begin
           clk => axiClk,
           dspcoremr_aresetn => axiRstL,
             --Inputs
-          ADCvalid => AdcValidVect(I downto I),
-          adcsum0 => Bcm2DspRcrdArr(I).AdcSumDataOut(0),
-          adcsum1 => Bcm2DspRcrdArr(I).AdcSumDataOut(1),
-          adcsum2 => Bcm2DspRcrdArr(I).AdcSumDataOut(2),
+          ADCvalid => AdcValidVect(0 downto 0),
+          adcsum0 => Bcm2DspRcrdArr(0).AdcSumDataOut(0),
+          adcsum1 => Bcm2DspRcrdArr(0).AdcSumDataOut(1),
+          adcsum2 => Bcm2DspRcrdArr(0).AdcSumDataOut(2),
           ADCvalid1 => AdcValidVect(I+1 downto I+1),
           adcsum3 => Bcm2DspRcrdArr(I+1).AdcSumDataOut(0),
           adcsum4 => Bcm2DspRcrdArr(I+1).AdcSumDataOut(1),
           adcsum5 => Bcm2DspRcrdArr(I+1).AdcSumDataOut(2),
+          ADCvalid2 => AdcValidVect(I+2 downto I+2),
+          adcsum6 => Bcm2DspRcrdArr(I+2).AdcSumDataOut(0),
+          adcsum7 => Bcm2DspRcrdArr(I+2).AdcSumDataOut(1),
+          adcsum8 => Bcm2DspRcrdArr(I+2).AdcSumDataOut(2),
             --Outputs
+
           adcvalidout => resultValidOut(I downto I),    --Need vector
           adcres0 => resultValuesOut(I)(0),
           adcres1 => resultValuesOut(I)(1),
           adcres2 => resultValuesOut(I)(2),
-           -- MPS Error vector
-          mpserr => mpserr(I+0 downto I+0 ),    --Need vector
+          adcres3 => resultValuesOut(I)(3),
+          adcres4 => resultValuesOut(I)(4),
+          mpserr0 => rtmMpsDoutV(I)(0 downto 0),
+          mpserr1 => rtmMpsDoutV(I)(1 downto 1),
+          mpserr2 => rtmMpsDoutV(I)(2 downto 2),
+          mpserr3 => rtmMpsDoutV(I)(3 downto 3),
+          mpserr4 => rtmMpsDoutV(I)(4 downto 4),
 
             --AXI-Lite Interface 0 - rwreg
-          dspcoremr_rwreg_s_axi_awaddr  => locAxilWriteMasters(DSP_CORE0_INDEX_C+I).awaddr(5 downto 0),
+          dspcoremr_rwreg_s_axi_awaddr  => locAxilWriteMasters(DSP_CORE0_INDEX_C+I).awaddr(6 downto 0),
           dspcoremr_rwreg_s_axi_awvalid => locAxilWriteMasters(DSP_CORE0_INDEX_C+I).awvalid,
           dspcoremr_rwreg_s_axi_wdata   => locAxilWriteMasters(DSP_CORE0_INDEX_C+I).wdata,
           dspcoremr_rwreg_s_axi_wstrb   => locAxilWriteMasters(DSP_CORE0_INDEX_C+I).wstrb,
           dspcoremr_rwreg_s_axi_wvalid  => locAxilWriteMasters(DSP_CORE0_INDEX_C+I).wvalid,
           dspcoremr_rwreg_s_axi_bready  => locAxilWriteMasters(DSP_CORE0_INDEX_C+I).bready,
-          dspcoremr_rwreg_s_axi_araddr  => locAxilReadMasters(DSP_CORE0_INDEX_C+I).araddr(5 downto 0),
+          dspcoremr_rwreg_s_axi_araddr  => locAxilReadMasters(DSP_CORE0_INDEX_C+I).araddr(6 downto 0),
           dspcoremr_rwreg_s_axi_arvalid => locAxilReadMasters(DSP_CORE0_INDEX_C+I).arvalid,
           dspcoremr_rwreg_s_axi_rready  => locAxilReadMasters(DSP_CORE0_INDEX_C+I).rready,
           dspcoremr_rwreg_s_axi_awready => locAxilWriteSlaves(DSP_CORE0_INDEX_C+I).awready,
@@ -301,16 +316,18 @@ begin
    end generate genDSPCores;
 
    unusedDSPCores : for I in 3 downto 1 generate
-       mpserr((I) downto (I)) <= (Others => '0');
+       rtmMpsDoutV(I) <= (Others => '0');
        ADCenabled(I) <= '0';
-       resultValidOut(I)     <= adcValidOut(I-1);
-       resultValuesOut(I)(0) <= adcValuesOut(I-1)(0);
-       resultValuesOut(I)(1) <= adcValuesOut(I-1)(1);
-       resultValuesOut(I)(2) <= adcValuesOut(I-1)(2);
+       resultValidOut(I)     <= adcValidOut(I);
+       resultValuesOut(I)(0) <= adcValuesOut(I)(0);
+       resultValuesOut(I)(1) <= adcValuesOut(I)(1);
+       resultValuesOut(I)(2) <= adcValuesOut(I)(2);
+       resultValuesOut(I)(3) <= adcValuesOut(I)(2);
+       resultValuesOut(I)(4) <= adcValuesOut(I)(2);
 
    end generate unusedDSPCores;
 
-   unusedDSPCores1 : for I in 3 downto 2 generate
+   unusedDSPCores1 : for I in 3 downto 2 generate  -- need to be 2 since DSP uses two address spaces
 
          AxiLiteEmpty_INST: entity work.AxiLiteEmpty
          generic map (
@@ -332,22 +349,42 @@ begin
    lclDataBus(0) <= resultValuesOut(0)(0);
    lclDataBus(1) <= resultValuesOut(0)(1);
    lclDataBus(2) <= resultValuesOut(0)(2);
-   lclDataBus(3) <= resultValuesOut(1)(0);
-   lclDataBus(4) <= resultValuesOut(1)(1);
-   lclDataBus(5) <= resultValuesOut(1)(2);
-   lclDataBus(6) <= resultValuesOut(2)(0);
-   lclDataBus(7) <= resultValuesOut(2)(1);
-   lclDataBus(8) <= resultValuesOut(2)(2);
-   lclDataBus(9) <= resultValuesOut(3)(0);
-   lclDataBus(10) <= resultValuesOut(3)(1);
-   lclDataBus(11) <= resultValuesOut(3)(2);
-   lclDataBus(12) <=  ADCenabled(1) & '0'  & X"000" & '0' & mpsErr(1 downto 1) & ADCenabled(0) & '0' & X"000" & '0' & mpsErr(0 downto 0);
-   lclDataBus(13) <=  ADCenabled(3) & '0'  & X"000" & '0' & mpsErr(3 downto 3) &  ADCenabled(2) & '0'  & X"000" & '0' & mpsErr(2 downto 2);
+   lclDataBus(3) <= resultValuesOut(0)(3);
+   lclDataBus(4) <= resultValuesOut(0)(4);
+   lclDataBus(5) <= X"0000" & AdcValidVect & adcValidOut(3 downto 0) &  "000" & rtmMpsDoutV(0)(4 downto 0);
+   lclDataBus(6) <= (Others => '0');
+   lclDataBus(7) <= (Others => '0');
+   lclDataBus(8) <= (Others => '0');
+   lclDataBus(9) <=  (Others => '0');
+   lclDataBus(10) <=  (Others => '0');
 
   diagnosticBus.strobe <= resultValidOut(0);
   diagnosticBus.data(DIAGNOSTIC_OUTPUTS_G -1 downto 0) <= lclDataBus(DIAGNOSTIC_OUTPUTS_G -1 downto 0);
-  diagnosticBus.timingMessage <= Bcm2DspRcrdArr(0).TimingMessageOut;
+  diagnosticBus.timingMessage <= TIMING_MESSAGE_INIT_C;
+  timingStream <= Bcm2DspRcrdArr(0).TimingStreamOut;
 
-  mpsOut <= mpsErr(0);
+-- Build MPS vector
+  rtmMpsDout(0) <= rtmMpsDoutV(0)(0);  -- Charge limit of IM02 or IMBC1I or IMBC2I
+  rtmMpsDout(1) <= rtmMpsDoutV(0)(1);  -- Charge limit of IM03 or IMBC1O or IMBC2O
+  rtmMpsDout(2) <= rtmMpsDoutV(0)(2);  -- Charge limit of IMS1
+  rtmMpsDout(3) <= rtmMpsDoutV(0)(3);  -- Loss  IM02 - OM03 or IMBC1I - IMBC1O or IMBC2I - IMBC2O
+  rtmMpsDout(4) <= rtmMpsDoutV(0)(4);  -- Loss  IM02 - OM0S
+  rtmMpsDout(5) <= '0'; -- rtmMpsDoutV(0)(0);
+  rtmMpsDout(6) <= '0'; -- rtmMpsDoutV(0)(0);
+  rtmMpsDout(7) <= '0'; -- rtmMpsDoutV(0)(0);
+
+
+   AqEnabled  <= ConfigSpace(2).TestMode(2) & ConfigSpace(1).TestMode(2) & ConfigSpace(0).TestMode(2);
+
+   U_ConfigCompl4Health : entity work.ConfigCompl4Health
+      port map (
+         axiClk          => axiClk,
+         axiRst          => axiRst,
+
+         AqEnabled       => '1',
+         TrigIn          => resultValidOut(0),
+
+         AMCconfigured   => AMCconfigured);
+
 
 end mapping;

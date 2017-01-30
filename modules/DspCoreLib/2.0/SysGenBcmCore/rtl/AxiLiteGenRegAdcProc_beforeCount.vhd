@@ -59,8 +59,6 @@ entity AxiLiteGenRegAdcProc is
       -- Configuration signals
       timingMessage   : in    TimingMessageType;
       resultValidOut  : in    sl;
-      TriggerRate     : in    slv(31 downto 0);
-      TriggerRateUpdate  : in    sl;
       ConfigSpaceLcl  : out  ConfigSpaceLclType := CONF_SPACE_LCL_C;
       ConfigSpace     : out  ConfigSpaceType := CONF_SPACE_C
    );
@@ -74,7 +72,6 @@ architecture rtl of AxiLiteGenRegAdcProc is
       TrigDelay       : Slv8Array(2 downto 0);
       SimAdcSumData   : Slv32Array(2 downto 0);
       TimingStamp     : slv(31 downto 0);
-      TriggerRate     : slv(31 downto 0);
       TestMode        : slv(2 downto 0);
       axilReadSlave   : AxiLiteReadSlaveType;
       axilWriteSlave  : AxiLiteWriteSlaveType;
@@ -86,8 +83,7 @@ architecture rtl of AxiLiteGenRegAdcProc is
       axilReadSlave   => AXI_LITE_READ_SLAVE_INIT_C,
       axilWriteSlave  => AXI_LITE_WRITE_SLAVE_INIT_C,
       SimAdcSumData   => ((others=>'0'),(others=>'0'),(others=>'0')),
-      TimingStamp     => (others=>'0'),
-      TriggerRate     => (others=>'0'),
+      TimingStamp         => (others=>'0'),
       TestMode        => (others=>'0')
       );
 
@@ -123,14 +119,9 @@ begin
       axiSlaveRegister(regCon, x"01C", 0, v.SimAdcSumData(2));
       axiSlaveRegister(regCon, x"020", 0, v.TestMode);
       axiSlaveRegisterR(regCon, x"024", 0, r.TimingStamp);
-      axiSlaveRegisterR(regCon, x"028", 0, r.TriggerRate);
 
       if (resultValidOut = '1') then
          v.TimingStamp := timingMessage.timeStamp(31 downto 0);
-      end if;
-
-      if (TriggerRateUpdate = '1') then
-         v.TriggerRate := TriggerRate;
       end if;
 
       -- Closeout the transaction

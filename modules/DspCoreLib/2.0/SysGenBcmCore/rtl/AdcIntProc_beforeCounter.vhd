@@ -80,8 +80,6 @@ architecture rtl of AdcIntProc is
 signal  ConfigSpaceLcl        :    ConfigSpaceLclType;
 signal  IntTrigOut            :    slv(2 downto 0);
 signal  adcValidOutV          :    slv(2 downto 0);
-signal  TriggerRate           :    slv(31 downto 0);
-signal  TriggerRateUpdate     :    sl;
 
 begin
 
@@ -107,27 +105,12 @@ begin
       axilWriteSlave  => axilWriteSlave,
       timingMessage   => timingMessage,
       resultValidOut  => resultValidOut,
-      TriggerRate      => TriggerRate,
-      TriggerRateUpdate => TriggerRateUpdate,
       ConfigSpaceLcl  => ConfigSpaceLcl,
       ConfigSpace     => ConfigSpace
       );
 
--- Trigger rate in 1s counter
-  SyncTrigRate_INST: entity work.SyncTrigRate
-   generic map (
-      TPD_G        => TPD_G,
-      REF_CLK_FREQ_G => 185.714286E+6,
-      ONE_SHOT_G   => true)
-   port map (
-      trigIn          => IntTrig,
-      trigRateUpdated => TriggerRateUpdate,
-      trigRateOut     => TriggerRate,
-      locClk          => axiClk,
-      refClk          => jesdClk
-      );
-
    -----------------------------------------------------------
+
 
    genAdcIntSum : for i in 2 downto 0 generate
 
