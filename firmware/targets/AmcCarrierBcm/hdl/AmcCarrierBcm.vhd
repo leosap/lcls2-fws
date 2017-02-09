@@ -1,25 +1,20 @@
 -------------------------------------------------------------------------------
--- Title      :
--------------------------------------------------------------------------------
 -- File       : AmcCarrierBcm.vhd
--- Author     : Larry Ruckman  <ruckman@slac.stanford.edu>
 -- Company    : SLAC National Accelerator Laboratory
--- Created    : 2015-07-10
--- Last update: 2016-03-10
--- Platform   :
--- Standard   : VHDL'93/02
+-- Created    : 2017-02-04
+-- Last update: 2017-02-07
 -------------------------------------------------------------------------------
 -- Description: Firmware Target's Top Level
---
+-- 
 -- Note: Common-to-Application interface defined in HPS ESD: LCLSII-2.7-ES-0536
---
+-- 
 -------------------------------------------------------------------------------
--- This file is part of 'LCLS2 BCM Firmware'.
--- It is subject to the license terms in the LICENSE.txt file found in the
--- top-level directory of this distribution and at:
---    https://confluence.slac.stanford.edu/display/ppareg/LICENSE.html.
--- No part of 'LCLS2 BCM Firmware', including this file,
--- may be copied, modified, propagated, or distributed except according to
+-- This file is part of 'LCLS2 AMC Carrier Firmware'.
+-- It is subject to the license terms in the LICENSE.txt file found in the 
+-- top-level directory of this distribution and at: 
+--    https://confluence.slac.stanford.edu/display/ppareg/LICENSE.html. 
+-- No part of 'LCLS2 AMC Carrier Firmware', including this file, 
+-- may be copied, modified, propagated, or distributed except according to 
 -- the terms contained in the LICENSE.txt file.
 -------------------------------------------------------------------------------
 
@@ -32,82 +27,63 @@ use work.SsiPkg.all;
 use work.AxiLitePkg.all;
 use work.TimingPkg.all;
 use work.AmcCarrierPkg.all;
+use work.AppTopPkg.all;
 
 entity AmcCarrierBcm is
    generic (
-      TPD_G         : time    := 1 ns;
-      SIM_SPEEDUP_G : boolean := false;
-      SIMULATION_G  : boolean := false);
+      TPD_G : time := 1 ns);
    port (
       -----------------------
       -- Application Ports --
       -----------------------
-      -- JESD High Speed Ports
-      jesdRxP          : in    Slv4Array(1 downto 0);
-      jesdRxN          : in    Slv4Array(1 downto 0);
-      jesdTxP          : out   Slv4Array(1 downto 0);
-      jesdTxN          : out   Slv4Array(1 downto 0);
-      -- JESD Reference Ports
-      jesdClkP         : in    slv(1 downto 0);
-      jesdClkN         : in    slv(1 downto 0);
-      jesdSysRefP      : in    slv(1 downto 0);
-      jesdSysRefN      : in    slv(1 downto 0);
-      -- JESD ADC Sync Ports
-      jesdRxSyncP      : out   Slv2Array(1 downto 0);
-      jesdRxSyncN      : out   Slv2Array(1 downto 0);
-      jesdTxSyncP      : in    slv(1 downto 0);
-      jesdTxSyncN      : in    slv(1 downto 0);
-      -- LMK Ports
-      lmkMuxSel        : out   slv(1 downto 0);
-      lmkClkSel        : out   Slv2Array(1 downto 0);
-      lmkStatus        : in    Slv2Array(1 downto 0);
-      lmkSck           : out   slv(1 downto 0);
-      lmkDio           : inout slv(1 downto 0);
-      lmkSync          : out   Slv2Array(1 downto 0);
-      lmkCsL           : out   slv(1 downto 0);
-      lmkRst           : out   slv(1 downto 0);
-      -- Fast ADC's SPI Ports
-      adcCsL           : out   Slv2Array(1 downto 0);
-      adcSck           : out   Slv2Array(1 downto 0);
-      adcMiso          : in    Slv2Array(1 downto 0);
-      adcMosi          : out   Slv2Array(1 downto 0);
-      -- Fast DAC's SPI Ports
-      dacCsL           : out   slv(1 downto 0);
-      dacSck           : out   slv(1 downto 0);
-      dacMiso          : in    slv(1 downto 0);
-      dacMosi          : out   slv(1 downto 0);
-      -- Slow DAC's SPI Ports
-      dacVcoCsP        : out   slv(1 downto 0);
-      dacVcoCsN        : out   slv(1 downto 0);
-      dacVcoSckP       : out   slv(1 downto 0);
-      dacVcoSckN       : out   slv(1 downto 0);
-      dacVcoDinP       : out   slv(1 downto 0);
-      dacVcoDinN       : out   slv(1 downto 0);
-      -- Pass through Interfaces
-      fpgaClkP         : out   slv(1 downto 0);
-      fpgaClkN         : out   slv(1 downto 0);
-      smaTrigP         : out   slv(1 downto 0);
-      smaTrigN         : out   slv(1 downto 0);
-      adcCalP          : out   slv(1 downto 0);
-      adcCalN          : out   slv(1 downto 0);
-      lemoDinP         : in    Slv2Array(1 downto 0);
-      lemoDinN         : in    Slv2Array(1 downto 0);
-      lemoDoutP        : out   Slv2Array(1 downto 0);
-      lemoDoutN        : out   Slv2Array(1 downto 0);
-      bcmL             : out   slv(1 downto 0);
+      -- AMC's JESD Ports
+      jesdRxP          : in    Slv7Array(1 downto 0);
+      jesdRxN          : in    Slv7Array(1 downto 0);
+      jesdTxP          : out   Slv7Array(1 downto 0);
+      jesdTxN          : out   Slv7Array(1 downto 0);
+      jesdClkP         : in    Slv3Array(1 downto 0);
+      jesdClkN         : in    Slv3Array(1 downto 0);
+      -- AMC's JTAG Ports
+      jtagPri          : inout Slv5Array(1 downto 0);
+      jtagSec          : inout Slv5Array(1 downto 0);
+      -- AMC's FPGA Clock Ports
+      fpgaClkP         : inout Slv2Array(1 downto 0);
+      fpgaClkN         : inout Slv2Array(1 downto 0);
+      -- AMC's System Reference Ports
+      sysRefP          : inout Slv4Array(1 downto 0);
+      sysRefN          : inout Slv4Array(1 downto 0);
+      -- AMC's Sync Ports
+      syncInP          : inout Slv4Array(1 downto 0);
+      syncInN          : inout Slv4Array(1 downto 0);
+      syncOutP         : inout Slv10Array(1 downto 0);
+      syncOutN         : inout Slv10Array(1 downto 0);
+      -- AMC's Spare Ports
+      spareP           : inout Slv16Array(1 downto 0);
+      spareN           : inout Slv16Array(1 downto 0);
+      -- RTM's Low Speed Ports
+      rtmLsP           : inout slv(53 downto 0);
+      rtmLsN           : inout slv(53 downto 0);
+      -- RTM's High Speed Ports
+      rtmHsRxP         : in    sl;
+      rtmHsRxN         : in    sl;
+      rtmHsTxP         : out   sl;
+      rtmHsTxN         : out   sl;
+      -- RTM's Clock Reference 
+      genClkP          : in    sl;
+      genClkN          : in    sl;
       ----------------
       -- Core Ports --
-      ----------------
+      ----------------   
       -- Common Fabricate Clock
       fabClkP          : in    sl;
       fabClkN          : in    sl;
-      -- XAUI Ports
-      xauiRxP          : in    slv(3 downto 0);
-      xauiRxN          : in    slv(3 downto 0);
-      xauiTxP          : out   slv(3 downto 0);
-      xauiTxN          : out   slv(3 downto 0);
-      xauiClkP         : in    sl;
-      xauiClkN         : in    sl;
+      -- Ethernet Ports
+      ethRxP           : in    slv(3 downto 0);
+      ethRxN           : in    slv(3 downto 0);
+      ethTxP           : out   slv(3 downto 0);
+      ethTxN           : out   slv(3 downto 0);
+      ethClkP          : in    sl;
+      ethClkN          : in    sl;
       -- Backplane MPS Ports
       mpsClkIn         : in    sl;
       mpsClkOut        : out   sl;
@@ -170,34 +146,24 @@ end AmcCarrierBcm;
 
 architecture top_level of AmcCarrierBcm is
 
-   -- AmcCarrierCore Configuration Constants
-   constant TIMING_MODE_C            : boolean                                                   := TIMING_MODE_186MHZ_C;
-   constant APP_TYPE_C               : AppType                                                   := APP_BCM_TYPE_C;
-   constant DIAGNOSTIC_RAW_STREAMS_C : positive                                                  := 4;
-   constant DIAGNOSTIC_RAW_CONFIGS_C : AxiStreamConfigArray(DIAGNOSTIC_RAW_STREAMS_C-1 downto 0) := (others => ssiAxiStreamConfig(4));
-
-   constant EN_BP_MSG_G              : boolean                                                   := true;
-   constant HEAD                     : boolean                                                   := true;
-
-
-   -- AXI-Lite Interface (appClk domain)
-   signal regClk         : sl;
-   signal regRst         : sl;
-   signal regReadMaster  : AxiLiteReadMasterType;
-   signal regReadSlave   : AxiLiteReadSlaveType;
-   signal regWriteMaster : AxiLiteWriteMasterType;
-   signal regWriteSlave  : AxiLiteWriteSlaveType;
-
-   -- Timing Interface (timingClk domain)
-   signal timingClk : sl;
-   signal timingRst : sl;
-   signal timingBus : TimingBusType;
-
+   -- AXI-Lite Interface (axilClk domain)
+   signal axilClk              : sl;
+   signal axilRst              : sl;
+   signal axilReadMaster       : AxiLiteReadMasterType;
+   signal axilReadSlave        : AxiLiteReadSlaveType;
+   signal axilWriteMaster      : AxiLiteWriteMasterType;
+   signal axilWriteSlave       : AxiLiteWriteSlaveType;
+   -- Timing Interface (timingClk domain) 
+   signal timingClk            : sl;
+   signal timingRst            : sl;
+   signal timingBus            : TimingBusType;
+   signal timingPhy            : TimingPhyType;
+   signal timingPhyClk         : sl;
+   signal timingPhyRst         : sl;
    -- Diagnostic Interface (diagnosticClk domain)
-   signal diagnosticClk : sl;
-   signal diagnosticRst : sl;
-   signal diagnosticBus : DiagnosticBusType;
-
+   signal diagnosticClk        : sl;
+   signal diagnosticRst        : sl;
+   signal diagnosticBus        : DiagnosticBusType;
    --  Waveform interface (waveformClk domain)
    signal waveformClk          : sl;
    signal waveformRst          : sl;
@@ -205,162 +171,213 @@ architecture top_level of AmcCarrierBcm is
    signal obAppWaveformSlaves  : WaveformSlaveArrayType;
    signal ibAppWaveformMasters : WaveformMasterArrayType;
    signal ibAppWaveformSlaves  : WaveformSlaveArrayType;
-
+   -- Backplane Messaging Interface  (axilClk domain)
+   signal obBpMsgClientMaster  : AxiStreamMasterType;
+   signal obBpMsgClientSlave   : AxiStreamSlaveType;
+   signal ibBpMsgClientMaster  : AxiStreamMasterType;
+   signal ibBpMsgClientSlave   : AxiStreamSlaveType;
+   signal obBpMsgServerMaster  : AxiStreamMasterType;
+   signal obBpMsgServerSlave   : AxiStreamSlaveType;
+   signal ibBpMsgServerMaster  : AxiStreamMasterType;
+   signal ibBpMsgServerSlave   : AxiStreamSlaveType;
+   -- Application Debug Interface (axilClk domain)
+   signal obAppDebugMaster     : AxiStreamMasterType;
+   signal obAppDebugSlave      : AxiStreamSlaveType;
+   signal ibAppDebugMaster     : AxiStreamMasterType;
+   signal ibAppDebugSlave      : AxiStreamSlaveType;
+   -- MPS Concentrator Interface (axilClk domain)
+   signal mpsObMasters         : AxiStreamMasterArray(14 downto 0);
+   signal mpsObSlaves          : AxiStreamSlaveArray(14 downto 0);
    -- Reference Clocks and Resets
-   signal recTimingClk : sl;
-   signal recTimingRst : sl;
-   signal ref156MHzClk : sl;
-   signal ref156MHzRst : sl;
-
+   signal recTimingClk         : sl;
+   signal recTimingRst         : sl;
+   signal gthFabClk            : sl;
+   -- Misc. Interface (axilClk domain)
+   signal ethPhyReady          : sl;
+   signal ipmiBsi              : BsiBusType;
 
 begin
 
-   U_App : entity work.Application
+   U_AppTop : entity work.AppTop
       generic map (
-         TPD_G         => TPD_G,
-         SIM_SPEEDUP_G => SIM_SPEEDUP_G)
+         TPD_G                => TPD_G,
+         -- JESD Generics
+         JESD_DRP_EN_G        => false,          -- Configured by application
+         JESD_RX_LANE_G       => (others => 4),  -- Configured by application
+         JESD_TX_LANE_G       => (others => 2),  -- Configured by application
+         JESD_RX_POLARITY_G   => (others => "0000000"),  -- Configured by application
+         JESD_TX_POLARITY_G   => (others => "0000000"),  -- Configured by application
+         JESD_REF_SEL_G       => (others => DEV_CLK2_SEL_C),  -- Configured by application
+         -- Signal Generator Generics
+         SIG_GEN_SIZE_G       => (others => 0),  -- Configured by application
+         SIG_GEN_ADDR_WIDTH_G => (others => 9),  -- Configured by application
+         SIG_GEN_LANE_MODE_G  => (others => "0000000"),  -- Configured by application
+         -- Triggering Generics
+         TRIG_SIZE_G          => 3,     -- Configured by application
+         TRIG_DELAY_WIDTH_G   => 32,    -- Configured by application
+         TRIG_PULSE_WIDTH_G   => 32)    -- Configured by application
       port map (
          ----------------------
          -- Top Level Interface
          ----------------------
-         -- AXI-Lite Interface (regClk domain)
-         regClk               => regClk,
-         regRst               => regRst,
-         regReadMaster        => regReadMaster,
-         regReadSlave         => regReadSlave,
-         regWriteMaster       => regWriteMaster,
-         regWriteSlave        => regWriteSlave,
-         -- Timing Interface (timingClk domain)
+         -- AXI-Lite Interface (axilClk domain)
+         axilClk              => axilClk,
+         axilRst              => axilRst,
+         axilReadMaster       => axilReadMaster,
+         axilReadSlave        => axilReadSlave,
+         axilWriteMaster      => axilWriteMaster,
+         axilWriteSlave       => axilWriteSlave,
+         -- Timing Interface (timingClk domain) 
          timingClk            => timingClk,
          timingRst            => timingRst,
          timingBus            => timingBus,
+         timingPhy            => timingPhy,
+         timingPhyClk         => timingPhyClk,
+         timingPhyRst         => timingPhyRst,
          -- Diagnostic Interface (diagnosticClk domain)
          diagnosticClk        => diagnosticClk,
          diagnosticRst        => diagnosticRst,
          diagnosticBus        => diagnosticBus,
-         --  Waveform interface (waveformClk domain)
+         -- Waveform interface (waveformClk domain)
          waveformClk          => waveformClk,
          waveformRst          => waveformRst,
          obAppWaveformMasters => obAppWaveformMasters,
          obAppWaveformSlaves  => obAppWaveformSlaves,
          ibAppWaveformMasters => ibAppWaveformMasters,
          ibAppWaveformSlaves  => ibAppWaveformSlaves,
-
+         -- Backplane Messaging Interface  (axilClk domain)
+         obBpMsgClientMaster  => obBpMsgClientMaster,
+         obBpMsgClientSlave   => obBpMsgClientSlave,
+         ibBpMsgClientMaster  => ibBpMsgClientMaster,
+         ibBpMsgClientSlave   => ibBpMsgClientSlave,
+         obBpMsgServerMaster  => obBpMsgServerMaster,
+         obBpMsgServerSlave   => obBpMsgServerSlave,
+         ibBpMsgServerMaster  => ibBpMsgServerMaster,
+         ibBpMsgServerSlave   => ibBpMsgServerSlave,
+         -- Application Debug Interface (axilClk domain)
+         obAppDebugMaster     => obAppDebugMaster,
+         obAppDebugSlave      => obAppDebugSlave,
+         ibAppDebugMaster     => ibAppDebugMaster,
+         ibAppDebugSlave      => ibAppDebugSlave,
+         -- MPS Concentrator Interface (axilClk domain)
+         mpsObMasters         => mpsObMasters,
+         mpsObSlaves          => mpsObSlaves,
          -- Reference Clocks and Resets
          recTimingClk         => recTimingClk,
          recTimingRst         => recTimingRst,
-         ref156MHzClk         => ref156MHzClk,
-         ref156MHzRst         => ref156MHzRst,
-
+         gthFabClk            => gthFabClk,
+         -- Misc. Interface (axilClk domain)
+         ipmiBsi              => ipmiBsi,
+         ethPhyReady          => ethPhyReady,
          -----------------------
          -- Application Ports --
          -----------------------
-         -- JESD High Speed Ports
+         -- AMC's JESD Ports
          jesdRxP              => jesdRxP,
          jesdRxN              => jesdRxN,
          jesdTxP              => jesdTxP,
          jesdTxN              => jesdTxN,
-         -- JESD Reference Ports
          jesdClkP             => jesdClkP,
          jesdClkN             => jesdClkN,
-         jesdSysRefP          => jesdSysRefP,
-         jesdSysRefN          => jesdSysRefN,
-         -- JESD ADC Sync Ports
-         jesdRxSyncP          => jesdRxSyncP,
-         jesdRxSyncN          => jesdRxSyncN,
-         jesdTxSyncP          => jesdTxSyncP,
-         jesdTxSyncN          => jesdTxSyncN,
-         -- LMK Ports
-         lmkMuxSel            => lmkMuxSel,
-         lmkClkSel            => lmkClkSel,
-         lmkStatus            => lmkStatus,
-         lmkSck               => lmkSck,
-         lmkDio               => lmkDio,
-         lmkSync              => lmkSync,
-         lmkCsL               => lmkCsL,
-         lmkRst               => lmkRst,
-         -- Fast ADC's SPI Ports
-         adcCsL               => adcCsL,
-         adcSck               => adcSck,
-         adcMiso              => adcMiso,
-         adcMosi              => adcMosi,
-         -- Fast DAC's SPI Ports
-         dacCsL               => dacCsL,
-         dacSck               => dacSck,
-         dacMiso              => dacMiso,
-         dacMosi              => dacMosi,
-         -- Slow DAC's SPI Ports
-         dacVcoCsP            => dacVcoCsP,
-         dacVcoCsN            => dacVcoCsN,
-         dacVcoSckP           => dacVcoSckP,
-         dacVcoSckN           => dacVcoSckN,
-         dacVcoDinP           => dacVcoDinP,
-         dacVcoDinN           => dacVcoDinN,
-         -- Pass through Interfaces
+         -- AMC's JTAG Ports
+         jtagPri              => jtagPri,
+         jtagSec              => jtagSec,
+         -- AMC's FPGA Clock Ports
          fpgaClkP             => fpgaClkP,
          fpgaClkN             => fpgaClkN,
-         smaTrigP             => smaTrigP,
-         smaTrigN             => smaTrigN,
-         adcCalP              => adcCalP,
-         adcCalN              => adcCalN,
-         lemoDinP             => lemoDinP,
-         lemoDinN             => lemoDinN,
-         lemoDoutP            => lemoDoutP,
-         lemoDoutN            => lemoDoutN,
-         bcmL                 => bcmL);
+         -- AMC's System Reference Ports
+         sysRefP              => sysRefP,
+         sysRefN              => sysRefN,
+         -- AMC's Sync Ports
+         syncInP              => syncInP,
+         syncInN              => syncInN,
+         syncOutP             => syncOutP,
+         syncOutN             => syncOutN,
+         -- AMC's Spare Ports
+         spareP               => spareP,
+         spareN               => spareN,
+         -- RTM's Low Speed Ports
+         rtmLsP               => rtmLsP,
+         rtmLsN               => rtmLsN,
+         -- RTM's High Speed Ports
+         rtmHsRxP             => rtmHsRxP,
+         rtmHsRxN             => rtmHsRxN,
+         rtmHsTxP             => rtmHsTxP,
+         rtmHsTxN             => rtmHsTxN,
+         -- RTM's Clock Reference 
+         genClkP              => genClkP,
+         genClkN              => genClkN);
 
-   U_Core : entity work.AmcCarrierCore
+   U_Core : entity work.AmcCarrierCoreBase
       generic map (
-         TPD_G                    => TPD_G,
-         SIM_SPEEDUP_G            => SIM_SPEEDUP_G,
-         APP_TYPE_G               => APP_TYPE_C,
-         EN_BP_MSG_G              => EN_BP_MSG_G)
+         TPD_G      => TPD_G,
+         APP_TYPE_G => APP_NULL_TYPE_C)  -- Configured by application (refer to AmcCarrierPkg for list of all application types
       port map (
          ----------------------
          -- Top Level Interface
          ----------------------
-         -- AXI-Lite Interface (regClk domain)
-         regClk               => regClk,
-         regRst               => regRst,
-         regReadMaster        => regReadMaster,
-         regReadSlave         => regReadSlave,
-         regWriteMaster       => regWriteMaster,
-         regWriteSlave        => regWriteSlave,
-         -- Timing Interface (timingClk domain)
+         -- AXI-Lite Interface (axilClk domain)
+         axilClk              => axilClk,
+         axilRst              => axilRst,
+         axilReadMaster       => axilReadMaster,
+         axilReadSlave        => axilReadSlave,
+         axilWriteMaster      => axilWriteMaster,
+         axilWriteSlave       => axilWriteSlave,
+         -- Timing Interface (timingClk domain) 
          timingClk            => timingClk,
          timingRst            => timingRst,
          timingBus            => timingBus,
+         timingPhy            => timingPhy,
+         timingPhyClk         => timingPhyClk,
+         timingPhyRst         => timingPhyRst,
          -- Diagnostic Interface (diagnosticClk domain)
          diagnosticClk        => diagnosticClk,
          diagnosticRst        => diagnosticRst,
          diagnosticBus        => diagnosticBus,
-         --  Waveform interface (waveformClk domain)
+         -- Waveform interface (waveformClk domain)
          waveformClk          => waveformClk,
          waveformRst          => waveformRst,
          obAppWaveformMasters => obAppWaveformMasters,
          obAppWaveformSlaves  => obAppWaveformSlaves,
          ibAppWaveformMasters => ibAppWaveformMasters,
          ibAppWaveformSlaves  => ibAppWaveformSlaves,
-
+         -- Backplane Messaging Interface  (axilClk domain)
+         obBpMsgClientMaster  => obBpMsgClientMaster,
+         obBpMsgClientSlave   => obBpMsgClientSlave,
+         ibBpMsgClientMaster  => ibBpMsgClientMaster,
+         ibBpMsgClientSlave   => ibBpMsgClientSlave,
+         obBpMsgServerMaster  => obBpMsgServerMaster,
+         obBpMsgServerSlave   => obBpMsgServerSlave,
+         ibBpMsgServerMaster  => ibBpMsgServerMaster,
+         ibBpMsgServerSlave   => ibBpMsgServerSlave,
+         -- Application Debug Interface (axilClk domain)
+         obAppDebugMaster     => obAppDebugMaster,
+         obAppDebugSlave      => obAppDebugSlave,
+         ibAppDebugMaster     => ibAppDebugMaster,
+         ibAppDebugSlave      => ibAppDebugSlave,
+         -- MPS Concentrator Interface (axilClk domain)
+         mpsObMasters         => mpsObMasters,
+         mpsObSlaves          => mpsObSlaves,
          -- Reference Clocks and Resets
          recTimingClk         => recTimingClk,
          recTimingRst         => recTimingRst,
-         ref156MHzClk         => ref156MHzClk,
-         ref156MHzRst         => ref156MHzRst,
-
+         gthFabClk            => gthFabClk,
+         -- Misc. Interface (axilClk domain)
+         ipmiBsi              => ipmiBsi,
+         ethPhyReady          => ethPhyReady,
          ----------------
          -- Core Ports --
-         ----------------
+         ----------------   
          -- Common Fabricate Clock
          fabClkP              => fabClkP,
          fabClkN              => fabClkN,
-         -- XAUI Ports
-         xauiRxP              => xauiRxP,
-         xauiRxN              => xauiRxN,
-         xauiTxP              => xauiTxP,
-         xauiTxN              => xauiTxN,
-         xauiClkP             => xauiClkP,
-         xauiClkN             => xauiClkN,
+         -- ETH Ports
+         ethRxP               => ethRxP,
+         ethRxN               => ethRxN,
+         ethTxP               => ethTxP,
+         ethTxN               => ethTxN,
+         ethClkP              => ethClkP,
+         ethClkN              => ethClkN,
          -- Backplane MPS Ports
          mpsClkIn             => mpsClkIn,
          mpsClkOut            => mpsClkOut,
@@ -387,7 +404,6 @@ begin
          xBarLoad             => xBarLoad,
          -- Secondary AMC Auxiliary Power Enable Port
          enAuxPwrL            => enAuxPwrL,
-
          -- IPMC Ports
          ipmcScl              => ipmcScl,
          ipmcSda              => ipmcSda,

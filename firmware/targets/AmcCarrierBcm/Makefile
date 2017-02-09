@@ -1,3 +1,65 @@
+##########################################################################################
+# Applications must define if using advance AMC carrier build
+# 
+# AMC_ADV_BUILD = 0: Uses pre-built AmcCarrierCore.vhd image (99% case)
+# AMC_ADV_BUILD = 1: Allows full configuration of AmcCarrierCore generics
+#
+# Here is a possible list of reason why you would need AMC_ADV_BUILD = 1
+#     1) Timing Generator application
+#     2) Not using BSA engine and would like to free up resources
+#     3) Using zone3 (RTM) instead of zone2 (backplane) for Ethernet
+#
+# Note: (AMC_ADV_BUILD = 1) requires a munch longer build time
+##########################################################################################
+# AMC_ADV_BUILD is defined by application
+export AMC_ADV_BUILD = 0
+
+##########################################################################################
+# Applications must define if using zone3 (RTM) ETH (instead of zone2 ETH)
+# Note: AMC_ADV_BUILD = 0 does NOT support zone3 (RTM) ETH
+##########################################################################################
+
+# RTM_ETH is defined by application
+export RTM_ETH = 0
+
+##########################################################################################
+# Applications must define the application specific hardware that's being 
+# used in AppCore.vhd
+#
+# Note:  In general for RTM_INTF,
+#        If carrier is version C05 (or ealier), use RTM_INTF = "Version1"  
+#        If carrier is version C06 (or later),  use RTM_INTF = "Version2"
+##########################################################################################
+
+# AMC_TYPE_BAY0 & AMC_INTF_BAY0 are defined by application
+export AMC_TYPE_BAY0 = AmcGenericAdcDac
+export AMC_INTF_BAY0 = 
+
+# AMC_TYPE_BAY1 & AMC_INTF_BAY1 are defined by application
+export AMC_TYPE_BAY1 = AmcGenericAdcDac
+export AMC_INTF_BAY1 = 
+
+# RTM_TYPE & RTM_INTF are defined by application
+export RTM_TYPE = RtmEmpty
+export RTM_INTF = Version1
+
+##########################################################################################
+# Applications must define the application common path where AppCore.vhd exists
+##########################################################################################
+
+# COMMON_FILE is defined by application
+export COMMON_FILE = AppLib
+
+##########################################################################################
+# Application have the option to remove unused source code from Vivado project
+#     If REMOVE_UNUSED_CODE = 0, all source code is kept after importing to Vivado project
+#     If REMOVE_UNUSED_CODE = 1, all unused source code is removed from Vivado project
+##########################################################################################
+export REMOVE_UNUSED_CODE = 1
+
+##########################################################################################
+############################  DO NOT EDIT THE CODE BELOW  ################################
+##########################################################################################
 
 # Define target output
 target: prom
@@ -5,58 +67,5 @@ target: prom
 # Define target part
 export PRJ_PART = XCKU040-FFVA1156-2-E
 
-# Define the tags
-export STDLIB_TAG  = 2.2.1
-export AMC_TAG     = 2.2.1
-export MGT_TAG     = 2.1
-export PGP_TAG     = 2.0
-export SALT_TAG    = 2.0
-export N25Q_TAG    = 2.1
-export SY56040_TAG = 2.1
-export BSA_TAG     = 2.1
-export TIMING_TAG  = 2.2
-export ETH_TAG     = 2.1
-export RSSI_TAG    = 2.1
-export JESD_TAG    = 2.1
-export COMMON_TAG  = 2.0
-export DSP_TAG     = 2.0
-
-export PROJECT = AmcCarrierBcm
-
-# Using a non-standard StdLib directory structure, 
-# which requires me to define the VIVADO_BUILD_DIR path
-export VIVADO_BUILD_DIR = $(abspath $(PWD)/../../modules/StdLib/$(STDLIB_TAG)/build)
-
-# List of build core directories.
-export MODULE_DIRS = $(PROJ_DIR)/../../modules/AmcCarrierCore/$(AMC_TAG)  \
-                     $(PROJ_DIR)/../../modules/StdLib/$(STDLIB_TAG) \
-                     $(PROJ_DIR)/../../modules/MgtLib/$(MGT_TAG)/gthUltraScale \
-                     $(PROJ_DIR)/../../modules/pgp2b/$(PGP_TAG)/core \
-                     $(PROJ_DIR)/../../modules/pgp2b/$(PGP_TAG)/gthUltraScale \
-                     $(PROJ_DIR)/../../modules/SaltCore/$(SALT_TAG)/core  \
-                     $(PROJ_DIR)/../../modules/SaltCore/$(SALT_TAG)/xilinxUltraScale  \
-                     $(PROJ_DIR)/../../modules/AxiMicronN25QCore/$(N25Q_TAG) \
-                     $(PROJ_DIR)/../../modules/AxiSy56040Core/$(SY56040_TAG) \
-                     $(PROJ_DIR)/../../modules/BsaCore/$(BSA_TAG) \
-                     $(PROJ_DIR)/../../modules/TimingCore/$(TIMING_TAG)/LCLS-I \
-                     $(PROJ_DIR)/../../modules/TimingCore/$(TIMING_TAG)/LCLS-II/core \
-                     $(PROJ_DIR)/../../modules/TimingCore/$(TIMING_TAG)/LCLS-II/gthUltraScale \
-                     $(PROJ_DIR)/../../modules/EthernetLib/$(ETH_TAG)/UdpEngine \
-                     $(PROJ_DIR)/../../modules/EthernetLib/$(ETH_TAG)/IpV4Engine \
-                     $(PROJ_DIR)/../../modules/EthernetLib/$(ETH_TAG)/TenGigEthCore/core \
-                     $(PROJ_DIR)/../../modules/EthernetLib/$(ETH_TAG)/TenGigEthCore/gthUltraScale \
-                     $(PROJ_DIR)/../../modules/EthernetLib/$(ETH_TAG)/GigEthCore/core \
-                     $(PROJ_DIR)/../../modules/EthernetLib/$(ETH_TAG)/GigEthCore/gthUltraScale \
-                     $(PROJ_DIR)/../../modules/EthernetLib/$(ETH_TAG)/XauiCore/core \
-                     $(PROJ_DIR)/../../modules/EthernetLib/$(ETH_TAG)/XauiCore/gthUltraScale \
-                     $(PROJ_DIR)/../../modules/EthernetLib/$(ETH_TAG)/EthMacCore \
-                     $(PROJ_DIR)/../../modules/RssiCore/$(RSSI_TAG) \
-                     $(PROJ_DIR)/../../modules/Jesd204bCore/$(JESD_TAG) \
-                     $(PROJ_DIR)/../../modules/DspCoreLib/$(DSP_TAG)/SysGenBcmCore \
-                     $(PROJ_DIR)/../../modules/Common/$(COMMON_TAG)/ \
-                     $(PROJ_DIR)
-
-
 # Use top level makefile
-include ../../modules/StdLib/$(STDLIB_TAG)/build/system_vivado_v1.mk
-
+include ../../submodules/ruckus/system_vivado.mk

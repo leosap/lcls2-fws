@@ -1,3 +1,0 @@
-vhdl work Version.vhd
-vhdl work hdl/AmcCarrierBcm.vhd
-vhdl work hdl/Application.vhd
