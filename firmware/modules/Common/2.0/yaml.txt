@@ -1,7 +1,0 @@
-manual yaml/TriggerLaneReg.yaml
-manual yaml/DacSigGeneration.yaml
-manual yaml/SigGenLane.yaml
-manual yaml/AxiLiteGenRegItf.yaml
-manual yaml/TimingProc.yaml
-manual yaml/TriggerLaneRegMr.yaml
-manual yaml/TimingProcMr.yaml
