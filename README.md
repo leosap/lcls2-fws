@@ -33,7 +33,7 @@ HPS common platform documentation can be found here:
 > In Bash:    $ source lcls2-bcm/firmware/setup_env_slac.sh
 
 2) If not done yet, make a symbolic link to the firmware/
-> $ ln -s /u1/$USER/build lcls2-bcm/firmware/build/build
+> $ ln -s /u1/$USER/build lcls2-bcm/firmware/build
 
 3) Go to the target directory and make the firmware:
 > $ cd lcls2-bcm/firmware/targets/AmcCarrierBcm/
