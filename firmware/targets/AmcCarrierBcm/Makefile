@@ -1,4 +1,9 @@
 ##########################################################################################
+# Applications must define the 32-bitFirmware Version Number
+##########################################################################################
+export PRJ_VERSION = 0x00000001
+
+##########################################################################################
 # Applications must define if using advance AMC carrier build
 # 
 # AMC_ADV_BUILD = 0: Uses pre-built AmcCarrierCore.vhd image (99% case)
@@ -48,14 +53,14 @@ export RTM_INTF = Version1
 ##########################################################################################
 
 # COMMON_FILE is defined by application
-export COMMON_FILE = AppLib
+export COMMON_FILE = CommonTemplate
 
 ##########################################################################################
 # Application have the option to remove unused source code from Vivado project
 #     If REMOVE_UNUSED_CODE = 0, all source code is kept after importing to Vivado project
 #     If REMOVE_UNUSED_CODE = 1, all unused source code is removed from Vivado project
 ##########################################################################################
-export REMOVE_UNUSED_CODE = 0
+export REMOVE_UNUSED_CODE = 1
 
 ##########################################################################################
 ############################  DO NOT EDIT THE CODE BELOW  ################################
