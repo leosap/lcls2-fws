@@ -311,7 +311,7 @@ begin
    U_Core : entity work.AmcCarrierCoreBase
       generic map (
          TPD_G      => TPD_G,
-         APP_TYPE_G => APP_NULL_TYPE_C)  -- Configured by application (refer to AmcCarrierPkg for list of all application types
+         APP_TYPE_G => APP_BCM_TYPE_C)  -- Configured by application (refer to AmcCarrierPkg for list of all application types
       port map (
          ----------------------
          -- Top Level Interface
