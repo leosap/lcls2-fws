@@ -161,7 +161,7 @@ begin
    diagnosticClk <= axiClk;
    diagnosticRst <= axiRst;
 
-   dacValues <= adcValues(1 downto 0);
+ --  dacValues <= adcValues(1 downto 0);
    -----------------------------------------------------------
    -- AXI lite cross bar
    -----------------------------------------------------------
