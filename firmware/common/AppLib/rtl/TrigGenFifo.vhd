@@ -134,7 +134,7 @@ begin
    config.delay    <= TrigSpec.trigDelay;
    config.width    <= TrigSpec.trigStretch;
    config.channel  <= (Others => '0');
-   arm             <= slvOne(0);
+   arm             <= slvOne(1);
 
    -- Trigger buffering
    BldTrigger_INST: entity work.BldTrigger
