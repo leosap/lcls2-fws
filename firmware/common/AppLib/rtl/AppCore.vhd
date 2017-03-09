@@ -147,7 +147,7 @@ end AppCore;
 
 architecture mapping of AppCore is
 
-   constant NUM_AXI_MASTERS_C : natural := 5;
+   constant NUM_AXI_MASTERS_C : natural := 6;
 
    constant AXI_CONFIG_C : AxiLiteCrossbarMasterConfigArray(NUM_AXI_MASTERS_C-1 downto 0) := genAxiLiteConfig(NUM_AXI_MASTERS_C, AXI_BASE_ADDR_G, 28, 24);  -- [0x8FFFFFFF:0x80000000]
 
@@ -156,6 +156,7 @@ architecture mapping of AppCore is
    constant SYSGEN1_INDEX_C      : natural := 2;
    constant TIMPROC0_INDEX_C     : natural := 3;
    constant TIMPROC1_INDEX_C     : natural := 4;
+   constant RTM_INDEX_C     : natural := 4;
 
    signal axilWriteMasters : AxiLiteWriteMasterArray(NUM_AXI_MASTERS_C-1 downto 0);
    signal axilWriteSlaves  : AxiLiteWriteSlaveArray(NUM_AXI_MASTERS_C-1 downto 0);
@@ -372,49 +373,46 @@ begin
             diagnosticRst  => diagnosticRst,
             diagnosticBus  => diagnosticBusArr(i),
 
-
-
-
             -- AXI-Lite Port
             axiClk         => axilClk,
             axiRst         => axilRst,
-            axiReadMaster  => readMasters(SYSGEN0_INDEX_C+i),
-            axiReadSlave   => readSlaves(SYSGEN0_INDEX_C+i),
-            axiWriteMaster => writeMasters(SYSGEN0_INDEX_C+i),
-            axiWriteSlave  => writeSlaves(SYSGEN0_INDEX_C+i));
+            axiReadMaster  => axilReadMasters(SYSGEN0_INDEX_C+i),
+            axiReadSlave   => axilReadSlaves(SYSGEN0_INDEX_C+i),
+            axiWriteMaster => axilWriteMasters(SYSGEN0_INDEX_C+i),
+            axiWriteSlave  => axilWriteSlaves(SYSGEN0_INDEX_C+i));
 
 
            -----------------------------
       -- Trigger processing including timing message and generating proper local processing triggers
       -----------------------------
-       U_TrigProcBlk : entity work.TrigProcBlk
-          generic map (
-             TPD_G            => TPD_G,
-             AXI_ERROR_RESP_G => AXI_RESP_SLVERR_C,
-             INT_TRIG_SIZE_G  => INT_TRIG_SIZE_G,
-             AXI_BASE_ADDR_G  => AXI_CONFIG_C(TIMPROC0_INDEX_C + i).baseAddr)
-          port map (
-             axiClk             => axilClk,
-             axiRst             => axilRst,
-             devClk             => jesdClk(i),
-             devRst             => jesdRst(i),
-             timingClk          => TimingClk,
-             timingRst          => TimingRst,
-             timingBus          => timingBus,
+    U_TrigProcBlk : entity work.TrigProcBlk
+        generic map (
+            TPD_G            => TPD_G,
+            AXI_ERROR_RESP_G => AXI_RESP_SLVERR_C,
+            INT_TRIG_SIZE_G  => INT_TRIG_SIZE_G,
+            AXI_BASE_ADDR_G  => AXI_CONFIG_C(TIMPROC0_INDEX_C + i).baseAddr)
+        port map (
+            axiClk             => axilClk,
+            axiRst             => axilRst,
+            devClk             => jesdClk(i),
+            devRst             => jesdRst(i),
+            timingClk          => TimingClk,
+            timingRst          => TimingRst,
+            timingBus          => timingBus,
+			 
+			axilReadMaster     => axilReadMasters(TIMPROC0_INDEX_C + i),
+			axilReadSlave      => axilReadSlaves(TIMPROC0_INDEX_C + i),
+			axilWriteMaster    => axilWriteMasters(TIMPROC0_INDEX_C + i),
+			axilWriteSlave     => axilWriteSlaves(TIMPROC0_INDEX_C + i),
 
-             axilReadMaster     => readMasters(TIMPROC0_INDEX_C + i),
-             axilReadSlave      => readSlaves(TIMPROC0_INDEX_C + i),
-             axilWriteMaster    => writeMasters(TIMPROC0_INDEX_C + i),
-             axilWriteSlave     => writeSlaves(TIMPROC0_INDEX_C + i),
+            smaTrigO           => smaTrig(i),
+            lemoDinI           => lemoDin(i),
+            lemoDoutO          => lemoDout(i),
+            bcmO               => bcm(i),
 
-             smaTrigO           => smaTrig(i),
-             lemoDinI           => lemoDin(i),
-             lemoDoutO          => lemoDout(i),
-             bcmO               => bcm(i),
+            intTrig            => intTrig(i)(INT_TRIG_SIZE_G-1 downto 0));
 
-             intTrig            => intTrig(i)(INT_TRIG_SIZE_G-1 downto 0));
-
-   end generate GEN_AMC;
+        end generate GEN_AMC;
 
 
    --------------------------------------------------------
