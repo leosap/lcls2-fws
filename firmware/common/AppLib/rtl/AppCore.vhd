@@ -334,6 +334,7 @@ begin
 		
 		
 --New Stuff
+   GEN_AMC : for i in 1 downto 0 generate
       ----------------
       -- SYSGEN Module
       ----------------
