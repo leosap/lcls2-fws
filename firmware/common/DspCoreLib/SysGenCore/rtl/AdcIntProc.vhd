@@ -55,9 +55,15 @@ entity AdcIntProc is
 
       -- configuration and status
       ConfigSpace     : out   ConfigSpaceType;
+      
+      adcValids       : in    sl;
       adcValuesIn     : in    slv(31 downto 0);
       adcValuesOut    : out   sampleDataArray(2 downto 0);
       adcValidOut     : out    sl;
+      dacValidsOut    : out    sl;
+      dacValidsIn     : in     sl;
+      dacValuesOut    : out    slv(31 downto 0);
+      dacValuesIn     : in     slv(31 downto 0);
       timingMessage   : in    TimingMessageType;
       resultValidOut  : in    sl;
 
@@ -171,4 +177,19 @@ begin
       adcValidOut     => adcValidOut
       );
 
+   DacSel_INST: entity work.DacSel
+   generic map (
+      TPD_G        => TPD_G)
+   port map (
+      jesdClk         => jesdClk,
+      jesdRst         => jesdRst,
+      DacSrs          => ConfigSpaceLcl.DacSrs,
+      adcValids       => adcValids,
+      adcValuesIn     => adcValuesIn,
+      dacValidsOut    => dacValidsOut,
+      dacValidsIn     => dacValidsIn,
+      dacValuesOut    => dacValuesOut,
+      dacValuesIn     => dacValuesIn
+      );
+      
 end rtl;

@@ -44,8 +44,12 @@ entity DspCoreWrapper is
       -- JESD Interface
       jesdClk        : in  sl;
       jesdRst        : in  sl;
+      adcValids      : in    slv(3 downto 0);
       adcValues      : in  sampleDataArray(3 downto 0);
-      dacValues      : out sampleDataArray(1 downto 0);
+      dacValidsOut   : out    slv(1 downto 0);
+      dacValidsIn    : in    slv(1 downto 0);
+      dacValuesOut   : out sampleDataArray(1 downto 0);
+      dacValuesIn    : in  sampleDataArray(1 downto 0);
       intTrig        : in  slv(3 downto 0);
       -- Timing Interface (Timing domain)
       timingClk      : in   sl;  --
@@ -185,7 +189,7 @@ begin
   -----------------------------------------------------------
    -- Initial ADC processing per ADC
    -----------------------------------------------------------
-   genAdcLanes : for I in 3 downto 0 generate
+   genAdcLanes10 : for I in 1 downto 0 generate
       AdcIntProc_INST: entity work.AdcIntProc
          generic map (
             TPD_G        => TPD_G,
@@ -197,17 +201,51 @@ begin
             jesdClk         => jesdClk,
             jesdRst         => jesdRst,
             ConfigSpace     => ConfigSpace(I), -- Synced to axiClk
+            adcValids       => adcValids(I),
             adcValuesIn     => adcValues(I),
             adcValuesOut    => adcValuesOut(I),
             adcValidOut     => adcValidOut(I),
-            timingMessage   => Bcm2DspRcrdArr(I).TimingMessageOut,
+            dacValidsOut    => dacValidsOut(I),
+            dacValidsIn     => dacValidsIn(I),
+            dacValuesIn     => dacValuesIn(I),
+            dacValuesOut    => dacValuesOut(I),
+            timingMessage   => TIMING_MESSAGE_INIT_C, -- unused
             resultValidOut  => resultValidOut(I),
             axilReadMaster  => locAxilReadMasters(REG_SPACE0_INDEX_C+I),
             axilReadSlave   => locAxilReadSlaves(REG_SPACE0_INDEX_C+I),
             axilWriteMaster => locAxilWriteMasters(REG_SPACE0_INDEX_C+I),
             axilWriteSlave  => locAxilWriteSlaves(REG_SPACE0_INDEX_C+I),
             IntTrig         => intTrig(I));
-   end generate genAdcLanes;
+   end generate genAdcLanes10;
+      
+   genAdcLanes32 : for I in 3 downto 2 generate
+      AdcIntProc_INST: entity work.AdcIntProc
+         generic map (
+            TPD_G        => TPD_G,
+            AXI_ERROR_RESP_G => AXI_ERROR_RESP_G,
+            AXI_BASE_ADDR_G => AXI_CROSSBAR_MASTERS_CONFIG_C(REG_SPACE0_INDEX_C+I).baseAddr)
+         port map (
+            axiClk          => axiClk,
+            axiRst          => axiRst,
+            jesdClk         => jesdClk,
+            jesdRst         => jesdRst,
+            ConfigSpace     => ConfigSpace(I), -- Synced to axiClk
+            adcValids       => adcValids(I),
+            adcValuesIn     => adcValues(I),
+            adcValuesOut    => adcValuesOut(I),
+            adcValidOut     => adcValidOut(I),
+            dacValidsOut    => open,
+            dacValidsIn     => '0',
+            dacValuesIn     => (others=>'0'),
+            dacValuesOut    => open,
+            timingMessage   => TIMING_MESSAGE_INIT_C, -- unused
+            resultValidOut  => resultValidOut(I),
+            axilReadMaster  => locAxilReadMasters(REG_SPACE0_INDEX_C+I),
+            axilReadSlave   => locAxilReadSlaves(REG_SPACE0_INDEX_C+I),
+            axilWriteMaster => locAxilWriteMasters(REG_SPACE0_INDEX_C+I),
+            axilWriteSlave  => locAxilWriteSlaves(REG_SPACE0_INDEX_C+I),
+            IntTrig         => intTrig(I));
+   end generate genAdcLanes32;
    -----------------------------------------------------
 
  genDSPCores : for I in 0 downto 0 generate

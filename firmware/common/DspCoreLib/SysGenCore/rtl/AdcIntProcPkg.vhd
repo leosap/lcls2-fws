@@ -39,11 +39,13 @@ package AdcIntProcPkg is
   type ConfigSpaceLclType is record
       NumberSamples   : Slv8Array(2 downto 0);
       TrigDelay       : Slv8Array(2 downto 0);
+      DacSrs          : sl;
   end record ConfigSpaceLclType;
 
    constant CONF_SPACE_LCL_C : ConfigSpaceLclType := (
       NumberSamples   => ((others=>'0'),(others=>'0'),(others=>'0')),
-      TrigDelay       => ((others=>'0'),(others=>'0'),(others=>'0')));
+      TrigDelay       => ((others=>'0'),(others=>'0'),(others=>'0')),
+      DacSrs          => '0');
 
   type ConfigSpaceType is record
       SimAdcSumData   : Slv32Array(2 downto 0);

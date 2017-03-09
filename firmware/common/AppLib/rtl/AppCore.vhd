@@ -25,17 +25,21 @@ use ieee.std_logic_arith.all;
 
 use work.StdRtlPkg.all;
 use work.AxiStreamPkg.all;
+use work.SsiPkg.all;
 use work.AxiLitePkg.all;
 use work.TimingPkg.all;
 use work.AmcCarrierPkg.all;
 use work.jesd204bpkg.all;
 use work.AppTopPkg.all;
+use work.AdcIntProcPkg.all;
 
 entity AppCore is
    generic (
       TPD_G            : time             := 1 ns;
       SIM_SPEEDUP_G    : boolean          := false;
       SIMULATION_G     : boolean          := false;
+      INT_TRIG_SIZE_G  : positive         := 7;
+      DIAGNOSTIC_OUTPUTS_G  : integer range 1 to 32     := 22;
       AXI_BASE_ADDR_G  : slv(31 downto 0) := x"80000000";
       AXI_ERROR_RESP_G : slv(1 downto 0)  := AXI_RESP_SLVERR_C);
    port (
@@ -143,12 +147,15 @@ end AppCore;
 
 architecture mapping of AppCore is
 
-   constant NUM_AXI_MASTERS_C : natural := 2;
+   constant NUM_AXI_MASTERS_C : natural := 5;
 
    constant AXI_CONFIG_C : AxiLiteCrossbarMasterConfigArray(NUM_AXI_MASTERS_C-1 downto 0) := genAxiLiteConfig(NUM_AXI_MASTERS_C, AXI_BASE_ADDR_G, 28, 24);  -- [0x8FFFFFFF:0x80000000]
 
-   constant AMC_INDEX_C : natural := 0;
-   constant RTM_INDEX_C : natural := 1;
+   constant AMC_INDEX_C          : natural := 0;
+   constant SYSGEN0_INDEX_C      : natural := 1;
+   constant SYSGEN1_INDEX_C      : natural := 2;
+   constant TIMPROC0_INDEX_C     : natural := 3;
+   constant TIMPROC1_INDEX_C     : natural := 4;
 
    signal axilWriteMasters : AxiLiteWriteMasterArray(NUM_AXI_MASTERS_C-1 downto 0);
    signal axilWriteSlaves  : AxiLiteWriteSlaveArray(NUM_AXI_MASTERS_C-1 downto 0);
@@ -160,6 +167,33 @@ architecture mapping of AppCore is
    signal locDebugValids : Slv4Array(1 downto 0)                         := (others => (others => '0'));
    signal locDebugValues : sampleDataVectorArray(1 downto 0, 3 downto 0) := (others => (others => x"0000_0000"));
 
+   -- Modifications LS
+   -- to make debugging hack
+   signal lemoDout  : Slv2Array(1 downto 0);
+   signal lemoDin   : Slv2Array(1 downto 0);
+   signal bcm       : slv(1 downto 0);
+   signal smaTrig : slv(1 downto 0);
+   signal adcCal : slv(1 downto 0);
+   signal fpgaClk : slv(1 downto 0);
+
+   signal TimingClkDouble   : slv(0 downto 0);
+   signal diagnosticBusArr     : DiagnosticBusArray( 1 downto 0);
+
+   signal timingStrobe  : sl;
+
+   signal Board_health  : sl;
+   signal EnableMsg     : sl;
+   signal testMode     : sl;
+
+   signal AMCconfigured : slv(1 downto 0);
+   type   timingStreamArType is array (natural range<>) of timingStreamType;
+   signal timingStream  : timingStreamArType( 1 downto 0);
+
+   signal dout      : slv(7 downto 0);
+   signal intTrig   : Slv7Array(1 downto 0);
+
+   signal diagnosticBusArr     : DiagnosticBusArray( 1 downto 0);
+   
 begin
 
    dacValids <= locDacValids;
@@ -296,5 +330,121 @@ begin
          -- RTM's Clock Reference 
          genClkP         => genClkP,
          genClkN         => genClkN);
+		 
+		
+		
+--New Stuff
+      ----------------
+      -- SYSGEN Module
+      ----------------
+      U_SysGen : entity work.DspCoreWrapper
+         generic map (
+            TPD_G => TPD_G,
+            BCM_APP_TYPE_C   => BCM_APP_TYPE_C(i),
+            DIAGNOSTIC_OUTPUTS_G => DIAGNOSTIC_OUTPUTS_G/2,
+            AXI_ERROR_RESP_G => AXI_RESP_SLVERR_C,
+            AXI_BASE_ADDR_G  => AXI_CONFIG_C(SYSGEN0_INDEX_C + i).baseAddr)
+         port map(
+            -- JESD Interface
+            jesdClk        => jesdClk(i),
+            jesdRst        => jesdRst(i),
+            adcValids       => adcValids(i)(3 downto 0),
+  
+            adcValues(0)   => adcValues(i, 0),
+            adcValues(1)   => adcValues(i, 1),
+            adcValues(2)   => adcValues(i, 2),
+            adcValues(3)   => adcValues(i, 3),
+            dacValidsOut   => locDacValids(i)(1 downto 0),
+            dacValidsIn    => dacSigValids(i)(1 downto 0),
+            dacValuesOut(0) => locDacValues(i, 0),
+            dacValuesOut(1) => locDacValues(i, 1),
+            dacValuesin(0)  => dacSigValues(i, 0),
+            dacValuesin(1)  => dacSigValues(i, 1),
+            intTrig        => intTrig(i)(5 downto 2),
+
+                  -- Timing bus
+            timingClk      => TimingClk,
+            timingRst      => TimingRst,
+            timingBus      => timingBus,
+                  -- Diagnostic Interface (diagnosticClk domain)
+            diagnosticClk  => diagnosticClk,
+            diagnosticRst  => diagnosticRst,
+            diagnosticBus  => diagnosticBusArr(i),
+
+
+
+
+            -- AXI-Lite Port
+            axiClk         => axilClk,
+            axiRst         => axilRst,
+            axiReadMaster  => readMasters(SYSGEN0_INDEX_C+i),
+            axiReadSlave   => readSlaves(SYSGEN0_INDEX_C+i),
+            axiWriteMaster => writeMasters(SYSGEN0_INDEX_C+i),
+            axiWriteSlave  => writeSlaves(SYSGEN0_INDEX_C+i));
+
+
+           -----------------------------
+      -- Trigger processing including timing message and generating proper local processing triggers
+      -----------------------------
+       U_TrigProcBlk : entity work.TrigProcBlk
+          generic map (
+             TPD_G            => TPD_G,
+             AXI_ERROR_RESP_G => AXI_RESP_SLVERR_C,
+             INT_TRIG_SIZE_G  => INT_TRIG_SIZE_G,
+             AXI_BASE_ADDR_G  => AXI_CONFIG_C(TIMPROC0_INDEX_C + i).baseAddr)
+          port map (
+             axiClk             => axilClk,
+             axiRst             => axilRst,
+             devClk             => jesdClk(i),
+             devRst             => jesdRst(i),
+             timingClk          => TimingClk,
+             timingRst          => TimingRst,
+             timingBus          => timingBus,
+
+             axilReadMaster     => readMasters(TIMPROC0_INDEX_C + i),
+             axilReadSlave      => readSlaves(TIMPROC0_INDEX_C + i),
+             axilWriteMaster    => writeMasters(TIMPROC0_INDEX_C + i),
+             axilWriteSlave     => writeSlaves(TIMPROC0_INDEX_C + i),
+
+             smaTrigO           => smaTrig(i),
+             lemoDinI           => lemoDin(i),
+             lemoDoutO          => lemoDout(i),
+             bcmO               => bcm(i),
+
+             intTrig            => intTrig(i)(INT_TRIG_SIZE_G-1 downto 0));
+
+   end generate GEN_AMC;
+
+
+   --------------------------------------------------------
+-- Add clock manager to generate double of RecTimingClock
+
+       U_ClockManagerUltraScale : entity work.ClockManagerUltraScale
+         generic map (
+            TPD_G               => TPD_G,
+            INPUT_BUFG_G        => false,
+            FB_BUFG_G           => true,
+            NUM_CLOCKS_G        => 1,
+            -- MMCM attributes
+            DIVCLK_DIVIDE_G     => 1,
+            CLKFBOUT_MULT_F_G   => 1.0,
+            CLKFBOUT_MULT_G     => 6,
+            CLKOUT0_DIVIDE_F_G  => 1.0,
+            CLKOUT0_DIVIDE_G    => 3,
+            CLKIN_PERIOD_G      => 5.385
+
+            )
+         port map (
+            clkIn           => TimingClk,
+            rstIn           => TimingRst,
+            clkOut          => TimingClkDouble,
+            rstOut          => open,
+            locked          => open);
+
+    diagnosticBus.strobe <= diagnosticBusArr(0).strobe;   -- Make output of one of the 2 AMC as master (it is delayed by 2 clock to garanty ambiguity of 2 AMC clk) --DIAGNOSTIC_BUS_INIT_C;
+    diagnosticBus.timingMessage <= diagnosticBusArr(0).timingMessage;   -- same for timing
+    diagnosticBus.data(DIAGNOSTIC_OUTPUTS_G/2-1 downto 0) <= diagnosticBusArr(0).data(DIAGNOSTIC_OUTPUTS_G/2-1 downto 0);
+    diagnosticBus.data(DIAGNOSTIC_OUTPUTS_G-1 downto DIAGNOSTIC_OUTPUTS_G/2) <= diagnosticBusArr(1).data(DIAGNOSTIC_OUTPUTS_G/2-1 downto 0);
+
 
 end mapping;

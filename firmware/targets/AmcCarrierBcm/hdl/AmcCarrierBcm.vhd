@@ -210,11 +210,11 @@ begin
          JESD_TX_POLARITY_G   => (others => "0000000"),  -- Configured by application
          JESD_REF_SEL_G       => (others => DEV_CLK2_SEL_C),  -- Configured by application
          -- Signal Generator Generics
-         SIG_GEN_SIZE_G       => (others => 0),  -- Configured by application
+         SIG_GEN_SIZE_G       => (others => 2),  -- Configured by application
          SIG_GEN_ADDR_WIDTH_G => (others => 9),  -- Configured by application
          SIG_GEN_LANE_MODE_G  => (others => "0000000"),  -- Configured by application
          -- Triggering Generics
-         TRIG_SIZE_G          => 3,     -- Configured by application
+         TRIG_SIZE_G          => 1,     -- Configured by application
          TRIG_DELAY_WIDTH_G   => 32,    -- Configured by application
          TRIG_PULSE_WIDTH_G   => 32)    -- Configured by application
       port map (
