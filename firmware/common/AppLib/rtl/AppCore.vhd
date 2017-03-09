@@ -156,7 +156,7 @@ architecture mapping of AppCore is
    constant SYSGEN1_INDEX_C      : natural := 2;
    constant TIMPROC0_INDEX_C     : natural := 3;
    constant TIMPROC1_INDEX_C     : natural := 4;
-   constant RTM_INDEX_C     : natural := 4;
+   constant RTM_INDEX_C          : natural := 5;
 
    signal axilWriteMasters : AxiLiteWriteMasterArray(NUM_AXI_MASTERS_C-1 downto 0);
    signal axilWriteSlaves  : AxiLiteWriteSlaveArray(NUM_AXI_MASTERS_C-1 downto 0);
