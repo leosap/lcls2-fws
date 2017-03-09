@@ -76,6 +76,7 @@ architecture rtl of AxiLiteGenRegAdcProc is
       TimingStamp     : slv(31 downto 0);
       TriggerRate     : slv(31 downto 0);
       TestMode        : slv(2 downto 0);
+      DacSrs          : slv(0 downto 0);
       axilReadSlave   : AxiLiteReadSlaveType;
       axilWriteSlave  : AxiLiteWriteSlaveType;
    end record RegType;
@@ -88,13 +89,15 @@ architecture rtl of AxiLiteGenRegAdcProc is
       SimAdcSumData   => ((others=>'0'),(others=>'0'),(others=>'0')),
       TimingStamp     => (others=>'0'),
       TriggerRate     => (others=>'0'),
-      TestMode        => (others=>'0')
+      TestMode        => (others=>'0'),
+      DacSrs          => (others=>'0')
       );
 
    signal r   : RegType := REG_INIT_C;
    signal rin : RegType;
    signal NumberSamples   : Slv8Array(2 downto 0);
    signal TrigDelay       : Slv8Array(2 downto 0);
+   signal DacSrs          : slv(0 downto 0);
 --   signal TestMode3Synced : Sl;
 
 
@@ -102,7 +105,7 @@ begin
    ------------------------------------
    -- Register Space
    ------------------------------------
-   comb : process (axilReadMaster, axiRst, axilWriteMaster, timingMessage, resultValidOut, r) is
+   comb : process (axilReadMaster, axiRst, axilWriteMaster, timingMessage, resultValidOut, TriggerRate, TriggerRateUpdate, r) is
       variable v      : RegType;
       variable regCon : AxiLiteEndPointType;
    begin
@@ -124,6 +127,7 @@ begin
       axiSlaveRegister(regCon, x"020", 0, v.TestMode);
       axiSlaveRegisterR(regCon, x"024", 0, r.TimingStamp);
       axiSlaveRegisterR(regCon, x"028", 0, r.TriggerRate);
+      axiSlaveRegister(regCon, x"02C", 0, v.DacSrs);
 
       if (resultValidOut = '1') then
          v.TimingStamp := timingMessage.timeStamp(31 downto 0);
@@ -187,13 +191,26 @@ begin
      );
   end generate GEN_CHAN;
 
+     SyncFifo_OUT3 : entity work.SynchronizerFifo
+     generic map (
+      TPD_G        => TPD_G,
+      DATA_WIDTH_G => 1
+     )
+     port map (
+      wr_clk => axiClk,
+      din    => r.DacSrs,
+      rd_clk => jesdClk,
+      dout   => DacSrs
+     );
+     
   --Synced to JesdClk
   ConfigSpaceLcl.NumberSamples   <= NumberSamples;
   ConfigSpaceLcl.TrigDelay   <= TrigDelay;
+  ConfigSpaceLcl.DacSrs   <= r.DacSrs(0);
 
       --Used at AxiliteClk
   ConfigSpace.SimAdcSumData   <= r.SimAdcSumData;
   ConfigSpace.TestMode(2 downto 0)   <= r.TestMode;
-
+  
 ---------------------------------------------------------------------
 end rtl;
