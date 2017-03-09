@@ -205,9 +205,9 @@ begin
    --------------------------
    -- Terminate usued outputs
    --------------------------
-   diagnosticClk <= axilClk;
-   diagnosticRst <= axilRst;
-   diagnosticBus <= DIAGNOSTIC_BUS_INIT_C;
+--   diagnosticClk <= axilClk;
+--   diagnosticRst <= axilRst;
+--   diagnosticBus <= DIAGNOSTIC_BUS_INIT_C;
 
    obBpMsgClientMaster <= AXI_STREAM_MASTER_INIT_C;
    ibBpMsgClientSlave  <= AXI_STREAM_SLAVE_FORCE_C;
@@ -219,11 +219,12 @@ begin
    ibAppDebugSlave  <= AXI_STREAM_SLAVE_FORCE_C;
 
    mpsObSlaves <= (others => AXI_STREAM_SLAVE_FORCE_C);
-   dacSigCtrl  <= (others => DAC_SIG_CTRL_INIT_C);
+   dacSigCtrl(0).start(0)  <= intTrig(0)(1);
+   dacSigCtrl(1).start(0)  <= intTrig(1)(1);
    timingPhy   <= TIMING_PHY_INIT_C;
 
-   freezeHw <= (others => '0');
-   trigHw   <= (others => '0');
+   freezeHw <= intTrig(1)(6) & intTrig(0)(6);
+   trigHw   <= intTrig(1)(0) & intTrig(0)(0);
 
 
    ---------------------
