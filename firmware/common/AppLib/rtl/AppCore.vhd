@@ -193,7 +193,6 @@ architecture mapping of AppCore is
    signal dout      : slv(7 downto 0);
    signal intTrig   : Slv7Array(1 downto 0);
 
-   signal diagnosticBusArr     : DiagnosticBusArray( 1 downto 0);
    
 begin
 
