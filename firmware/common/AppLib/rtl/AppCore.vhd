@@ -39,7 +39,7 @@ entity AppCore is
       SIM_SPEEDUP_G    : boolean          := false;
       SIMULATION_G     : boolean          := false;
       INT_TRIG_SIZE_G  : positive         := 7;
-      DIAGNOSTIC_OUTPUTS_G  : integer range 1 to 32     := 22;
+      DIAGNOSTIC_OUTPUTS_G  : integer range 1 to 32     := 28;
       AXI_BASE_ADDR_G  : slv(31 downto 0) := x"80000000";
       AXI_ERROR_RESP_G : slv(1 downto 0)  := AXI_RESP_SLVERR_C);
    port (
