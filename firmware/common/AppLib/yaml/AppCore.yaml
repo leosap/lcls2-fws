@@ -10,11 +10,13 @@
 #schemaversion 3.0.0
 #once
 #include AmcGenericAdcDacCore.yaml
+#include SysGen.yaml
+#include TimingProc.yaml
 
 AppCore: &AppCore 
   name: AppCore
   description: AMC Carrier Application Core
-  size: 0x00100000
+  size: 0x06000000
   class: MMIODev
   configPrio: 1
   ########
@@ -28,4 +30,17 @@ AppCore: &AppCore
         stride: 0x00080000
         nelms: 2
     ##################################################     
-    
+    SysGen:
+      <<: *SysGen
+      at:
+        offset: 0x01000000
+        stride: 0x01000000
+        nelms: 2
+    ##################################################
+    TimingProc:
+      <<: *TimingProc
+      at:
+        offset: 0x03000000
+        stride: 0x01000000
+        nelms: 2
+    #################################################    

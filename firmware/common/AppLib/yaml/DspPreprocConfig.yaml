@@ -118,4 +118,12 @@ DspPreprocConfig: &DspPreprocConfig
       mode: RO
       description: "Trigger rate over 1 second interval"
     #########################################################
-
+    DacSrs:
+      class: IntField
+      at:
+        offset: 0x002C
+      sizeBits: 1
+      lsBit: 0
+      mode: RW
+      description: "Select DAC memory as source of the DAC - 0, or loopback ADC - 1"
+    #########################################################

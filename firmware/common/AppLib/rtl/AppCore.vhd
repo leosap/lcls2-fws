@@ -10,11 +10,11 @@
 --
 -------------------------------------------------------------------------------
 -- This file is part of 'LCLS2 AMC Carrier Firmware'.
--- It is subject to the license terms in the LICENSE.txt file found in the 
--- top-level directory of this distribution and at: 
---    https://confluence.slac.stanford.edu/display/ppareg/LICENSE.html. 
--- No part of 'LCLS2 AMC Carrier Firmware', including this file, 
--- may be copied, modified, propagated, or distributed except according to 
+-- It is subject to the license terms in the LICENSE.txt file found in the
+-- top-level directory of this distribution and at:
+--    https://confluence.slac.stanford.edu/display/ppareg/LICENSE.html.
+-- No part of 'LCLS2 AMC Carrier Firmware', including this file,
+-- may be copied, modified, propagated, or distributed except according to
 -- the terms contained in the LICENSE.txt file.
 -------------------------------------------------------------------------------
 
@@ -43,12 +43,12 @@ entity AppCore is
       AXI_BASE_ADDR_G  : slv(31 downto 0) := x"80000000";
       AXI_ERROR_RESP_G : slv(1 downto 0)  := AXI_RESP_SLVERR_C);
    port (
-      -- Clocks and resets   
+      -- Clocks and resets
       jesdClk             : in    slv(1 downto 0);
       jesdRst             : in    slv(1 downto 0);
       jesdClk2x           : in    slv(1 downto 0);
       jesdRst2x           : in    slv(1 downto 0);
-      -- DaqMux/Trig Interface (timingClk domain) 
+      -- DaqMux/Trig Interface (timingClk domain)
       freezeHw            : out   slv(1 downto 0);
       evrTrig             : in    AppTopTrigType;
       trigHw              : out   slv(1 downto 0);
@@ -80,7 +80,7 @@ entity AppCore is
       ----------------------
       -- Top Level Interface
       ----------------------
-      -- Timing Interface (timingClk domain) 
+      -- Timing Interface (timingClk domain)
       timingClk           : in    sl;
       timingRst           : in    sl;
       timingBus           : in    TimingBusType;
@@ -114,7 +114,7 @@ entity AppCore is
       ethPhyReady         : in    sl;
       -----------------------
       -- Application Ports --
-      -----------------------      
+      -----------------------
       -- AMC's JTAG Ports
       jtagPri             : inout Slv5Array(1 downto 0);
       jtagSec             : inout Slv5Array(1 downto 0);
@@ -140,7 +140,7 @@ entity AppCore is
       rtmHsRxN            : in    sl;
       rtmHsTxP            : out   sl := '0';
       rtmHsTxN            : out   sl := '1';
-      -- RTM's Clock Reference 
+      -- RTM's Clock Reference
       genClkP             : in    sl;
       genClkN             : in    sl);
 end AppCore;
@@ -193,7 +193,7 @@ architecture mapping of AppCore is
    signal dout      : slv(7 downto 0);
    signal intTrig   : Slv7Array(1 downto 0);
 
-   
+
 begin
 
    dacValids <= locDacValids;
@@ -226,6 +226,8 @@ begin
    freezeHw <= intTrig(1)(6) & intTrig(0)(6);
    trigHw   <= intTrig(1)(0) & intTrig(0)(0);
 
+   adcCal    <= intTrig(1)(5) & intTrig(0)(5);
+   fpgaClk   <= TimingClkDouble(0) & TimingClkDouble(0);
 
    ---------------------
    -- AXI-Lite Crossbar
@@ -280,12 +282,12 @@ begin
          axilWriteMaster => axilWriteMasters(AMC_INDEX_C),
          axilWriteSlave  => axilWriteSlaves(AMC_INDEX_C),
          -- Pass through Interfaces
-         fpgaClk         => "00",
-         smaTrig         => "00",
-         adcCal          => "00",
-         lemoDin         => open,
-         lemoDout        => (others => "00"),
-         bcm             => "00",
+         fpgaClk         => fpgaClk,
+         smaTrig         => smaTrig,
+         adcCal          => adcCal,
+         lemoDin         => lemoDin,
+         lemoDout        => lemoDout,
+         bcm             => bcm,
          -----------------------
          -- Application Ports --
          -----------------------
@@ -324,16 +326,16 @@ begin
          axilWriteSlave  => axilWriteSlaves(RTM_INDEX_C),
          -----------------------
          -- Application Ports --
-         -----------------------      
+         -----------------------
          -- RTM's Low Speed Ports
          rtmLsP          => rtmLsP,
          rtmLsN          => rtmLsN,
-         -- RTM's Clock Reference 
+         -- RTM's Clock Reference
          genClkP         => genClkP,
          genClkN         => genClkN);
-		 
-		
-		
+
+
+
 --New Stuff
    GEN_AMC : for i in 1 downto 0 generate
       ----------------
@@ -351,7 +353,7 @@ begin
             jesdClk        => jesdClk(i),
             jesdRst        => jesdRst(i),
             adcValids       => adcValids(i)(3 downto 0),
-  
+
             adcValues(0)   => adcValues(i, 0),
             adcValues(1)   => adcValues(i, 1),
             adcValues(2)   => adcValues(i, 2),
@@ -399,7 +401,7 @@ begin
             timingClk          => TimingClk,
             timingRst          => TimingRst,
             timingBus          => timingBus,
-			 
+
 			axilReadMaster     => axilReadMasters(TIMPROC0_INDEX_C + i),
 			axilReadSlave      => axilReadSlaves(TIMPROC0_INDEX_C + i),
 			axilWriteMaster    => axilWriteMasters(TIMPROC0_INDEX_C + i),
