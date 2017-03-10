@@ -2,7 +2,7 @@
 -- File       : AmcCarrierBcm.vhd
 -- Company    : SLAC National Accelerator Laboratory
 -- Created    : 2017-02-04
--- Last update: 2017-02-07
+-- Last update: 2017-03-10
 -------------------------------------------------------------------------------
 -- Description: Firmware Target's Top Level
 -- 
@@ -202,19 +202,22 @@ begin
    U_AppTop : entity work.AppTop
       generic map (
          TPD_G                => TPD_G,
+         MR_LCLS_APP_G        => false,          -- Configured by application
          -- JESD Generics
          JESD_DRP_EN_G        => false,          -- Configured by application
          JESD_RX_LANE_G       => (others => 4),  -- Configured by application
          JESD_TX_LANE_G       => (others => 2),  -- Configured by application
          JESD_RX_POLARITY_G   => (others => "0000000"),  -- Configured by application
          JESD_TX_POLARITY_G   => (others => "0000000"),  -- Configured by application
+         JESD_RX_ROUTES_G     => (others => JESD_CH0_CH1_SWAP_C),  -- Configured by application
+         JESD_TX_ROUTES_G     => (others => JESD_ROUTES_INIT_C),  -- Configured by application         
          JESD_REF_SEL_G       => (others => DEV_CLK2_SEL_C),  -- Configured by application
          -- Signal Generator Generics
          SIG_GEN_SIZE_G       => (others => 0),  -- Configured by application
          SIG_GEN_ADDR_WIDTH_G => (others => 9),  -- Configured by application
          SIG_GEN_LANE_MODE_G  => (others => "0000000"),  -- Configured by application
          -- Triggering Generics
-         TRIG_SIZE_G          => 3,     -- Configured by application
+         TRIG_SIZE_G          => 4,     -- Configured by application
          TRIG_DELAY_WIDTH_G   => 32,    -- Configured by application
          TRIG_PULSE_WIDTH_G   => 32)    -- Configured by application
       port map (
