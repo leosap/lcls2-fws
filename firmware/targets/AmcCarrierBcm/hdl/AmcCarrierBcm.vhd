@@ -5,16 +5,16 @@
 -- Last update: 2017-02-07
 -------------------------------------------------------------------------------
 -- Description: Firmware Target's Top Level
--- 
+--
 -- Note: Common-to-Application interface defined in HPS ESD: LCLSII-2.7-ES-0536
--- 
+--
 -------------------------------------------------------------------------------
 -- This file is part of 'LCLS2 AMC Carrier Firmware'.
--- It is subject to the license terms in the LICENSE.txt file found in the 
--- top-level directory of this distribution and at: 
---    https://confluence.slac.stanford.edu/display/ppareg/LICENSE.html. 
--- No part of 'LCLS2 AMC Carrier Firmware', including this file, 
--- may be copied, modified, propagated, or distributed except according to 
+-- It is subject to the license terms in the LICENSE.txt file found in the
+-- top-level directory of this distribution and at:
+--    https://confluence.slac.stanford.edu/display/ppareg/LICENSE.html.
+-- No part of 'LCLS2 AMC Carrier Firmware', including this file,
+-- may be copied, modified, propagated, or distributed except according to
 -- the terms contained in the LICENSE.txt file.
 -------------------------------------------------------------------------------
 
@@ -69,12 +69,12 @@ entity AmcCarrierBcm is
       rtmHsRxN         : in    sl;
       rtmHsTxP         : out   sl;
       rtmHsTxN         : out   sl;
-      -- RTM's Clock Reference 
+      -- RTM's Clock Reference
       genClkP          : in    sl;
       genClkN          : in    sl;
       ----------------
       -- Core Ports --
-      ----------------   
+      ----------------
       -- Common Fabricate Clock
       fabClkP          : in    sl;
       fabClkN          : in    sl;
@@ -154,7 +154,7 @@ architecture top_level of AmcCarrierBcm is
    signal axilReadSlave        : AxiLiteReadSlaveType;
    signal axilWriteMaster      : AxiLiteWriteMasterType;
    signal axilWriteSlave       : AxiLiteWriteSlaveType;
-   -- Timing Interface (timingClk domain) 
+   -- Timing Interface (timingClk domain)
    signal timingClk            : sl;
    signal timingRst            : sl;
    signal timingBus            : TimingBusType;
@@ -208,6 +208,8 @@ begin
          JESD_TX_LANE_G       => (others => 2),  -- Configured by application
          JESD_RX_POLARITY_G   => (others => "0000000"),  -- Configured by application
          JESD_TX_POLARITY_G   => (others => "0000000"),  -- Configured by application
+         JESD_RX_ROUTES_G     => (others => JESD_CH0_CH1_SWAP_C),  -- Configured by application
+         JESD_TX_ROUTES_G     => (others => JESD_ROUTES_INIT_C),  -- Configured by application
          JESD_REF_SEL_G       => (others => DEV_CLK2_SEL_C),  -- Configured by application
          -- Signal Generator Generics
          SIG_GEN_SIZE_G       => (others => 2),  -- Configured by application
@@ -228,7 +230,7 @@ begin
          axilReadSlave        => axilReadSlave,
          axilWriteMaster      => axilWriteMaster,
          axilWriteSlave       => axilWriteSlave,
-         -- Timing Interface (timingClk domain) 
+         -- Timing Interface (timingClk domain)
          timingClk            => timingClk,
          timingRst            => timingRst,
          timingBus            => timingBus,
@@ -305,7 +307,7 @@ begin
          rtmHsRxN             => rtmHsRxN,
          rtmHsTxP             => rtmHsTxP,
          rtmHsTxN             => rtmHsTxN,
-         -- RTM's Clock Reference 
+         -- RTM's Clock Reference
          genClkP              => genClkP,
          genClkN              => genClkN);
 
@@ -325,7 +327,7 @@ begin
          axilReadSlave        => axilReadSlave,
          axilWriteMaster      => axilWriteMaster,
          axilWriteSlave       => axilWriteSlave,
-         -- Timing Interface (timingClk domain) 
+         -- Timing Interface (timingClk domain)
          timingClk            => timingClk,
          timingRst            => timingRst,
          timingBus            => timingBus,
@@ -369,7 +371,7 @@ begin
          ethPhyReady          => ethPhyReady,
          ----------------
          -- Core Ports --
-         ----------------   
+         ----------------
          -- Common Fabricate Clock
          fabClkP              => fabClkP,
          fabClkN              => fabClkN,
