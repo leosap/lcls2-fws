@@ -202,6 +202,7 @@ begin
    U_AppTop : entity work.AppTop
       generic map (
          TPD_G                => TPD_G,
+		 MR_LCLS_APP_G        => false,          -- Configured by application
          -- JESD Generics
          JESD_DRP_EN_G        => false,          -- Configured by application
          JESD_RX_LANE_G       => (others => 4),  -- Configured by application
@@ -442,3 +443,5 @@ begin
          vNIn                 => vNIn);
 
 end top_level;
+=======
+
