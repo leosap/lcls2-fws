@@ -141,7 +141,7 @@ architecture mapping of DspCoreWrapper is
    signal ConfigSpace         : ConfigSpaceArrayType(3 downto 0);
    signal adcValidOut         : Slv(3 downto 0);
 
-  signal resultValuesOut        : sampleDataArray3Array(3 downto 0);
+  signal resultValuesOut        : sampleDataArray3Array(3 downto 0) := (Others => (Others => (Others => '0')));
 
   signal resultValidOut         : slv(3 downto 0);
   signal dsperr                 : slv(7 downto 0);
@@ -217,7 +217,7 @@ begin
             axilWriteSlave  => locAxilWriteSlaves(REG_SPACE0_INDEX_C+I),
             IntTrig         => intTrig(I));
    end generate genAdcLanes10;
-      
+
    genAdcLanes32 : for I in 3 downto 2 generate
       AdcIntProc_INST: entity work.AdcIntProc
          generic map (
@@ -285,9 +285,9 @@ begin
           adcsum2 => Bcm2DspRcrdArr(I).AdcSumDataOut(2),
             --Outputs
           adcvalidout => resultValidOut(I downto I),    --Need vector
-          adcres0 => resultValuesOut(I)(0),
-          adcres1 => resultValuesOut(I)(1),
-          adcres2 => resultValuesOut(I)(2),
+          adcres0 => resultValuesOut(I)(0)(17 downto 0),
+          adcres1 => resultValuesOut(I)(1)(17 downto 0),
+          adcres2 => resultValuesOut(I)(2)(17 downto 0),
            -- Error vector
           dsperr => dsperr(I+0 downto I+0 ),    --Need vector
           dsperr1 => dsperr(I+1 downto I+1 ),    --Need vector
