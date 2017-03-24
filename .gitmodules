@@ -10,3 +10,6 @@
 [submodule "firmware/submodules/sysgen-dsp-lib"]
 	path = firmware/submodules/sysgen-dsp-lib
 	url = git@github.com:/slaclab/sysgen-dsp-lib
+[submodule "firmware/modules/amc-carrier-core"]
+	path = firmware/modules/amc-carrier-core
+	url = git@github.com:slaclab/amc-carrier-core.git
