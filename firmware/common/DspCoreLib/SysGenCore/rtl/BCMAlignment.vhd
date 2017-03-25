@@ -45,6 +45,7 @@ entity BCMAlignment is
             -- Precomputed ADC data
       AdcSumData     : in   sampleDataArray(2 downto 0); --Slv32Array(2 downto 0);
       AdcSumDataWe   : in  sl;
+      commonConfig   : in  commonConfigType;
             -- Timing data
       timingClk      : in   sl;  --
       timingRst      : in   sl;  --
@@ -80,6 +81,7 @@ architecture rtl of BCMAlignment is
    signal AdcSumsWe             : sl;
 
    signal AdcValid_lcl          : sl;
+   signal timingValidSync       : sl;
 
 
    type RegType is record
@@ -141,7 +143,7 @@ begin
          wr_en  => timingWe,
          din    => timingFrameSlv,
          rd_clk => axiClk,
-         valid  => open,
+         valid  => timingValidSync,
          dout   => timingFrameOutSlv);
 
 
@@ -173,7 +175,7 @@ begin
    -- Logic sequence
    ------------------------------------
 
-   comb : process (TimingMessageOut, SimAdcSumData, AdcSumDataOut, ADCValid_lcl, TestMode, axiRst , r) is
+   comb : process (TimingMessageOut, timingValidSync, commonConfig, SimAdcSumData, AdcSumDataOut, ADCValid_lcl, TestMode, axiRst , r) is
       variable v      : RegType;
    begin
 
@@ -181,15 +183,10 @@ begin
       v := r;
       v.ADCValid := '0';
 
-      if (axiRst = '1') then
-         v := REG_INIT_C;
-      end if;
-
       -- Outputs
-     if (ADCValid_lcl = '1') then
+      v.Bcm2DspRcrd.TimingValid <= timingValidSync;
+      if (ADCValid_lcl = '1') then
         v.Bcm2DspRcrd.ADCvalid := '1';
-        v.Bcm2DspRcrd.TimingMessageOut := TimingMessageOut;
-
         if (TestMode(1) = '1') then
            v.Bcm2DspRcrd.AdcSumDataOut := SimAdcSumData;
         elsif (TestMode(0) = '1') then   -- to substract bergoz offset
@@ -201,7 +198,13 @@ begin
       else
          v.Bcm2DspRcrd.ADCvalid := '0';
       end if;
+      if ((ADCValid_lcl = '1' and commonConfig.enableCalib = '0') or (timingValidSync = '1' and commonConfig.enableCalib = '1'))then
+        v.Bcm2DspRcrd.TimingMessageOut := TimingMessageOut;
+      end if;
 
+      if (axiRst = '1') then
+         v := REG_INIT_C;
+      end if;
 
       rin <= v;
    end process comb;

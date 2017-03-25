@@ -16,7 +16,7 @@ from subprocess import check_call
 tagConfig = [ ['/firmware/submodules/amc-carrier-core', 'v1.3.0-bsa-variance'],
               ['/firmware/submodules/lcls-timing-core', 'v1.3.0'],
               ['/firmware/submodules/ruckus',           'v1.2.0'],
-              ['/firmware/submodules/surf',             'v1.2.5'],
+              ['/firmware/submodules/surf',             'v1.2.6'],
               ['/firmware/submodules/sysgen-dsp-lib',   'v1.0.0'] ]
 
 # Check that the submodule paths exists

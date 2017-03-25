@@ -55,17 +55,19 @@ entity AdcIntProc is
 
       -- configuration and status
       ConfigSpace     : out   ConfigSpaceType;
-      
-      adcValids       : in    sl;
-      adcValuesIn     : in    slv(31 downto 0);
+
+      adcValids       : in    sl := '0';
+      adcValuesIn     : in    slv(31 downto 0) := (others => '0');
+	    adcValids2       : in    sl; := '0'
+      adcValuesIn2     : in    slv(31 downto 0) := (others => '0');
       adcValuesOut    : out   sampleDataArray(2 downto 0);
       adcValidOut     : out    sl;
       dacValidsOut    : out    sl;
-      dacValidsIn     : in     sl;
+      dacValidsIn     : in     sl := '0';
       dacValuesOut    : out    slv(31 downto 0);
       dacValuesIn     : in     slv(31 downto 0);
-      timingMessage   : in    TimingMessageType;
-      resultValidOut  : in    sl;
+      timingMessage   : in    TimingMessageType := TIMING_MESSAGE_INIT_C;
+      resultValidOut  : in    sl := '0';
 
       -- AXI-Lite Register Interface
       axilReadMaster  : in    AxiLiteReadMasterType;
@@ -186,10 +188,12 @@ begin
       DacSrs          => ConfigSpaceLcl.DacSrs,
       adcValids       => adcValids,
       adcValuesIn     => adcValuesIn,
+      adcValids2      => adcValids2,
+      adcValuesIn2    => adcValuesIn2,
       dacValidsOut    => dacValidsOut,
       dacValidsIn     => dacValidsIn,
       dacValuesOut    => dacValuesOut,
       dacValuesIn     => dacValuesIn
       );
-      
+
 end rtl;

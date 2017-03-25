@@ -38,14 +38,16 @@ entity DacSel is
       -- Clocks and Resets
       jesdClk         : in   sl;
       jesdRst         : in   sl;
-      DacSrs          : in   sl;
+      DacSrs          : in   slv(1 downto 0);
       adcValids       : in   sl;
       adcValuesIn     : in   slv(31 downto 0);
-      dacValidsOut    : out  sl;     
+      adcValids2      : in   sl;
+      adcValuesIn2    : in   slv(31 downto 0);
+      dacValidsOut    : out  sl;
       dacValidsIn     : in   sl;
-      dacValuesOut    : out  slv(31 downto 0);     
-      dacValuesIn     : in   slv(31 downto 0)  
-      
+      dacValuesOut    : out  slv(31 downto 0);
+      dacValuesIn     : in   slv(31 downto 0)
+
    );
 end DacSel;
 
@@ -76,9 +78,12 @@ begin
 
       v := r;
       -- reset
-      if (DacSrs= '1')  then
+      if (DacSrs(0)= '1')  then
           v.dacValidOut  := adcValids;
           v.dacValueOut  := adcValuesIn;
+      elsif (DacSrs(1)= '1')  then
+          v.dacValidOut  := adcValids2;
+          v.dacValueOut  := adcValuesIn2;
       else
          v.dacValidOut := dacValidsIn;
          v.dacValueOut := dacValuesIn;

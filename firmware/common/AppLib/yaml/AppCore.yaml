@@ -12,6 +12,8 @@
 #include AmcGenericAdcDacCore.yaml
 #include SysGen.yaml
 #include TimingProc.yaml
+#include commonConfig.yaml
+
 
 AppCore: &AppCore 
   name: AppCore
@@ -43,4 +45,11 @@ AppCore: &AppCore
         offset: 0x03000000
         stride: 0x01000000
         nelms: 2
-    #################################################    
+    #################################################
+    commonConfig:
+      <<: *commonConfig
+      at:
+        offset: 0x06000000
+        stride: 0x01000000
+        nelms: 1
+    #################################################     

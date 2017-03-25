@@ -122,8 +122,8 @@ DspPreprocConfig: &DspPreprocConfig
       class: IntField
       at:
         offset: 0x002C
-      sizeBits: 1
+      sizeBits: 2
       lsBit: 0
       mode: RW
-      description: "Select DAC memory as source of the DAC - 0, or loopback ADC - 1"
+      description: "Select DAC memory as source of the DAC - 0, or loopback ADC0 - 1 or 3, adc+2 -2"
     #########################################################

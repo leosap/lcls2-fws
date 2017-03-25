@@ -147,7 +147,7 @@ end AppCore;
 
 architecture mapping of AppCore is
 
-   constant NUM_AXI_MASTERS_C : natural := 6;
+   constant NUM_AXI_MASTERS_C : natural := 7;
 
    constant AXI_CONFIG_C : AxiLiteCrossbarMasterConfigArray(NUM_AXI_MASTERS_C-1 downto 0) := genAxiLiteConfig(NUM_AXI_MASTERS_C, AXI_BASE_ADDR_G, 28, 24);  -- [0x8FFFFFFF:0x80000000]
 
@@ -157,6 +157,7 @@ architecture mapping of AppCore is
    constant TIMPROC0_INDEX_C     : natural := 3;
    constant TIMPROC1_INDEX_C     : natural := 4;
    constant RTM_INDEX_C          : natural := 5;
+   constant COMMON_INDEX_C        : natural := 6;
 
    signal axilWriteMasters : AxiLiteWriteMasterArray(NUM_AXI_MASTERS_C-1 downto 0);
    signal axilWriteSlaves  : AxiLiteWriteSlaveArray(NUM_AXI_MASTERS_C-1 downto 0);
@@ -192,8 +193,13 @@ architecture mapping of AppCore is
 
    signal dout      : slv(7 downto 0);
    signal intTrig   : Slv7Array(1 downto 0);
+   
+   signal tmitMessage  : tmitMessageTypeArr;
+   signal bpMsgClk     : sl;
+   signal bpMsgRst     : sl;
+   signal commonConfig   : commonConfigType;
 
-
+			
 begin
 
    dacValids <= locDacValids;
@@ -209,7 +215,7 @@ begin
 --   diagnosticRst <= axilRst;
 --   diagnosticBus <= DIAGNOSTIC_BUS_INIT_C;
 
-   obBpMsgClientMaster <= AXI_STREAM_MASTER_INIT_C;
+--   obBpMsgClientMaster <= AXI_STREAM_MASTER_INIT_C;
    ibBpMsgClientSlave  <= AXI_STREAM_SLAVE_FORCE_C;
 
    obBpMsgServerMaster <= AXI_STREAM_MASTER_INIT_C;
@@ -365,6 +371,7 @@ begin
             dacValuesin(0)  => dacSigValues(i, 0),
             dacValuesin(1)  => dacSigValues(i, 1),
             intTrig        => intTrig(i)(5 downto 2),
+			commonConfig   => commonConfig,
 
                   -- Timing bus
             timingClk      => TimingClk,
@@ -374,6 +381,11 @@ begin
             diagnosticClk  => diagnosticClk,
             diagnosticRst  => diagnosticRst,
             diagnosticBus  => diagnosticBusArr(i),
+			
+                  -- BP BPM BLEN Interface (bpMsgClk domain)
+            bpMsgClk       => bpMsgClk,
+            bpMsgRst  	   => bpMsgRst,
+            tmitMessage    => tmitMessageArr,
 
             -- AXI-Lite Port
             axiClk         => axilClk,
@@ -446,6 +458,45 @@ begin
     diagnosticBus.timingMessage <= diagnosticBusArr(0).timingMessage;   -- same for timing
     diagnosticBus.data(DIAGNOSTIC_OUTPUTS_G/2-1 downto 0) <= diagnosticBusArr(0).data(DIAGNOSTIC_OUTPUTS_G/2-1 downto 0);
     diagnosticBus.data(DIAGNOSTIC_OUTPUTS_G-1 downto DIAGNOSTIC_OUTPUTS_G/2) <= diagnosticBusArr(1).data(DIAGNOSTIC_OUTPUTS_G/2-1 downto 0);
+
+	   ----------------------         
+   -- Backplane Messaging for EIC, but will work for debugging as well
+   ----------------------         
+   U_BpMsgOb : entity work.AppMsgOb
+      generic map (
+         TPD_G       => TPD_G,
+         HDR_SIZE_G  => HDR_SIZE_C,-- Needs to be the same as stripline BPM
+         DATA_SIZE_G => DATA_SIZE_C)-- Needs to be the same as stripline BPM
+      port map (   
+         -- Application Messaging Interface (clk domain)      
+         clk         => bpMsgClk,
+         rst         => bpMsgRst,
+         strobe      => tmitMessageArr(0).strobe,-- to stripline BPM
+         header      => tmitMessageArr(0).header,-- to stripline BPM
+         timeStamp   => tmitMessageArr(0).timeStamp,-- to stripline BPM
+         data        => tmitMessageArr(0).data,-- to stripline BPM
+		 tdest       => x"00",  -- unused
+         -- Backplane Messaging Interface  (axilClk domain)
+         axilClk     => axilClk,
+         axilRst     => axilRst,
+         obMsgMaster => obBpMsgClientMaster,
+         obMsgSlave  => obBpMsgClientSlave);  
+		 
+-- Common logic to control shared resurces
+   CommonConfig_INST: entity work.CommonConfig
+    generic map (
+      TPD_G            => TPD_G,
+      AXI_ERROR_RESP_G => AXI_ERROR_RESP_G
+      )
+    port map (
+      axiClk             => axilClk,
+      axiRst             => axilRst,
+	  axilReadMaster     => axilReadMasters(COMMON_INDEX_C),
+	  axilReadSlave      => axilReadSlaves(COMMON_INDEX_C),
+	  axilWriteMaster    => axilWriteMasters(COMMON_INDEX_C),
+	  axilWriteSlave     => axilWriteSlaves(COMMON_INDEX_C),
+      commonConfig       => commonConfig
+      );
 
 
 end mapping;

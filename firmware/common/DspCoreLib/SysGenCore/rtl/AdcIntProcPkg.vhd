@@ -31,6 +31,14 @@ use work.TimingPkg.all;
 
 package AdcIntProcPkg is
 
+   constant NUM_BCM_APP_C : natural := 2;
+   constant DIAGNOSTIC_OUTPUTS_G  : integer := 14;
+   constant DATA_FRAME_LEN_C  : integer := 32 * DIAGNOSTIC_OUTPUTS_G;
+   constant BCM_BERGOZ_C     : slv(1 downto 0) := "00";
+   constant BCM_FARADAYCUP_C : slv(1 downto 0) := "01";
+   constant BCM_APP_TYPE_C : Slv2Array(NUM_BCM_APP_C-1 downto 0) := (BCM_BERGOZ_C, BCM_FARADAYCUP_C);
+   constant HDR_SIZE_C        : positive := 1;
+   constant DATA_SIZE_C       : positive := 6;
 
   type sampleDataArray3Array is array (natural range <>) of sampleDataArray(2 downto 0);
   type sampleDataArray5Array is array (natural range <>) of sampleDataArray(5 downto 0);
@@ -39,13 +47,13 @@ package AdcIntProcPkg is
   type ConfigSpaceLclType is record
       NumberSamples   : Slv8Array(2 downto 0);
       TrigDelay       : Slv8Array(2 downto 0);
-      DacSrs          : sl;
+      DacSrs          : slv(1 downto 0);
   end record ConfigSpaceLclType;
 
    constant CONF_SPACE_LCL_C : ConfigSpaceLclType := (
       NumberSamples   => ((others=>'0'),(others=>'0'),(others=>'0')),
       TrigDelay       => ((others=>'0'),(others=>'0'),(others=>'0')),
-      DacSrs          => '0');
+      DacSrs          => (others=>'0'));
 
   type ConfigSpaceType is record
       SimAdcSumData   : Slv32Array(2 downto 0);
@@ -62,6 +70,7 @@ package AdcIntProcPkg is
  type ConfigSpaceArrayType is array (natural range <>) of ConfigSpaceType;
 
   type Bcm2DspRcrdType is record
+      TimingValid     : sl;
       AdcValid       : sl;
       AdcSumDataOut   : Slv32Array(2 downto 0);
       TimingMessageOut : TimingMessageType;
@@ -75,6 +84,7 @@ package AdcIntProcPkg is
 
 
      constant BCM_2_DSP_RCRD_INIT_C : Bcm2DspRcrdType := (
+	  TimingValid    => '0';
       AdcValid       => '0',
       AdcSumDataOut   => (others => (others => '1')),
       TimingMessageOut         => TIMING_MESSAGE_INIT_C );
@@ -87,12 +97,26 @@ package AdcIntProcPkg is
   type Bcm2DspRcrdArrType is array (natural range<>) of Bcm2DspRcrdType;
   type Bcm2DspRcrdMRArrType is array (natural range<>) of Bcm2DspRcrdMRType;
 
-   constant NUM_BCM_APP_C : natural := 2;
-   constant DIAGNOSTIC_OUTPUTS_G  : integer := 14;
-   constant DATA_FRAME_LEN_C  : integer := 32 * DIAGNOSTIC_OUTPUTS_G;
-   constant BCM_BERGOZ_C     : slv(1 downto 0) := "00";
-   constant BCM_FARADAYCUP_C : slv(1 downto 0) := "01";
-   constant BCM_APP_TYPE_C : Slv2Array(NUM_BCM_APP_C-1 downto 0) := (BCM_BERGOZ_C, BCM_FARADAYCUP_C);
+     type tmitMessageType is record
+      strobe : sl;
+      header : Slv32Array(HDR_SIZE_C-1 downto 0);
+      timeStamp  : slv(63 downto 0);
+      data : Slv32Array(DATA_SIZE_C-1 downto 0);
+   end record tmitMessageType;
+   constant TMITINIT_C : tmitMessageType := (
+      strobe => '0';
+      header => (others => (others => '0')),
+      timeStamp  => (others => '0'),
+      data => (others => (others => '0')));
+
+   type tmitMessageArrType is array (natural range <>) of tmitMessageType;
+
+   type commonConfigType is record
+      enableCalib : sl;
+   end record commonConfigType;
+   constant COMMONCONFIG_C : commonConfigType := (
+      enableCalib => '0');
+
 
 end package AdcIntProcPkg;
 
