@@ -84,7 +84,7 @@ package AdcIntProcPkg is
 
 
      constant BCM_2_DSP_RCRD_INIT_C : Bcm2DspRcrdType := (
-	  TimingValid    => '0';
+	  TimingValid    => '0',
       AdcValid       => '0',
       AdcSumDataOut   => (others => (others => '1')),
       TimingMessageOut         => TIMING_MESSAGE_INIT_C );
@@ -104,7 +104,7 @@ package AdcIntProcPkg is
       data : Slv32Array(DATA_SIZE_C-1 downto 0);
    end record tmitMessageType;
    constant TMITINIT_C : tmitMessageType := (
-      strobe => '0';
+      strobe => '0',
       header => (others => (others => '0')),
       timeStamp  => (others => '0'),
       data => (others => (others => '0')));
