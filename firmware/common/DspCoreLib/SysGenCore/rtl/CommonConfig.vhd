@@ -63,7 +63,7 @@ architecture rtl of CommonConfig is
 
 
    type RegType is record
-      commonConfig    : sl;
+      commonConfig    : commonConfigType;
       axilReadSlave   : AxiLiteReadSlaveType;
       axilWriteSlave  : AxiLiteWriteSlaveType;
    end record RegType;

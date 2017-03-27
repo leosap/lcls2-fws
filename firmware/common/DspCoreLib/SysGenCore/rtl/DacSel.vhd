@@ -72,7 +72,7 @@ begin
    -- Logic sequence
    ------------------------------------
 
-   comb : process (DacSrs, adcValids, adcValuesIn, dacValidsIn, dacValuesIn, jesdRst, r) is
+   comb : process (DacSrs, adcValids, adcValuesIn, adcValids2, adcValuesIn2, dacValidsIn, dacValuesIn, jesdRst, r) is
       variable v      : RegType;
    begin
 

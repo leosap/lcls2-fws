@@ -184,7 +184,7 @@ begin
       v.ADCValid := '0';
 
       -- Outputs
-      v.Bcm2DspRcrd.TimingValid <= timingValidSync;
+      v.Bcm2DspRcrd.TimingValid := timingValidSync;
       if (ADCValid_lcl = '1') then
         v.Bcm2DspRcrd.ADCvalid := '1';
         if (TestMode(1) = '1') then

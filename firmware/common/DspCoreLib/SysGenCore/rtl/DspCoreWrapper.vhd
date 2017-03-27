@@ -158,7 +158,7 @@ architecture mapping of DspCoreWrapper is
    signal ADCenabled      : slv(3 downto 0);
    signal axiRstVect      : slv(1 downto 0);
    signal adcvalidvect    : slv(3 downto 0);
-   signal StatusVect      : slv(31 downto 0) := (Others => '0');
+   signal StatusVect      : Slv32Array(1 downto 0) := (Others => (Others => '0'));
 
 
 begin
@@ -387,18 +387,18 @@ begin
    lclDataBus(12) <=  ADCenabled(1) & '0'  & X"000" & dspErr(3 downto 2) & ADCenabled(0) & '0' & X"000" & dspErr(1 downto 0);
    lclDataBus(13) <=  ADCenabled(3) & '0'  & X"000" & dspErr(7 downto 6) &  ADCenabled(2) & '0'  & X"000" & dspErr(5 downto 4);
 
-  diagnosticBus.strobe <= (resultValidOut(0) and NOT(commonConfig.enableCalib)) OR (Bcm2DspRcrd.TimingValid and commonConfig.enableCalib);
+  diagnosticBus.strobe <= (resultValidOut(0) and NOT(commonConfig.enableCalib)) OR (Bcm2DspRcrdArr(0).TimingValid and commonConfig.enableCalib);
   diagnosticBus.data(DIAGNOSTIC_OUTPUTS_G -1 downto 0) <= lclDataBus(DIAGNOSTIC_OUTPUTS_G -1 downto 0);
   diagnosticBus.timingMessage <= Bcm2DspRcrdArr(0).TimingMessageOut;
 
 
   tmitMessage.strobe <= resultValidOut(0);
   tmitMessage.timeStamp <= Bcm2DspRcrdArr(0).TimingMessageOut.timeStamp;
-  tmitMessage.header <= StatusVect;
-  tmitMessage.data(0) <= 0x12345678; -- test word , unused
-  tmitMessage.data(1) <= 0x87654321; -- test word , unused
+  tmitMessage.header(0) <= StatusVect(0);
+  tmitMessage.data(0) <= x"12345678"; -- test word , unused
+  tmitMessage.data(1) <= x"87654321"; -- test word , unused
   tmitMessage.data(2) <= resultValuesOut(0)(0);
-  tmitMessage.data(4) <= 0xabcdef00; -- test word , unused
-  tmitMessage.data(5) <= 0x00fedcba; -- test word , unused
-  tmitMessage.data(6) <= resultValuesOut(0)(1);   -- unused
+  tmitMessage.data(3) <= x"abcdef00"; -- test word , unused
+  tmitMessage.data(4) <= x"00fedcba"; -- test word , unused
+  tmitMessage.data(5) <= resultValuesOut(0)(1);   -- unused
 end mapping;

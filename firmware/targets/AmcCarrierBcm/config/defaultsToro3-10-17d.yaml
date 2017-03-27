@@ -82,7 +82,7 @@
     - AmcCarrierTiming:
         - GthRxAlignCheck:
             - ResetLen: !<value> 0x3
-            - PhaseTarget: !<value> 0x11
+            - PhaseTarget: !<value> 0x10
         - TimingFrameRx:
             - MsgDelay: !<value> 0x00000
             - BypassRst: !<value> 0x0
@@ -394,7 +394,7 @@
                 - RollOverEn: !<value> 0x0
                 - VcoDacEnable: !<value> 0x0
                 - VcoDacSckConfig: !<value> 0xffff
-                - LmkMuxSel: !<value> 0x1
+                - LmkMuxSel: !<value> 0x0
                 - LmkSync: !<value> 0x0
                 - CntRst: !<value> 0x0
                 - LmkRst: !<value> 0x0
@@ -900,12 +900,11 @@
                     - -1.622099989617709e-05
                     - 0
 ## Initialize the CDCM6802 clock cleaner before ADC/DAC
-- AppTop:            
-    - AxiCdcm6208:
-        - Cdcm6208:
-            - ReCdcm6802: !<value> 0x1
-            
-            
+#- AmcCarrierCore:
+#    - AxiCdcm6208:
+#        - ReCdcm6802: !<value> 0x1
+#        
+#        
 ## Initialize the JESD lanes
 - AppTop:            
     - AppTopJesd:

@@ -97,7 +97,7 @@ architecture rtl of AxiLiteGenRegAdcProc is
    signal rin : RegType;
    signal NumberSamples   : Slv8Array(2 downto 0);
    signal TrigDelay       : Slv8Array(2 downto 0);
-   signal DacSrs          : slv(0 downto 0);
+   signal DacSrs          : slv(1 downto 0);
 --   signal TestMode3Synced : Sl;
 
 
@@ -202,7 +202,7 @@ begin
       rd_clk => jesdClk,
       dout   => DacSrs
      );
-     
+
   --Synced to JesdClk
   ConfigSpaceLcl.NumberSamples   <= NumberSamples;
   ConfigSpaceLcl.TrigDelay   <= TrigDelay;
@@ -211,6 +211,6 @@ begin
       --Used at AxiliteClk
   ConfigSpace.SimAdcSumData   <= r.SimAdcSumData;
   ConfigSpace.TestMode(2 downto 0)   <= r.TestMode;
-  
+
 ---------------------------------------------------------------------
 end rtl;

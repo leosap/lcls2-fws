@@ -58,7 +58,7 @@ entity AdcIntProc is
 
       adcValids       : in    sl := '0';
       adcValuesIn     : in    slv(31 downto 0) := (others => '0');
-	    adcValids2       : in    sl; := '0';
+	  adcValids2       : in    sl := '0';
       adcValuesIn2     : in    slv(31 downto 0) := (others => '0');
       adcValuesOut    : out   sampleDataArray(2 downto 0);
       adcValidOut     : out    sl;

@@ -194,7 +194,7 @@ architecture mapping of AppCore is
    signal dout      : slv(7 downto 0);
    signal intTrig   : Slv7Array(1 downto 0);
    
-   signal tmitMessage  : tmitMessageTypeArr;
+   signal tmitMessageArr  : tmitMessageArrType(1 downto 0);
    signal bpMsgClk     : sl;
    signal bpMsgRst     : sl;
    signal commonConfig   : commonConfigType;
@@ -385,7 +385,7 @@ begin
                   -- BP BPM BLEN Interface (bpMsgClk domain)
             bpMsgClk       => bpMsgClk,
             bpMsgRst  	   => bpMsgRst,
-            tmitMessage    => tmitMessageArr,
+            tmitMessage    => tmitMessageArr(i),
 
             -- AXI-Lite Port
             axiClk         => axilClk,

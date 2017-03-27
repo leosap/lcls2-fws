@@ -1,10 +1,10 @@
 ##############################################################################
 ## This file is part of 'SLAC Firmware Standard Library'.
-## It is subject to the license terms in the LICENSE.txt file found in the 
-## top-level directory of this distribution and at: 
-##    https://confluence.slac.stanford.edu/display/ppareg/LICENSE.html. 
-## No part of 'SLAC Firmware Standard Library', including this file, 
-## may be copied, modified, propagated, or distributed except according to 
+## It is subject to the license terms in the LICENSE.txt file found in the
+## top-level directory of this distribution and at:
+##    https://confluence.slac.stanford.edu/display/ppareg/LICENSE.html.
+## No part of 'SLAC Firmware Standard Library', including this file,
+## may be copied, modified, propagated, or distributed except according to
 ## the terms contained in the LICENSE.txt file.
 ##############################################################################
 #schemaversion 3.0.0
@@ -12,26 +12,26 @@
 #include AmcGenericAdcDacCore.yaml
 #include SysGen.yaml
 #include TimingProc.yaml
-#include commonConfig.yaml
+#include CmnConfig.yaml
 
 
-AppCore: &AppCore 
+AppCore: &AppCore
   name: AppCore
   description: AMC Carrier Application Core
-  size: 0x06000000
+  size: 0x07000000
   class: MMIODev
   configPrio: 1
   ########
   children:
   ########
-    ##################################################     
+    ##################################################
     AmcGenericAdcDacCore:
       <<: *AmcGenericAdcDacCore
       at:
-        offset: 0x00000000      
+        offset: 0x00000000
         stride: 0x00080000
         nelms: 2
-    ##################################################     
+    ##################################################
     SysGen:
       <<: *SysGen
       at:
@@ -46,10 +46,10 @@ AppCore: &AppCore
         stride: 0x01000000
         nelms: 2
     #################################################
-    commonConfig:
-      <<: *commonConfig
+    CmnConfig:
+      <<: *CmnConfig
       at:
         offset: 0x06000000
         stride: 0x01000000
         nelms: 1
-    #################################################     
+    #################################################
