@@ -147,6 +147,7 @@ architecture mapping of DspCoreWrapper is
    signal adcValidOut         : Slv(3 downto 0);
 
   signal resultValuesOut        : sampleDataArray3Array(3 downto 0) := (Others => (Others => (Others => '0')));
+  signal floatRes               : Slv32Array(1 downto 0) := (Others => (Others => '0'));
 
   signal resultValidOut         : slv(3 downto 0);
   signal dsperr                 : slv(7 downto 0);
@@ -300,6 +301,7 @@ begin
           adcres0 => resultValuesOut(I)(0)(17 downto 0),
           adcres1 => resultValuesOut(I)(1)(17 downto 0),
           adcres2 => resultValuesOut(I)(2)(17 downto 0),
+		  floatres => floatRes(I),
            -- Error vector
           dsperr => dsperr(I+0 downto I+0 ),    --Need vector
           dsperr1 => dsperr(I+1 downto I+1 ),    --Need vector
@@ -397,8 +399,8 @@ begin
   tmitMessage.header(0) <= StatusVect(0);
   tmitMessage.data(0) <= x"12345678"; -- test word , unused
   tmitMessage.data(1) <= x"87654321"; -- test word , unused
-  tmitMessage.data(2) <= resultValuesOut(0)(0);
+  tmitMessage.data(2) <= floatRes(0);
   tmitMessage.data(3) <= x"abcdef00"; -- test word , unused
   tmitMessage.data(4) <= x"00fedcba"; -- test word , unused
-  tmitMessage.data(5) <= resultValuesOut(0)(1);   -- unused
+  tmitMessage.data(5) <= floatRes(1);   -- unused
 end mapping;
