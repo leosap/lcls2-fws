@@ -389,7 +389,7 @@ begin
 	  ethPhyReady          => ethPhyReady,
 	  timingBus            => timingBus,
 	  dsperr               => dsperr,
-	  detError             => detError,
+	  detError             => detError
       );
 
    bsaBcmAmc_INST: entity work.bsaBcmAmc

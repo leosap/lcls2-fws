@@ -75,8 +75,8 @@ architecture rtl of bsaBcmAmc is
 
 begin
 
-   diagnosticClk <= axiClk;
-   diagnosticRst <= axiRst;
+   diagnosticClk <= Clk;
+   diagnosticRst <= Rst;
    
    diagnosticBus <= r.diagnosticBus;
    tmitOut       <= r.diagnosticBus.strobe;
@@ -96,20 +96,20 @@ begin
 
 -- Otput strobe generation	  
 	  if (commonConfig.enableCalib = '1' OR ADCenabled(0) = '0') then -- if data slow or disabled, use trigger reporting
-        v.diagnosticBus.strobe := cm2DspRcrdArr(0).TimingValid;  -- calibration is slow process at 1Hz with external trigger, all the time triggered by timing pulse with same value until change
+        v.diagnosticBus.strobe := Bcm2DspRcrdArr(0).TimingValid;  -- calibration is slow process at 1Hz with external trigger, all the time triggered by timing pulse with same value until change
       else
         v.diagnosticBus.strobe := resultValidOut(0); -- when normal operation, need to run at full MHz
       end if;
 	  
  -- Output data
       v.diagnosticBus.data(0) := resultValuesOut(0)(0);
-      v.diagnosticBus.data(1) <= resultValuesOut(0)(1);
-      v.diagnosticBus.data(2) <= resultValuesOut(0)(2);
-      v.diagnosticBus.data(3) <= floatRes(0);
-      v.diagnosticBus.data(4)(31) <= detError.err;
-	  v.diagnosticBus.data(4)(30) <= commonConfig.enableCalib;
-	  v.diagnosticBus.data(4)(29) <= ADCenabled(0);
-	  v.diagnosticBus.data(4)(28 downto 0) <= detError.status(28 downto 0);
+      v.diagnosticBus.data(1) := resultValuesOut(0)(1);
+      v.diagnosticBus.data(2) := resultValuesOut(0)(2);
+      v.diagnosticBus.data(3) := floatRes(0);
+      v.diagnosticBus.data(4)(31) := detError.err;
+	  v.diagnosticBus.data(4)(30) := commonConfig.enableCalib;
+	  v.diagnosticBus.data(4)(29) := ADCenabled(0);
+	  v.diagnosticBus.data(4)(28 downto 0) := detError.status(28 downto 0);
 	  
  -- Output average
       v.diagnosticBus.fixed(0) := '0';  -- temperature corrected result, field can be averaged
