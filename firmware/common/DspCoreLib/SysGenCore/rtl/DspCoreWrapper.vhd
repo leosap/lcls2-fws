@@ -160,6 +160,11 @@ architecture mapping of DspCoreWrapper is
    signal axiRstVect      : slv(1 downto 0);
    signal adcvalidvect    : slv(3 downto 0);
    signal StatusVect      : Slv32Array(1 downto 0) := (Others => (Others => '0'));
+   signal tmitOut         : sl;
+   signal detError        : detErrorType;
+   signal AppTypeV        : slv(0 downto 0);
+   
+   
 
 
 begin
@@ -167,9 +172,6 @@ begin
    axiRstL <= not(axiRst);
    bpMsgClk <= axiClk;
    bpMsgRst<= axiRst;
-
-   diagnosticClk <= axiClk;
-   diagnosticRst <= axiRst;
 
  --  dacValues <= adcValues(1 downto 0);
    -----------------------------------------------------------
@@ -285,13 +287,14 @@ begin
 
   axiRstVect(1 downto 0) <= axiRst & axiRst;
   AdcValidVect <= Bcm2DspRcrdArr(3).ADCValid & Bcm2DspRcrdArr(2).ADCValid & Bcm2DspRcrdArr(1).ADCValid & Bcm2DspRcrdArr(0).ADCValid;
-
+  AppTypeV(0) <= commonConfig.AppType;
    U_DspCore : entity work.DspCore
        port map (
           rst => axiRstVect(0 downto 0),
           clk => axiClk,
           dspcore_aresetn => axiRstL,
             --Inputs
+		  AppType  => AppTypeV(0 downto 0), 
           ADCvalid => AdcValidVect(I downto I),
           adcsum0 => Bcm2DspRcrdArr(I).AdcSumDataOut(0),
           adcsum1 => Bcm2DspRcrdArr(I).AdcSumDataOut(1),
@@ -369,30 +372,47 @@ begin
             axiWriteSlave   => locAxilWriteSlaves(DSP_CORE0_INDEX_C+I));
 
    end generate unusedDSPCores1;
+   
+   
+-- Inter-trigger error capture to report it with processed data (event by event)
+    errorCaptureBCM_INST: entity work.errorCaptureBCM
+    generic map (
+      TPD_G            => TPD_G
+      )
+    port map (
+      jesdClk              => jesdClk,
+      jesdRst              => jesdRst,
+	  Clk                  => axiClk,
+      Rst                  => axiRst,
+	  adcValidOut          => adcValidOut,  
+	  AdcValids            => AdcValids,
+	  ethPhyReady          => ethPhyReady,
+	  timingBus            => timingBus,
+	  dsperr               => dsperr,
+	  detError             => detError,
+      );
 
-
-
-
-   -- assign BSA reported data
-   lclDataBus(0) <= resultValuesOut(0)(0);
-   lclDataBus(1) <= resultValuesOut(0)(1);
-   lclDataBus(2) <= resultValuesOut(0)(2);
-   lclDataBus(3) <= resultValuesOut(1)(0);
-   lclDataBus(4) <= resultValuesOut(1)(1);
-   lclDataBus(5) <= resultValuesOut(1)(2);
-   lclDataBus(6) <= resultValuesOut(2)(0);
-   lclDataBus(7) <= resultValuesOut(2)(1);
-   lclDataBus(8) <= resultValuesOut(2)(2);
-   lclDataBus(9) <= resultValuesOut(3)(0);
-   lclDataBus(10) <= resultValuesOut(3)(1);
-   lclDataBus(11) <= resultValuesOut(3)(2);
-   lclDataBus(12) <=  ADCenabled(1) & '0'  & X"000" & dspErr(3 downto 2) & ADCenabled(0) & '0' & X"000" & dspErr(1 downto 0);
-   lclDataBus(13) <=  ADCenabled(3) & '0'  & X"000" & dspErr(7 downto 6) &  ADCenabled(2) & '0'  & X"000" & dspErr(5 downto 4);
-
-  diagnosticBus.strobe <= (resultValidOut(0) and NOT(commonConfig.enableCalib)) OR (Bcm2DspRcrdArr(0).TimingValid and commonConfig.enableCalib);
-  diagnosticBus.data(DIAGNOSTIC_OUTPUTS_G -1 downto 0) <= lclDataBus(DIAGNOSTIC_OUTPUTS_G -1 downto 0);
-  diagnosticBus.timingMessage <= Bcm2DspRcrdArr(0).TimingMessageOut;
-
+   bsaBcmAmc_INST: entity work.bsaBcmAmc
+    generic map (
+      TPD_G            => TPD_G,
+	  DIAGNOSTIC_OUTPUTS_G  => DIAGNOSTIC_OUTPUTS_G
+      )
+    port map (
+      Clk                  => axiClk,
+      Rst                  => axiRst,
+	  ADCenabled           => ADCenabled,
+	  commonConfig         => commonConfig,
+	  resultValuesOut      => resultValuesOut,
+	  floatRes             => floatRes,
+	  detError             => detError,
+	  resultValidOut       => resultValidOut,
+	  Bcm2DspRcrdArr       => Bcm2DspRcrdArr,
+	  diagnosticClk        => diagnosticClk,
+      diagnosticRst        => diagnosticRst,
+	  tmitOut              => tmitOut,
+	  diagnosticBus        => diagnosticBus
+      );
+	  
 
   tmitMessage.strobe <= resultValidOut(0);
   tmitMessage.timeStamp <= Bcm2DspRcrdArr(0).TimingMessageOut.timeStamp;

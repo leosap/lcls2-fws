@@ -27,4 +27,11 @@ CmnConfig: &CmnConfig
       mode: RW
       description: "1 - calibration enabled, 0 - normal mode"
     #########################################################
-
+    AppType:
+      class: IntField
+      at:
+        offset: 0x0004
+      sizeBits: 1
+      mode: RW
+      description: "1 - FC, 0 - Bergoz Toroid"
+    #########################################################

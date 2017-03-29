@@ -93,6 +93,7 @@ begin
 
       --  TrigDelay(0) -- unused
       axiSlaveRegister(regCon, x"000", 0, v.commonConfig.enableCalib);
+      axiSlaveRegister(regCon, x"004", 0, v.commonConfig.AppType);
 
       -- Closeout the transaction
       axiSlaveDefault(regCon,v.axilWriteSlave, v.axilReadSlave, AXI_ERROR_RESP_G);

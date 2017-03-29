@@ -113,11 +113,20 @@ package AdcIntProcPkg is
 
    type commonConfigType is record
       enableCalib : sl;
+	  AppType : sl;
    end record commonConfigType;
    constant COMMONCONFIG_C : commonConfigType := (
-      enableCalib => '0');
+      enableCalib => '0',
+	  AppType  => '0');  -- 0 - bergoz, 1 -FC
 
-
+    type detErrorType is record
+      err : sl;
+      status  : slv(31 downto 0);
+   end record detErrorType;
+   constant DETECTED_ERROR_INIT_C : detErrorType := (
+      err => '0',
+      status  => (others => '0'));
+	  
 end package AdcIntProcPkg;
 
 package body AdcIntProcPkg is
