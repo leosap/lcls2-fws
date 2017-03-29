@@ -104,18 +104,18 @@ begin
       v.detError.Err := '0';
 
 -- Otput status generation	  
-	  if (adcValidOut = '1') then -- collect data between processing pulses
+	  if (adcValidOut(0) = '1') then -- collect data between processing pulses, only channel 0
         v.detError.status(5 downto 0) := InputSignalOutsSlv;
 		v.detError.status(9 downto 6) := NOT(adcValidOut);
 		v.detError.status(11 downto 10) := dsperr(1 downto 0);
 	  else
-        v.detError.status(5 downto 0) := r.diagnosticBus.strobe(5 downto 0) OR InputSignalOutsSlv; -- 
-		v.detError.status(9 downto 6) := r.diagnosticBus.strobe(9 downto 6) OR NOT(adcValidOut);
-		v.detError.status(11 downto 10) := r.diagnosticBus.strobe(11 downto 10) OR dsperr(1 downto 0);
+        v.detError.status(5 downto 0) := r.diagnosticBus.status(5 downto 0) OR InputSignalOutsSlv; -- 
+		v.detError.status(9 downto 6) := r.diagnosticBus.status(9 downto 6) OR NOT(adcValidOut);
+		v.detError.status(11 downto 10) := r.diagnosticBus.status(11 downto 10) OR dsperr(1 downto 0);
       end if;
 	  
  -- Otput err generation	  
-	  if (adcValidOut = '1') then -- 
+	  if (adcValidOut(0) = '1') then -- only channel 0
         v.detError.err := '0';
 	  elsif (r.detError.status /= x"00000000") then -- 
         v.detError.err := '1';
