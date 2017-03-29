@@ -119,7 +119,7 @@ begin
 	  v.diagnosticBus.fixed(4) := '1';  -- status, not a number, not averaged
 	  
  -- Output sevirity
-     if (detError.err = '1' commonConfig.enableCalib = '1' and ADCenabled(0) = '0') then
+     if (detError.err = '1' or commonConfig.enableCalib = '1' or ADCenabled(0) = '0') then
 		  v.diagnosticBus.sevr(0) := "11";  -- 
 		  v.diagnosticBus.sevr(1) := "11";  -- 
 		  v.diagnosticBus.sevr(2) := "11";  -- 
