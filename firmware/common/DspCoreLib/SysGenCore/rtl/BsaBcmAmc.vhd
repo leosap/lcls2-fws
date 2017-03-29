@@ -132,7 +132,7 @@ begin
       end if;
 	  v.diagnosticBus.sevr(4) := "00";  -- status, for internal subsystem use, always valid 
 	  
-	  v.diagnosticBus.timingMessage <= Bcm2DspRcrdArr(0).TimingMessageOut;
+	  v.diagnosticBus.timingMessage := Bcm2DspRcrdArr(0).TimingMessageOut;
 	  
       if (Rst = '1') then
          v := REG_INIT_C;
