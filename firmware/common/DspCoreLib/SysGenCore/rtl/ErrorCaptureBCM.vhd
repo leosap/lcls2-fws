@@ -109,9 +109,9 @@ begin
 		v.detError.status(9 downto 6) := NOT(adcValidOut);
 		v.detError.status(11 downto 10) := dsperr(1 downto 0);
 	  else
-        v.detError.status(5 downto 0) := r.diagnosticBus.status(5 downto 0) OR InputSignalOutsSlv; -- 
-		v.detError.status(9 downto 6) := r.diagnosticBus.status(9 downto 6) OR NOT(adcValidOut);
-		v.detError.status(11 downto 10) := r.diagnosticBus.status(11 downto 10) OR dsperr(1 downto 0);
+        v.detError.status(5 downto 0) := r.detError.status(5 downto 0) OR InputSignalOutsSlv; -- 
+		v.detError.status(9 downto 6) := r.detError.status(9 downto 6) OR NOT(adcValidOut);
+		v.detError.status(11 downto 10) := r.detError.status(11 downto 10) OR dsperr(1 downto 0);
       end if;
 	  
  -- Otput err generation	  
