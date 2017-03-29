@@ -19,7 +19,7 @@ export PRJ_VERSION = 0x00000001
 # Note: (AMC_ADV_BUILD = 1) requires a munch longer build time
 ##########################################################################################
 # AMC_ADV_BUILD is defined by application
-export AMC_ADV_BUILD = 0
+export AMC_ADV_BUILD = 1
 
 ##########################################################################################
 # Applications must define if using zone3 (RTM) ETH (instead of zone2 ETH)

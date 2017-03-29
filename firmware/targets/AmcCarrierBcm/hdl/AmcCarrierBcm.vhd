@@ -312,19 +312,19 @@ begin
          genClkP              => genClkP,
          genClkN              => genClkN);
 
-   U_Core : entity work.AmcCarrierCoreBase
-      generic map (
-         TPD_G        => TPD_G,
-         BUILD_INFO_G => BUILD_INFO_G,
-         APP_TYPE_G   => APP_BCM_TYPE_C)  -- Configured by application (refer to AmcCarrierPkg for list of all application types
-      port map (
-   -- U_Core : entity work.AmcCarrierCoreAdv
+   -- U_Core : entity work.AmcCarrierCoreBase
       -- generic map (
-         -- TPD_G         => TPD_G,
-         -- BUILD_INFO_G  => BUILD_INFO_G,
-         -- DISABLE_BSA_G => false,  -- false = includes BSA engine, true = doesn't build the BSA engine
-         -- APP_TYPE_G    => APP_BCM_TYPE_C)  -- Configured by application (refer to AmcCarrierPkg for list of all application types
+         -- TPD_G        => TPD_G,
+         -- BUILD_INFO_G => BUILD_INFO_G,
+         -- APP_TYPE_G   => APP_BCM_TYPE_C)  -- Configured by application (refer to AmcCarrierPkg for list of all application types
       -- port map (
+   U_Core : entity work.AmcCarrierCoreAdv
+      generic map (
+         TPD_G         => TPD_G,
+         BUILD_INFO_G  => BUILD_INFO_G,
+         DISABLE_BSA_G => false,  -- false = includes BSA engine, true = doesn't build the BSA engine
+         APP_TYPE_G    => APP_BCM_TYPE_C)  -- Configured by application (refer to AmcCarrierPkg for list of all application types
+      port map (
          ----------------------
          -- Top Level Interface
          ----------------------
