@@ -52,6 +52,7 @@ entity DspCoreWrapper is
       dacValuesIn    : in  sampleDataArray(1 downto 0);
       intTrig        : in  slv(3 downto 0);
 	  commonConfig   : in  commonConfigType;
+	  ethPhyReady    : in  sl;
       -- Timing Interface (Timing domain)
       timingClk      : in   sl;  --
       timingRst      : in   sl;  --

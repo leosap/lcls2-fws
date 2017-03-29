@@ -372,6 +372,7 @@ begin
             dacValuesin(1)  => dacSigValues(i, 1),
             intTrig        => intTrig(i)(5 downto 2),
 			commonConfig   => commonConfig,
+			ethPhyReady    => ethPhyReady,
 
                   -- Timing bus
             timingClk      => TimingClk,
