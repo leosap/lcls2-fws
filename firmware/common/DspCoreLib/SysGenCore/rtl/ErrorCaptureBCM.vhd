@@ -29,7 +29,7 @@ use work.AmcCarrierPkg.all;
 use work.Jesd204bPkg.all;
 use work.TimingPkg.all;
 use work.AdcIntProcPkg.all;
-	  
+
 entity errorCaptureBCM is
    generic (
       TPD_G             : time                        := 1 ns
@@ -41,7 +41,7 @@ entity errorCaptureBCM is
          -- AXI clocks
       Clk             : in  sl;
       Rst             : in  sl;
-	  
+
       adcValidOut     : in  slv(3 downto 0);
 	  AdcValids       : in  slv(3 downto 0);
 	  ethPhyReady     : in  sl;
@@ -70,15 +70,15 @@ architecture rtl of errorCaptureBCM is
    signal rin       : RegType;
    signal InputSignalsSlv       : slv(5 downto 0);
    signal InputSignalOutsSlv       : slv(5 downto 0);
-   
+
 
 
 begin
 
-   
+
    detError <= r.detError;
 
-   
+
   InputSignalsSlv       <= timingBus.v2.linkUp & ethPhyReady & AdcValids;
 
    SynchronizerFifo_TM : entity work.SynchronizerFifo
@@ -103,24 +103,24 @@ begin
       v := r;
       v.detError.Err := '0';
 
--- Otput status generation	  
+-- Otput status generation
 	  if (adcValidOut(0) = '1') then -- collect data between processing pulses, only channel 0
-        v.detError.status(5 downto 0) := InputSignalOutsSlv;
-		v.detError.status(9 downto 6) := NOT(adcValidOut);
+        v.detError.status(5 downto 0) := NOT(InputSignalOutsSlv);
+--		v.detError.status(9 downto 6) := (adcValidOut);
 		v.detError.status(11 downto 10) := dsperr(1 downto 0);
 	  else
-        v.detError.status(5 downto 0) := r.detError.status(5 downto 0) OR InputSignalOutsSlv; -- 
-		v.detError.status(9 downto 6) := r.detError.status(9 downto 6) OR NOT(adcValidOut);
+        v.detError.status(5 downto 0) := r.detError.status(5 downto 0) OR NOT(InputSignalOutsSlv); --
+--		v.detError.status(9 downto 6) := r.detError.status(9 downto 6) OR (adcValidOut);
 		v.detError.status(11 downto 10) := r.detError.status(11 downto 10) OR dsperr(1 downto 0);
       end if;
-	  
- -- Otput err generation	  
+
+ -- Otput err generation
 	  if (adcValidOut(0) = '1') then -- only channel 0
         v.detError.err := '0';
-	  elsif (r.detError.status /= x"00000000") then -- 
+	  elsif (r.detError.status /= x"00000000") then --
         v.detError.err := '1';
       end if;
-	  
+
       if (Rst = '1') then
          v := REG_INIT_C;
       end if;
