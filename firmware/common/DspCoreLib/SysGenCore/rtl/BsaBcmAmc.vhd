@@ -145,7 +145,7 @@ begin
 		  v.diagnosticBus.mpsIgnore(2) := '1';  --
 		  v.diagnosticBus.mpsIgnore(3) := '1';  --
       v.diagnosticBus.mpsIgnore(4) := '1';  --
-      end if
+      end if;
 
 	  v.diagnosticBus.timingMessage := Bcm2DspRcrdArr(0).TimingMessageOut;
 
