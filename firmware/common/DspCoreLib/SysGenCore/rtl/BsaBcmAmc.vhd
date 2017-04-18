@@ -30,7 +30,7 @@ use work.Jesd204bPkg.all;
 use work.TimingPkg.all;
 use work.AdcIntProcPkg.all;
 
-	  
+
 entity bsaBcmAmc is
    generic (
       TPD_G             : time                        := 1 ns;
@@ -77,7 +77,7 @@ begin
 
    diagnosticClk <= Clk;
    diagnosticRst <= Rst;
-   
+
    diagnosticBus <= r.diagnosticBus;
    tmitOut       <= r.diagnosticBus.strobe;
 
@@ -94,13 +94,13 @@ begin
       v := r;
       v.diagnosticBus.strobe := '0';
 
--- Otput strobe generation	  
+-- Otput strobe generation
 	  if (commonConfig.enableCalib = '1' OR ADCenabled(0) = '0') then -- if data slow or disabled, use trigger reporting
         v.diagnosticBus.strobe := Bcm2DspRcrdArr(0).TimingValid;  -- calibration is slow process at 1Hz with external trigger, all the time triggered by timing pulse with same value until change
       else
         v.diagnosticBus.strobe := resultValidOut(0); -- when normal operation, need to run at full MHz
       end if;
-	  
+
  -- Output data
       v.diagnosticBus.data(0) := resultValuesOut(0)(0);
       v.diagnosticBus.data(1) := resultValuesOut(0)(1);
@@ -110,30 +110,45 @@ begin
 	  v.diagnosticBus.data(4)(30) := commonConfig.enableCalib;
 	  v.diagnosticBus.data(4)(29) := ADCenabled(0);
 	  v.diagnosticBus.data(4)(28 downto 0) := detError.status(28 downto 0);
-	  
+
  -- Output average
       v.diagnosticBus.fixed(0) := '0';  -- temperature corrected result, field can be averaged
 	  v.diagnosticBus.fixed(1) := '0';  -- not temperature corrected result,field can be averaged
 	  v.diagnosticBus.fixed(2) := '1';  -- only summing, can be big range, float, not averaged
 	  v.diagnosticBus.fixed(3) := '1';  -- float representation of word 0, float, not averaged
 	  v.diagnosticBus.fixed(4) := '1';  -- status, not a number, not averaged
-	  
+
  -- Output sevirity
      if (detError.err = '1' or commonConfig.enableCalib = '1' or ADCenabled(0) = '0') then
-		  v.diagnosticBus.sevr(0) := "11";  -- 
-		  v.diagnosticBus.sevr(1) := "11";  -- 
-		  v.diagnosticBus.sevr(2) := "11";  -- 
-		  v.diagnosticBus.sevr(3) := "11";  -- 
+		  v.diagnosticBus.sevr(0) := "11";  --
+		  v.diagnosticBus.sevr(1) := "11";  --
+		  v.diagnosticBus.sevr(2) := "11";  --
+		  v.diagnosticBus.sevr(3) := "11";  --
 	 else
-		  v.diagnosticBus.sevr(0) := "00";  -- 
-		  v.diagnosticBus.sevr(1) := "00";  -- 
-		  v.diagnosticBus.sevr(2) := "00";  -- 
-		  v.diagnosticBus.sevr(3) := "00";  -- 
+		  v.diagnosticBus.sevr(0) := "00";  --
+		  v.diagnosticBus.sevr(1) := "00";  --
+		  v.diagnosticBus.sevr(2) := "00";  --
+		  v.diagnosticBus.sevr(3) := "00";  --
       end if;
-	  v.diagnosticBus.sevr(4) := "00";  -- status, for internal subsystem use, always valid 
-	  
+	  v.diagnosticBus.sevr(4) := "00";  -- status, for internal subsystem use, always valid
+
+     -- Output mpsIgnore, only charge is used by MPS and only for EIC, so only one word need diffirenciate between calibration or not
+     if (commonConfig.enableCalib = '1') then
+		  v.diagnosticBus.mpsIgnore(0) := '1';  --
+		  v.diagnosticBus.mpsIgnore(1) := '1';  --
+		  v.diagnosticBus.mpsIgnore(2) := '1';  --
+		  v.diagnosticBus.mpsIgnore(3) := '1';  --
+      v.diagnosticBus.mpsIgnore(4) := '1';  --
+	 else
+		  v.diagnosticBus.mpsIgnore(0) := '0';  --
+		  v.diagnosticBus.mpsIgnore(1) := '1';  --
+		  v.diagnosticBus.mpsIgnore(2) := '1';  --
+		  v.diagnosticBus.mpsIgnore(3) := '1';  --
+      v.diagnosticBus.mpsIgnore(4) := '1';  --
+      end if
+
 	  v.diagnosticBus.timingMessage := Bcm2DspRcrdArr(0).TimingMessageOut;
-	  
+
       if (Rst = '1') then
          v := REG_INIT_C;
       end if;

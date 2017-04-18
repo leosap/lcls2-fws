@@ -164,8 +164,8 @@ architecture mapping of DspCoreWrapper is
    signal tmitOut         : sl;
    signal detError        : detErrorType;
    signal AppTypeV        : slv(0 downto 0);
-   
-   
+
+
 
 
 begin
@@ -295,7 +295,7 @@ begin
           clk => axiClk,
           dspcore_aresetn => axiRstL,
             --Inputs
-		  AppType  => AppTypeV(0 downto 0), 
+		  AppType  => AppTypeV(0 downto 0),
           ADCvalid => AdcValidVect(I downto I),
           adcsum0 => Bcm2DspRcrdArr(I).AdcSumDataOut(0),
           adcsum1 => Bcm2DspRcrdArr(I).AdcSumDataOut(1),
@@ -373,8 +373,8 @@ begin
             axiWriteSlave   => locAxilWriteSlaves(DSP_CORE0_INDEX_C+I));
 
    end generate unusedDSPCores1;
-   
-   
+
+
 -- Inter-trigger error capture to report it with processed data (event by event)
     errorCaptureBCM_INST: entity work.errorCaptureBCM
     generic map (
@@ -385,7 +385,7 @@ begin
       jesdRst              => jesdRst,
 	  Clk                  => axiClk,
       Rst                  => axiRst,
-	  adcValidOut          => adcValidOut,  
+	  adcValidOut          => adcValidOut,
 	  AdcValids            => AdcValids,
 	  ethPhyReady          => ethPhyReady,
 	  timingBus            => timingBus,
@@ -413,15 +413,16 @@ begin
 	  tmitOut              => tmitOut,
 	  diagnosticBus        => diagnosticBus
       );
-	  
+
 
   tmitMessage.strobe <= resultValidOut(0);
   tmitMessage.timeStamp <= Bcm2DspRcrdArr(0).TimingMessageOut.timeStamp;
-  tmitMessage.header(0) <= StatusVect(0);
-  tmitMessage.data(0) <= x"12345678"; -- test word , unused
-  tmitMessage.data(1) <= x"87654321"; -- test word , unused
-  tmitMessage.data(2) <= floatRes(0);
-  tmitMessage.data(3) <= x"abcdef00"; -- test word , unused
-  tmitMessage.data(4) <= x"00fedcba"; -- test word , unused
-  tmitMessage.data(5) <= floatRes(1);   -- unused
+  tmitMessage.data(0) <= StatusVect(0);
+  tmitMessage.data(1) <= resultValuesOut(0)(0); --floatRes(0);
+  tmitMessage.data(2) <= x"12345678"; -- test word , unused
+  tmitMessage.data(3) <= x"87654321"; -- test word , unused
+  tmitMessage.data(4) <= StatusVect(1);
+  tmitMessage.data(5) <= resultValuesOut(1)(0); --floatRes(1);   -- unused
+  tmitMessage.data(6) <= x"abcdef00"; -- test word , unused
+  tmitMessage.data(7) <= x"00fedcba"; -- test word , unused
 end mapping;

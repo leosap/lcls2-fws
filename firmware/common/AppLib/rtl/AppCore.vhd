@@ -464,6 +464,8 @@ begin
     diagnosticBus.fixed(DIAGNOSTIC_OUTPUTS_G-1 downto DIAGNOSTIC_OUTPUTS_G/2) <= diagnosticBusArr(1).fixed(DIAGNOSTIC_OUTPUTS_G/2-1 downto 0);
 	diagnosticBus.sevr(DIAGNOSTIC_OUTPUTS_G/2-1 downto 0) <= diagnosticBusArr(0).sevr(DIAGNOSTIC_OUTPUTS_G/2-1 downto 0);
     diagnosticBus.sevr(DIAGNOSTIC_OUTPUTS_G-1 downto DIAGNOSTIC_OUTPUTS_G/2) <= diagnosticBusArr(1).sevr(DIAGNOSTIC_OUTPUTS_G/2-1 downto 0);
+	diagnosticBus.mpsIgnore(DIAGNOSTIC_OUTPUTS_G/2-1 downto 0) <= diagnosticBusArr(0).mpsIgnore(DIAGNOSTIC_OUTPUTS_G/2-1 downto 0);
+    diagnosticBus.mpsIgnore(DIAGNOSTIC_OUTPUTS_G-1 downto DIAGNOSTIC_OUTPUTS_G/2) <= diagnosticBusArr(1).mpsIgnore(DIAGNOSTIC_OUTPUTS_G/2-1 downto 0);
 
 	   ----------------------         
    -- Backplane Messaging for EIC, but will work for debugging as well
