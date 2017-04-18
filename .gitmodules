@@ -13,3 +13,6 @@
 [submodule "firmware/submodules/amc-carrier-core"]
 	path = firmware/submodules/amc-carrier-core
 	url = git@github.com:slaclab/amc-carrier-core.git
+[submodule "firmware/submodules/lcls-bpm-core"]
+	path = firmware/submodules/lcls-bpm-core
+	url = git@github.com:/slaclab/lcls-bpm-core
