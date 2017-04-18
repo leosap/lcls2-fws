@@ -37,8 +37,8 @@ package AdcIntProcPkg is
    constant BCM_BERGOZ_C     : slv(1 downto 0) := "00";
    constant BCM_FARADAYCUP_C : slv(1 downto 0) := "01";
    constant BCM_APP_TYPE_C : Slv2Array(NUM_BCM_APP_C-1 downto 0) := (BCM_BERGOZ_C, BCM_FARADAYCUP_C);
-   constant HDR_SIZE_C        : positive := 1;
-   constant DATA_SIZE_C       : positive := 6;
+   constant HDR_SIZE_C        : positive := 0;
+   constant DATA_SIZE_C       : positive := 8;
 
   type sampleDataArray3Array is array (natural range <>) of sampleDataArray(2 downto 0);
   type sampleDataArray5Array is array (natural range <>) of sampleDataArray(5 downto 0);
@@ -126,7 +126,7 @@ package AdcIntProcPkg is
    constant DETECTED_ERROR_INIT_C : detErrorType := (
       err => '0',
       status  => (others => '0'));
-	  
+
 end package AdcIntProcPkg;
 
 package body AdcIntProcPkg is
