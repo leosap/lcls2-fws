@@ -37,7 +37,7 @@ package AdcIntProcPkg is
    constant BCM_BERGOZ_C     : slv(1 downto 0) := "00";
    constant BCM_FARADAYCUP_C : slv(1 downto 0) := "01";
    constant BCM_APP_TYPE_C : Slv2Array(NUM_BCM_APP_C-1 downto 0) := (BCM_BERGOZ_C, BCM_FARADAYCUP_C);
-   constant HDR_SIZE_C        : positive := 0;
+   constant HDR_SIZE_C        : positive := 1;
    constant DATA_SIZE_C       : positive := 8;
 
   type sampleDataArray3Array is array (natural range <>) of sampleDataArray(2 downto 0);
