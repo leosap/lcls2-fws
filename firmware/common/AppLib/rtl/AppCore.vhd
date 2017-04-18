@@ -460,6 +460,10 @@ begin
     diagnosticBus.timingMessage <= diagnosticBusArr(0).timingMessage;   -- same for timing
     diagnosticBus.data(DIAGNOSTIC_OUTPUTS_G/2-1 downto 0) <= diagnosticBusArr(0).data(DIAGNOSTIC_OUTPUTS_G/2-1 downto 0);
     diagnosticBus.data(DIAGNOSTIC_OUTPUTS_G-1 downto DIAGNOSTIC_OUTPUTS_G/2) <= diagnosticBusArr(1).data(DIAGNOSTIC_OUTPUTS_G/2-1 downto 0);
+	diagnosticBus.fixed(DIAGNOSTIC_OUTPUTS_G/2-1 downto 0) <= diagnosticBusArr(0).fixed(DIAGNOSTIC_OUTPUTS_G/2-1 downto 0);
+    diagnosticBus.fixed(DIAGNOSTIC_OUTPUTS_G-1 downto DIAGNOSTIC_OUTPUTS_G/2) <= diagnosticBusArr(1).fixed(DIAGNOSTIC_OUTPUTS_G/2-1 downto 0);
+	diagnosticBus.sevr(DIAGNOSTIC_OUTPUTS_G/2-1 downto 0) <= diagnosticBusArr(0).sevr(DIAGNOSTIC_OUTPUTS_G/2-1 downto 0);
+    diagnosticBus.sevr(DIAGNOSTIC_OUTPUTS_G-1 downto DIAGNOSTIC_OUTPUTS_G/2) <= diagnosticBusArr(1).sevr(DIAGNOSTIC_OUTPUTS_G/2-1 downto 0);
 
 	   ----------------------         
    -- Backplane Messaging for EIC, but will work for debugging as well
