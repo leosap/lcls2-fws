@@ -126,7 +126,7 @@ package AdcIntProcPkg is
    constant DETECTED_ERROR_INIT_C : detErrorType := (
       err => '0',
       status  => (others => '0'));
-
+	  
 end package AdcIntProcPkg;
 
 package body AdcIntProcPkg is
