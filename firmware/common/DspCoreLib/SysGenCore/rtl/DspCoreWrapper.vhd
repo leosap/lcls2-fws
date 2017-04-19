@@ -303,9 +303,9 @@ begin
           adcsum2 => Bcm2DspRcrdArr(I).AdcSumDataOut(2),
             --Outputs
           adcvalidout => resultValidOut(I downto I),    --Need vector
-          adcres0 => resultValuesOut(I)(0)(17 downto 0),
-          adcres1 => resultValuesOut(I)(1)(17 downto 0),
-          adcres2 => resultValuesOut(I)(2)(17 downto 0),
+          adcres0 => resultValuesOut(I)(0)(31 downto 0),
+          adcres1 => resultValuesOut(I)(1)(31 downto 0),
+          adcres2 => resultValuesOut(I)(2)(31 downto 0),
 		  floatres => floatRes(I),
            -- Error vector
           dsperr => dsperr(I+0 downto I+0 ),    --Need vector
