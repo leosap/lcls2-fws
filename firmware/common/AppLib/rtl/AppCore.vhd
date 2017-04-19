@@ -32,6 +32,7 @@ use work.AmcCarrierPkg.all;
 use work.jesd204bpkg.all;
 use work.AppTopPkg.all;
 use work.AdcIntProcPkg.all;
+use work.BpmPkg.all;
 
 entity AppCore is
    generic (
@@ -474,7 +475,7 @@ begin
       generic map (
          TPD_G       => TPD_G,
          HDR_SIZE_G  => HDR_SIZE_C,-- Needs to be the same as stripline BPM
-         DATA_SIZE_G => DATA_SIZE_C)-- Needs to be the same as stripline BPM
+         DATA_SIZE_G => BPM_N_MSG_CHANNELS)-- Needs to be the same as stripline BPM
       port map (   
          -- Application Messaging Interface (clk domain)      
          clk         => bpMsgClk,

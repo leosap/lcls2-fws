@@ -31,6 +31,7 @@ use work.Jesd204bPkg.all;
 use work.TimingPkg.all;
 use work.AmcCarrierPkg.all;
 use work.AdcIntProcPkg.all;
+use work.BpmPkg.all;
 
 entity DspCoreWrapper is
    generic (
@@ -417,12 +418,12 @@ begin
 
   tmitMessage.strobe <= resultValidOut(0);
   tmitMessage.timeStamp <= Bcm2DspRcrdArr(0).TimingMessageOut.timeStamp;
-  tmitMessage.data(0) <= StatusVect(0);
-  tmitMessage.data(1) <= resultValuesOut(0)(0); --floatRes(0);
-  tmitMessage.data(2) <= x"12345678"; -- test word , unused
-  tmitMessage.data(3) <= x"87654321"; -- test word , unused
-  tmitMessage.data(4) <= StatusVect(1);
-  tmitMessage.data(5) <= resultValuesOut(1)(0); --floatRes(1);   -- unused
-  tmitMessage.data(6) <= x"abcdef00"; -- test word , unused
-  tmitMessage.data(7) <= x"00fedcba"; -- test word , unused
+  tmitMessage.data(BPM_A_MSG_STAT_IDX) <= StatusVect(0);
+  tmitMessage.data(BPM_A_MSG_TMIT_IDX) <= resultValuesOut(0)(0); --floatRes(0);
+  tmitMessage.data(BPM_A_MSG_XPOS_IDX) <= x"12345678"; -- test word , unused
+  tmitMessage.data(BPM_A_MSG_YPOS_IDX) <= x"87654321"; -- test word , unused
+  tmitMessage.data(BPM_B_MSG_STAT_IDX) <= StatusVect(1);
+  tmitMessage.data(BPM_B_MSG_TMIT_IDX) <= resultValuesOut(1)(0); --floatRes(1);   -- unused
+  tmitMessage.data(BPM_B_MSG_XPOS_IDX) <= x"abcdef00"; -- test word , unused
+  tmitMessage.data(BPM_B_MSG_YPOS_IDX) <= x"00fedcba"; -- test word , unused
 end mapping;
