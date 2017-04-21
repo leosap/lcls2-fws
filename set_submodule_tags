@@ -14,7 +14,7 @@ from subprocess import check_call
 
 ## Define the GIT submodule path and TAG-ing
 tagConfig = [ ['/firmware/submodules/amc-carrier-core', 'mps-dev'],
-              ['/firmware/submodules/lcls-timing-core', 'v1.5.0'],
+              ['/firmware/submodules/lcls-timing-core', 'v1.6.0'],
               ['/firmware/submodules/ruckus',           'v1.2.7'],
               ['/firmware/submodules/surf',             'v1.2.8'],
               ['/firmware/submodules/sysgen-dsp-lib',   'v1.0.0'] ]

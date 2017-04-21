@@ -61,8 +61,6 @@
         - AppMpsSalt:
             - CntRst: !<value> 0x0
             - RollOverEn: !<value> 0x0000
-            - MpsTestMode: !<value> 0x0
-            - MpsEnable: !<value> 0x0
     - RssiServerSw:
         - MaxOutOfSeq: !<value> 0x00
         - MaxCumAck: !<value> 0x03
