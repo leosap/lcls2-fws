@@ -206,7 +206,7 @@ begin
   --Synced to JesdClk
   ConfigSpaceLcl.NumberSamples   <= NumberSamples;
   ConfigSpaceLcl.TrigDelay   <= TrigDelay;
-  ConfigSpaceLcl.DacSrs   <= r.DacSrs(1 downto 0);
+  ConfigSpaceLcl.DacSrs   <= DacSrs(1 downto 0);
 
       --Used at AxiliteClk
   ConfigSpace.SimAdcSumData   <= r.SimAdcSumData;

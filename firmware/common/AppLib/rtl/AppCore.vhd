@@ -41,6 +41,7 @@ entity AppCore is
       SIMULATION_G     : boolean          := false;
       INT_TRIG_SIZE_G  : positive         := 7;
       DIAGNOSTIC_OUTPUTS_G  : integer range 1 to 32     := 28;
+	  JESD_USR_DIV_G   : natural          := 4;
       AXI_BASE_ADDR_G  : slv(31 downto 0) := x"80000000";
       AXI_ERROR_RESP_G : slv(1 downto 0)  := AXI_RESP_SLVERR_C);
    port (
@@ -57,6 +58,8 @@ entity AppCore is
       jesdSysRef          : out   slv(1 downto 0);
       jesdRxSync          : in    slv(1 downto 0);
       jesdTxSync          : out   slv(1 downto 0);
+	  jesdUsrClk          : in    slv(1 downto 0);
+      jesdUsrRst          : in    slv(1 downto 0);
       trigCascBay         : in    slv(1 downto 0);
       -- ADC/DAC/Debug Interface (jesdClk[1:0] domain)
       adcValids           : in    Slv7Array(1 downto 0);
