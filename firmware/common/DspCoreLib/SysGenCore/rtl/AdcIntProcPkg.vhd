@@ -100,7 +100,7 @@ package AdcIntProcPkg is
 
      type tmitMessageType is record
       strobe : sl;
-      header : Slv32Array(HDR_SIZE_C-1 downto 0);
+      header : Slv32Array(BPM_MSG_HDR_SIZE_C-1 downto 0);
       timeStamp  : slv(63 downto 0);
       data : Slv32Array(BPM_N_MSG_CHANNELS-1 downto 0);
    end record tmitMessageType;
