@@ -477,7 +477,8 @@ begin
    U_BpMsgOb : entity work.AppMsgOb
       generic map (
          TPD_G       => TPD_G,
-         HDR_SIZE_G  => HDR_SIZE_C,-- Needs to be the same as stripline BPM
+         HDR_SIZE_G  => BPM_MSG_HDR_SIZE_C,-- Needs to be the same as stripline BPM
+		 EN_CRC_G    => BPM_MSG_CRC_ENBL_C,
          DATA_SIZE_G => BPM_N_MSG_CHANNELS)-- Needs to be the same as stripline BPM
       port map (   
          -- Application Messaging Interface (clk domain)      
