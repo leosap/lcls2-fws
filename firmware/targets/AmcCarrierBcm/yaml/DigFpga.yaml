@@ -8,7 +8,7 @@
 ## the terms contained in the LICENSE.txt file.
 ##############################################################################
 #schemaversion 3.0.0
-#once
+#once DigFpga.yaml
 #include AmcCarrierCore.yaml
 #include ApplicationCore.yaml
 

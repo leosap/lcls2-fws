@@ -8,7 +8,7 @@
 ## the terms contained in the LICENSE.txt file.
 ##############################################################################
 #schemaversion 3.0.0
-#once
+#once SysGenMr.yaml
 #include AxiEmpty.yaml
 #include DspCoreConfigMr.yaml
 #include DspCoreResMr.yaml

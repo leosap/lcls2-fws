@@ -27,6 +27,7 @@ use work.StdRtlPkg.all;
 use work.Jesd204bPkg.all;
 use work.AmcCarrierPkg.all;
 use work.TimingPkg.all;
+use work.BpmPkg.all;
 
 
 package AdcIntProcPkg is
@@ -101,7 +102,7 @@ package AdcIntProcPkg is
       strobe : sl;
       header : Slv32Array(HDR_SIZE_C-1 downto 0);
       timeStamp  : slv(63 downto 0);
-      data : Slv32Array(DATA_SIZE_C-1 downto 0);
+      data : Slv32Array(BPM_N_MSG_CHANNELS-1 downto 0);
    end record tmitMessageType;
    constant TMITINIT_C : tmitMessageType := (
       strobe => '0',
@@ -126,7 +127,7 @@ package AdcIntProcPkg is
    constant DETECTED_ERROR_INIT_C : detErrorType := (
       err => '0',
       status  => (others => '0'));
-	  
+
 end package AdcIntProcPkg;
 
 package body AdcIntProcPkg is

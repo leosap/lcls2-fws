@@ -8,7 +8,7 @@
 ## the terms contained in the LICENSE.txt file.
 ##############################################################################
 #schemaversion 3.0.0
-#once
+#once ApplicationCore.yaml
 #include AmcGenericAdcDacCore.yaml
 #include DaqMuxV2.yaml
 #include DacSigGeneration.yaml

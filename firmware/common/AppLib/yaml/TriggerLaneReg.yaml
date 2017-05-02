@@ -8,7 +8,7 @@
 ## the terms contained in the LICENSE.txt file.
 ##############################################################################
 #schemaversion 3.0.0
-#once
+##once TriggerLaneReg.yaml
 
 TriggerLaneReg: &TriggerLaneReg
   description: "To process timing and external signal for internal and external single line trigger generation"

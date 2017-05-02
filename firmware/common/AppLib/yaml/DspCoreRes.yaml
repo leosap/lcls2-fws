@@ -8,7 +8,7 @@
 ## the terms contained in the LICENSE.txt file.
 ##############################################################################
 #schemaversion 3.0.0
-#once
+#once DspCoreRes.yaml
 
 DspCoreRes: &DspCoreRes
   description: "Sysgen configuration and status registers"
